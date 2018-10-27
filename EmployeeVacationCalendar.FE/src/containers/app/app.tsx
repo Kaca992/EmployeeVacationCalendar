@@ -3,6 +3,9 @@ import { connect } from 'react-redux';
 import { IRootReducerState } from '@reducers/rootReducer';
 import './app.scss';
 import Layout from '../../components/layout/layout';
+import { Route } from 'react-router';
+import { RoutesEnum } from '../../common/enums';
+import CalendarContainer from '../calendarContainer/calendarContainer';
 
 interface IAppProps {
 
@@ -33,7 +36,9 @@ class App extends React.Component<IAppProps, IAppState> {
     public render() {
         return (
             <Layout>
-                Hello
+                <Route exact path={RoutesEnum.Calendar} component={CalendarContainer} />
+                {/* <Route path='/counter' component={Counter} />
+                <Route path='/fetchdata' component={FetchData} /> */}
             </Layout>
         );
     }

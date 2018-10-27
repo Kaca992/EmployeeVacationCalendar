@@ -84,6 +84,7 @@
             "interface I${2}State {",
             "",
             "}",
+            "",
             "function mapStateToProps(state: IRootReducerState): Partial<I${2}Props> {",
             "\treturn {",
             "",
