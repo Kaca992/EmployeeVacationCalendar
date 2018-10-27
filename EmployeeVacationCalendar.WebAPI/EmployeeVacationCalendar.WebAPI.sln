@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2026
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeVacationCalendar.WebAPI.App", "EmployeeVacationCalendar.WebAPI.App\EmployeeVacationCalendar.WebAPI.App.csproj", "{A9ABEA7B-F252-44E4-930C-139918D6C6C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmployeeVacationCalendar.WebAPI.App", "EmployeeVacationCalendar.WebAPI.App\EmployeeVacationCalendar.WebAPI.App.csproj", "{A9ABEA7B-F252-44E4-930C-139918D6C6C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeVacationCalendar.WebAPI.Database", "EmployeeVacationCalendar.WebAPI.Database\EmployeeVacationCalendar.WebAPI.Database.csproj", "{21CEDD43-4B08-4205-9812-6597217B6321}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeVacationCalendar.WebAPI.Common", "EmployeeVacationCalendar.WebAPI.Common\EmployeeVacationCalendar.WebAPI.Common.csproj", "{0DA65022-850A-40D8-8DDD-F1A4011ABC34}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{A9ABEA7B-F252-44E4-930C-139918D6C6C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9ABEA7B-F252-44E4-930C-139918D6C6C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9ABEA7B-F252-44E4-930C-139918D6C6C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21CEDD43-4B08-4205-9812-6597217B6321}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21CEDD43-4B08-4205-9812-6597217B6321}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21CEDD43-4B08-4205-9812-6597217B6321}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21CEDD43-4B08-4205-9812-6597217B6321}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DA65022-850A-40D8-8DDD-F1A4011ABC34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DA65022-850A-40D8-8DDD-F1A4011ABC34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DA65022-850A-40D8-8DDD-F1A4011ABC34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DA65022-850A-40D8-8DDD-F1A4011ABC34}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
