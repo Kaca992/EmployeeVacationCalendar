@@ -6,8 +6,8 @@ namespace EmployeeVacationCalendar.WebAPI.Common
 {
     public static class EmployeeRoles
     {
-        public static string MasterAdmin => "MasterAdmin";
-        public static string Admin => "Admin";
-        public static string User => "User";
+        public const string MasterAdmin = "MasterAdmin";
+        public const string Admin = "Admin";
+        public const string User = "User";
     }
 }

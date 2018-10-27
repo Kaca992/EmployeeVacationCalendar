@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EmployeeVacationCalendar.WebAPI.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeVacationCalendar.WebAPI.App.Controllers
@@ -17,6 +19,7 @@ namespace EmployeeVacationCalendar.WebAPI.App.Controllers
         }
 
         // GET api/values/5
+        [Authorize(Policy = EmployeePolicies.RequireMasterAdminRole)]
         [HttpGet("{id}")]
         public string Get(int id)
         {

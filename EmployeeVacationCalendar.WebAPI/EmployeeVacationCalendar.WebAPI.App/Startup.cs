@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using EmployeeVacationCalendar.WebAPI.Common;
 using EmployeeVacationCalendar.WebAPI.Common.Interfaces;
 using EmployeeVacationCalendar.WebAPI.Database;
 using EmployeeVacationCalendar.WebAPI.Database.Models;
@@ -33,8 +34,7 @@ namespace EmployeeVacationCalendar.WebAPI.App
             services.AddDbContext<EmployeeVacationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("EmployeeVacationDatabase")));
 
-            services.AddDefaultIdentity<Employee>()
-                .AddRoles<IdentityRole>()
+            services.AddIdentity<Employee, IdentityRole>()
                 .AddEntityFrameworkStores<EmployeeVacationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -64,6 +64,12 @@ namespace EmployeeVacationCalendar.WebAPI.App
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(EmployeePolicies.RequireMasterAdminRole, policy => policy.RequireRole(EmployeeRoles.MasterAdmin));
+                options.AddPolicy(EmployeePolicies.RequireAdminRights, policy => policy.RequireRole(EmployeeRoles.MasterAdmin, EmployeeRoles.Admin));
+            });
 
             configureDI(services);
         }
