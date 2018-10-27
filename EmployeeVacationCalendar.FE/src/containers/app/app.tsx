@@ -6,6 +6,7 @@ import Layout from '../../components/layout/layout';
 import { Route } from 'react-router';
 import { RoutesEnum } from '../../common/enums';
 import CalendarContainer from '../calendarContainer/calendarContainer';
+import LoginContainer from '../loginContainer/loginContainer';
 
 interface IAppProps {
 
@@ -37,8 +38,7 @@ class App extends React.Component<IAppProps, IAppState> {
         return (
             <Layout>
                 <Route exact path={RoutesEnum.Calendar} component={CalendarContainer} />
-                {/* <Route path='/counter' component={Counter} />
-                <Route path='/fetchdata' component={FetchData} /> */}
+                <Route path='/login' component={LoginContainer} />
             </Layout>
         );
     }

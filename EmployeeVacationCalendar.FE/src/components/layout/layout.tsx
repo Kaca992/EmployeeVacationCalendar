@@ -19,7 +19,7 @@ export default class Layout extends React.Component<ILayoutProps, ILayoutState> 
 
     public render() {
         return (
-            <div>
+            <div className="layout">
                 {this.props.children}
             </div>
         );
