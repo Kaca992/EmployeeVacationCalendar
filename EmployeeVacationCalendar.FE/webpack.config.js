@@ -11,8 +11,6 @@ module.exports = (env) => {
   const isProduction = env && env.prod;
   return {
     entry: {
-      // IE support, if not needed you can remove this and babel from awesome TS loader
-      babel_polyfill: 'babel-polyfill',
       main: './src/index.tsx'
     },
     devtool: isProduction ? 'source-map' : 'inline-source-map',

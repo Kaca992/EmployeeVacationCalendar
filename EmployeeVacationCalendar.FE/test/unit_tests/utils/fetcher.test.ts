@@ -13,7 +13,7 @@ afterEach(() => {
 });
 
 test('Check if fetcher executes', done => {
-    fetcher.fetch('https://dog.ceo/api/breeds/image/random', { fullUrlProvided: true, jsonResponseExpected: true, requestInit: { headers: {} } }).then(result => {
+    fetcher.fetch('https://dog.ceo/api/breeds/image/random', { jsonResponseExpected: true, requestInit: { headers: {} } }).then(result => {
         expect(result).toEqual(1);
         done();
     });

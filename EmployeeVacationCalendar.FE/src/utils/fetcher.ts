@@ -1,11 +1,8 @@
-import { appendServiceApiEndpoint } from "@common/config/service.config";
 import 'isomorphic-fetch';
 
 export interface IBasicFetchOptions {
     jsonResponseExpected?: boolean;
     requestInit?: RequestInit;
-    /** Use when you don't want to append the service api endpoint */
-    fullUrlProvided?: boolean;
     responseActionPayloadMapper?(responsePayload): any;
 }
 
@@ -25,14 +22,13 @@ export class Fetcher {
     };
 
     public fetch = (url: string, fetchOptions: IBasicFetchOptions) => {
-        const fullUrl = fetchOptions.fullUrlProvided ? url : appendServiceApiEndpoint(url);
         const options = { ...fetchOptions };
         const newInit: RequestInit = {
             ...this.init,
             ...options.requestInit
         };
 
-        return Promise.resolve(this.fetchImplementation(fullUrl, newInit, options));
+        return Promise.resolve(this.fetchImplementation(url, newInit, options));
     }
 
     public reduxFetch = (url: string, reduxFetchOptions: IReduxFetchOptions, dispatch: any) => {
