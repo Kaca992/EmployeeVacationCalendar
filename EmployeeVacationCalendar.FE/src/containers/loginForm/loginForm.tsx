@@ -5,6 +5,7 @@ import './loginForm.scss';
 import { Header, Form, Button, InputOnChangeData, Input, Label } from 'semantic-ui-react';
 import { LoginFormStrings } from '../../common/strings';
 import { emptyAndNonWhitespaceInput, emailValidation } from '../../utils/validation';
+import fetcher from '../../utils/fetcher';
 
 interface ILoginFormProps {
 
@@ -98,11 +99,20 @@ class LoginForm extends React.Component<ILoginFormProps, ILoginFormState> {
     }
 
     private _onLogin = () => {
+        const { email, password } = this.state;
         if (!this._isValidInput()) {
             return;
         }
 
         this.setState({ loginInProgress: true });
+
+        fetcher.fetch('/api/login', {
+            jsonResponseExpected: true,
+            requestInit: {
+                method: 'POST',
+                body: JSON.stringify({ email: email && email.trim(), password })
+            }
+        });
     }
 
     private _isValidInput = (): boolean => {
