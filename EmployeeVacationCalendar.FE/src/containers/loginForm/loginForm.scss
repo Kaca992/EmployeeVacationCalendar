@@ -6,15 +6,22 @@
     align-items: center;
     justify-content: center;
 
+    position: absolute;
+    top: 30%;
     width: 100%;
-    height: 100%;
+
+    margin-bottom: 2%;
 
     &__header {
         color: $primary-color !important;
     }
 
-    &__inputs {
+    &__fields {
         width: 100%;
         max-width: 450px !important;
+
+        .field {
+            margin-bottom: 10px;
+        }
     }
 }

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { IRootReducerState } from '@reducers/rootReducer';
 import './loginForm.scss';
-import { Header, Form, Button, InputOnChangeData } from 'semantic-ui-react';
+import { Header, Form, Button, InputOnChangeData, Input, Label } from 'semantic-ui-react';
 import { LoginFormStrings } from '../../common/strings';
 import { emptyAndNonWhitespaceInput, emailValidation } from '../../utils/validation';
 
@@ -43,7 +43,7 @@ class LoginForm extends React.Component<ILoginFormProps, ILoginFormState> {
     }
 
     public render() {
-        const { email, password, loginInProgress } = this.state;
+        const { email, password, loginInProgress, emailError, passwordError } = this.state;
 
         return (
             <div className="login-form">
@@ -51,39 +51,50 @@ class LoginForm extends React.Component<ILoginFormProps, ILoginFormState> {
                     {/* <Image src='/logo.png' /> Log-in to your account */}
                     {LoginFormStrings.Header}
                 </Header>
-                <Form className="login-form__inputs">
-                    <Form.Input
-                        fluid
-                        icon='user'
-                        iconPosition='left'
-                        placeholder={LoginFormStrings.EmailPlaceholder}
-                        value={email}
-                        onChange={this._onEmailChanged}
-                    />
-                    <Form.Input
-                        fluid
-                        icon='lock'
-                        iconPosition='left'
-                        placeholder={LoginFormStrings.PasswordPlaceholder}
-                        type='password'
-                        value={password}
-                        onChange={this._onPasswordChanged}
-                    />
-
+                <div className="login-form__fields">
+                    <Form.Field>
+                        <Input
+                            fluid
+                            icon='user'
+                            iconPosition='left'
+                            placeholder={LoginFormStrings.EmailPlaceholder}
+                            value={email}
+                            error={!!emailError}
+                            onChange={this._onEmailChanged}
+                        />
+                        {emailError && <Label basic color='red' pointing>
+                            {emailError}
+                        </Label>}
+                    </Form.Field>
+                    <Form.Field>
+                        <Input
+                            fluid
+                            icon='lock'
+                            iconPosition='left'
+                            placeholder={LoginFormStrings.PasswordPlaceholder}
+                            type='password'
+                            value={password}
+                            error={!!passwordError}
+                            onChange={this._onPasswordChanged}
+                        />
+                        {passwordError && <Label basic color='red' pointing>
+                            {passwordError}
+                        </Label>}
+                    </Form.Field>
                     <Button primary fluid size='large' onClick={this._onLogin} loading={loginInProgress}>
                         {LoginFormStrings.LoginBtn}
                     </Button>
-                </Form>
+                </div>
             </div>
         );
     }
 
     private _onEmailChanged = (event: React.SyntheticEvent<HTMLInputElement>, data: InputOnChangeData) => {
-        this.setState({ email: data.value, emailError: null, passwordError: null });
+        this.setState({ email: data.value, emailError: null });
     }
 
     private _onPasswordChanged = (event: React.SyntheticEvent<HTMLInputElement>, data: InputOnChangeData) => {
-        this.setState({ password: data.value, emailError: null, passwordError: null });
+        this.setState({ password: data.value, passwordError: null });
     }
 
     private _onLogin = () => {
