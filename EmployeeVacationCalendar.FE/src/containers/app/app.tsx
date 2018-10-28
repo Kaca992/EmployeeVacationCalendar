@@ -6,7 +6,7 @@ import Layout from '../../components/layout/layout';
 import { Route } from 'react-router';
 import { RoutesEnum } from '../../common/enums';
 import CalendarContainer from '../calendarContainer/calendarContainer';
-import LoginContainer from '../loginContainer/loginContainer';
+import LoginForm from '../loginForm/loginForm';
 
 interface IAppProps {
 
@@ -38,7 +38,7 @@ class App extends React.Component<IAppProps, IAppState> {
         return (
             <Layout>
                 <Route exact path={RoutesEnum.Calendar} component={CalendarContainer} />
-                <Route path='/login' component={LoginContainer} />
+                <Route path='/login' component={LoginForm} />
             </Layout>
         );
     }
