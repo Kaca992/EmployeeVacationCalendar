@@ -7,7 +7,9 @@ export const LoginFormStrings = {
 
 export const NavigationItems = {
     Calendar: 'Calendar',
-    Login: 'Login'
+    Login: 'Login',
+    EditInfo: 'Edit User',
+    Logout: 'Log out'
 };
 
 export const fieldRequiredMessage = "Value is required";

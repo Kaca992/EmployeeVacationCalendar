@@ -13,7 +13,7 @@ export function loginUser(email: string, password: string, history: History) {
             },
             action: appActions.LOGIN_USER
         }, dispatch).then(result => {
-            history.push(RoutesEnum.Calendar);
+            history.replace(RoutesEnum.Calendar);
         });
     };
 }

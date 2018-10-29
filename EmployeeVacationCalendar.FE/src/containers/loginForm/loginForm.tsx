@@ -100,11 +100,11 @@ class LoginForm extends React.Component<ILoginFormProps, ILoginFormState> {
     }
 
     private _onEmailChanged = (event: React.SyntheticEvent<HTMLInputElement>, data: InputOnChangeData) => {
-        this.setState({ email: data.value, emailError: null });
+        this.setState({ email: data.value, emailError: null, passwordError: null });
     }
 
     private _onPasswordChanged = (event: React.SyntheticEvent<HTMLInputElement>, data: InputOnChangeData) => {
-        this.setState({ password: data.value, passwordError: null });
+        this.setState({ password: data.value, emailError: null, passwordError: null });
     }
 
     private _onLogin = () => {
