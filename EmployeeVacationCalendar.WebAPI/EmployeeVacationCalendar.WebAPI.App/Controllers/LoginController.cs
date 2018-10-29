@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EmployeeVacationCalendar.WebAPI.Common.DTO;
 using EmployeeVacationCalendar.WebAPI.Common.Exceptions;
+using EmployeeVacationCalendar.WebAPI.Database;
 using EmployeeVacationCalendar.WebAPI.Database.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -16,11 +17,13 @@ namespace EmployeeVacationCalendar.WebAPI.App.Controllers
     {
         private SignInManager<Employee> _signInManager;
         private UserManager<Employee> _userManager;
+        private EmployeeVacationDbContext _context;
 
-        public LoginController(SignInManager<Employee> signInManager, UserManager<Employee> userManager)
+        public LoginController(SignInManager<Employee> signInManager, UserManager<Employee> userManager, EmployeeVacationDbContext context)
         {
             _signInManager = signInManager;
             _userManager = userManager;
+            _context = context;
         }
 
         [HttpPost]
@@ -29,7 +32,9 @@ namespace EmployeeVacationCalendar.WebAPI.App.Controllers
             var result = await _signInManager.PasswordSignInAsync(loginDto.Email, loginDto.Password, false, false);
             if (result.Succeeded)
             {
-                return Ok(new {});
+                var normalizedEmail = loginDto.Email.ToUpper();
+                var user = _context.Users.FirstOrDefault(x => x.NormalizedEmail == normalizedEmail);
+                return Ok(new UserInfoDTO(user.DisplayName, user.EmployeeType));
             }
 
             return BadRequest(new UserLoginFailedException());

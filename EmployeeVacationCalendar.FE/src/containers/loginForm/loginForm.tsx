@@ -7,11 +7,28 @@ import { LoginFormStrings } from '../../common/strings';
 import { emptyAndNonWhitespaceInput, emailValidation } from '../../utils/validation';
 import fetcher from '../../utils/fetcher';
 import { IErrorObject } from '../../common/appDataStructures';
+import { RouteComponentProps, withRouter } from 'react-router';
 import { History } from 'history';
-import { IUserInfo } from '../../common/data';
+import * as appActions from '@actions/app';
 
-interface ILoginFormProps {
-    onUserLoggedIn(userInfo: IUserInfo): void;
+interface ILoginFormOwnProps extends RouteComponentProps<any> {
+
+}
+
+interface ILoginFormProps extends ILoginFormOwnProps {
+    loginUser(email: string, password: string, history: History);
+}
+
+function mapStateToProps(state: IRootReducerState, ownProps: ILoginFormOwnProps): Partial<ILoginFormProps> {
+    return {
+
+    };
+}
+
+function mapDispatchToProps(dispatch: any): Partial<ILoginFormProps> {
+    return {
+        loginUser: (email: string, password: string, history: History) => dispatch(appActions.loginUser(email, password, history))
+    };
 }
 
 interface ILoginFormState {
@@ -22,7 +39,7 @@ interface ILoginFormState {
     passwordError: string | null;
 }
 
-export default class LoginForm extends React.Component<ILoginFormProps, ILoginFormState> {
+class LoginForm extends React.Component<ILoginFormProps, ILoginFormState> {
     constructor(props: ILoginFormProps) {
         super(props);
         this.state = {
@@ -91,6 +108,7 @@ export default class LoginForm extends React.Component<ILoginFormProps, ILoginFo
     }
 
     private _onLogin = () => {
+        const { loginUser, history } = this.props;
         const { email, password } = this.state;
         if (!this._isValidInput()) {
             return;
@@ -98,14 +116,7 @@ export default class LoginForm extends React.Component<ILoginFormProps, ILoginFo
 
         this.setState({ loginInProgress: true });
 
-        fetcher.fetch('/api/login', {
-            jsonResponseExpected: true,
-            requestInit: {
-                method: 'POST',
-                body: JSON.stringify({ email: email && email.trim(), password })
-            }
-        })
-            .then()
+        loginUser(email, password, history)
             .catch((error: IErrorObject) => {
                 this.setState({
                     emailError: error.body.message,
@@ -124,3 +135,8 @@ export default class LoginForm extends React.Component<ILoginFormProps, ILoginFo
         return !passwordError && !emailError;
     }
 }
+
+export default withRouter(connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(LoginForm));

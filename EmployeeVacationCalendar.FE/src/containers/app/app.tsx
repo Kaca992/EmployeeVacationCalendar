@@ -44,7 +44,7 @@ export class App extends React.Component<IAppProps, IAppState> {
     }
 
     private _renderLoginForm = (props: RouteComponentProps<any>) => {
-        return <LoginForm history={props.history} />;
+        return <LoginForm {...props} />;
     }
 }
 

@@ -1,1 +1,1 @@
-export const GET_INITIAL_DATA = '@App/GET_INITIAL_DATA';
+export const LOGIN_USER = '@App/LOGIN_USER';
