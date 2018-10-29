@@ -3,3 +3,9 @@ export interface IAction {
     payload?: any;
     error?: any;
 }
+
+export interface IErrorObject {
+    body: {
+        message: string;
+    };
+}

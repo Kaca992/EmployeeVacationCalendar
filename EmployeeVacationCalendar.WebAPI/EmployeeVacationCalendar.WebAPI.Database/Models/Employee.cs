@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using EmployeeVacationCalendar.WebAPI.Common.Enums;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,5 +15,7 @@ namespace EmployeeVacationCalendar.WebAPI.Database.Models
         public string LastName { get; set; }
 
         public string DisplayName => $"{LastName} {FirstName}";
+
+        public EmployeeTypeEnum EmployeeType { get; set; }
     }
 }

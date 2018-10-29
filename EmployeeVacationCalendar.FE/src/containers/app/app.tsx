@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { IRootReducerState } from '@reducers/rootReducer';
 import './app.scss';
 import Layout from '../../components/layout/layout';
-import { Route, withRouter } from 'react-router';
+import { Route, withRouter, RouteComponentProps } from 'react-router';
 import { RoutesEnum } from '../../common/enums';
 import CalendarContainer from '../calendarContainer/calendarContainer';
 import LoginForm from '../loginForm/loginForm';
@@ -38,9 +38,13 @@ export class App extends React.Component<IAppProps, IAppState> {
         return (
             <Layout>
                 <Route exact path={RoutesEnum.Calendar} component={CalendarContainer} />
-                <Route path={RoutesEnum.Login} component={LoginForm} />
+                <Route path={RoutesEnum.Login} render={this._renderLoginForm} />
             </Layout>
         );
+    }
+
+    private _renderLoginForm = (props: RouteComponentProps<any>) => {
+        return <LoginForm history={props.history} />;
     }
 }
 

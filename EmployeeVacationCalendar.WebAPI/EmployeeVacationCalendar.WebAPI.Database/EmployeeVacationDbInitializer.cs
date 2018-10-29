@@ -1,4 +1,5 @@
 ﻿using EmployeeVacationCalendar.WebAPI.Common;
+using EmployeeVacationCalendar.WebAPI.Common.Enums;
 using EmployeeVacationCalendar.WebAPI.Common.Interfaces;
 using EmployeeVacationCalendar.WebAPI.Database.Models;
 using Microsoft.AspNetCore.Identity;
@@ -29,7 +30,10 @@ namespace EmployeeVacationCalendar.WebAPI.Database
                 Employee user = new Employee
                 {
                     UserName = appSettings.MasterAdminEmail,
-                    Email = appSettings.MasterAdminEmail
+                    Email = appSettings.MasterAdminEmail,
+                    EmployeeType = EmployeeTypeEnum.MasterAdmin,
+                    FirstName = "MOD",
+                    LastName = "Admin"
                 };
 
                 IdentityResult result = userManager.CreateAsync(user, appSettings.MasterAdminPassword).Result;

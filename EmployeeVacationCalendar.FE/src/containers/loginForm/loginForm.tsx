@@ -6,10 +6,12 @@ import { Header, Form, Button, InputOnChangeData, Input, Label, Segment } from '
 import { LoginFormStrings } from '../../common/strings';
 import { emptyAndNonWhitespaceInput, emailValidation } from '../../utils/validation';
 import fetcher from '../../utils/fetcher';
-import { withRouter, RouteComponentProps } from 'react-router';
+import { IErrorObject } from '../../common/appDataStructures';
+import { History } from 'history';
+import { IUserInfo } from '../../common/data';
 
 interface ILoginFormProps {
-
+    onUserLoggedIn(userInfo: IUserInfo): void;
 }
 
 interface ILoginFormState {
@@ -34,6 +36,7 @@ export default class LoginForm extends React.Component<ILoginFormProps, ILoginFo
 
     public render() {
         const { email, password, loginInProgress, emailError, passwordError } = this.state;
+        const loginBtnEnabled = !passwordError && !emailError;
 
         return (
             <div className="login-form">
@@ -71,7 +74,7 @@ export default class LoginForm extends React.Component<ILoginFormProps, ILoginFo
                             {passwordError}
                         </Label>}
                     </Form.Field>
-                    <Button primary fluid size='large' onClick={this._onLogin} loading={loginInProgress}>
+                    <Button primary fluid size='large' onClick={this._onLogin} loading={loginInProgress} disabled={!loginBtnEnabled}>
                         {LoginFormStrings.LoginBtn}
                     </Button>
                 </Segment>
@@ -101,7 +104,15 @@ export default class LoginForm extends React.Component<ILoginFormProps, ILoginFo
                 method: 'POST',
                 body: JSON.stringify({ email: email && email.trim(), password })
             }
-        });
+        })
+            .then()
+            .catch((error: IErrorObject) => {
+                this.setState({
+                    emailError: error.body.message,
+                    passwordError: error.body.message,
+                    loginInProgress: false
+                });
+            });
     }
 
     private _isValidInput = (): boolean => {
