@@ -6,11 +6,11 @@
     align-items: center;
     justify-content: center;
 
-    position: absolute;
-    top: 30%;
+    height: 100%;
     width: 100%;
+    background-color: $login-background-color;
 
-    margin-bottom: 2%;
+    padding-bottom: 2%;
 
     &__header {
         color: $primary-color !important;

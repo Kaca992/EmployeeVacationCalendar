@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { IRootReducerState } from '@reducers/rootReducer';
 import './loginForm.scss';
-import { Header, Form, Button, InputOnChangeData, Input, Label } from 'semantic-ui-react';
+import { Header, Form, Button, InputOnChangeData, Input, Label, Segment } from 'semantic-ui-react';
 import { LoginFormStrings } from '../../common/strings';
 import { emptyAndNonWhitespaceInput, emailValidation } from '../../utils/validation';
 import fetcher from '../../utils/fetcher';
@@ -52,7 +52,7 @@ class LoginForm extends React.Component<ILoginFormProps, ILoginFormState> {
                     {/* <Image src='/logo.png' /> Log-in to your account */}
                     {LoginFormStrings.Header}
                 </Header>
-                <div className="login-form__fields">
+                <Segment className="login-form__fields">
                     <Form.Field>
                         <Input
                             fluid
@@ -85,7 +85,7 @@ class LoginForm extends React.Component<ILoginFormProps, ILoginFormState> {
                     <Button primary fluid size='large' onClick={this._onLogin} loading={loginInProgress}>
                         {LoginFormStrings.LoginBtn}
                     </Button>
-                </div>
+                </Segment>
             </div>
         );
     }
