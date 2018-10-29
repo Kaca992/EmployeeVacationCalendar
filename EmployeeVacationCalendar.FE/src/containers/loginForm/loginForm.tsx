@@ -6,6 +6,7 @@ import { Header, Form, Button, InputOnChangeData, Input, Label, Segment } from '
 import { LoginFormStrings } from '../../common/strings';
 import { emptyAndNonWhitespaceInput, emailValidation } from '../../utils/validation';
 import fetcher from '../../utils/fetcher';
+import { withRouter, RouteComponentProps } from 'react-router';
 
 interface ILoginFormProps {
 
@@ -19,19 +20,7 @@ interface ILoginFormState {
     passwordError: string | null;
 }
 
-function mapStateToProps(state: IRootReducerState): Partial<ILoginFormProps> {
-    return {
-
-    };
-}
-
-function mapDispatchToProps(dispatch: any): Partial<ILoginFormProps> {
-    return {
-
-    };
-}
-
-class LoginForm extends React.Component<ILoginFormProps, ILoginFormState> {
+export default class LoginForm extends React.Component<ILoginFormProps, ILoginFormState> {
     constructor(props: ILoginFormProps) {
         super(props);
         this.state = {
@@ -124,8 +113,3 @@ class LoginForm extends React.Component<ILoginFormProps, ILoginFormState> {
         return !passwordError && !emailError;
     }
 }
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(LoginForm);

@@ -1,3 +1,4 @@
 export enum RoutesEnum {
-    Calendar = '/'
+    Calendar = '/',
+    Login = '/login'
 }

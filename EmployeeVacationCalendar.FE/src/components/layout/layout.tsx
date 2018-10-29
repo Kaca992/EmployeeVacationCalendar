@@ -2,6 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 
 import './layout.scss';
+import Navigation from '../navigation/navigation';
 
 export interface ILayoutProps {
 
@@ -20,7 +21,10 @@ export default class Layout extends React.Component<ILayoutProps, ILayoutState> 
     public render() {
         return (
             <div className="layout">
-                {this.props.children}
+                <Navigation />
+                <div className="layout__content">
+                    {this.props.children}
+                </div>
             </div>
         );
     }
