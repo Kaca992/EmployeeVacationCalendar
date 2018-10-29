@@ -21,16 +21,16 @@ export default class Navigation extends React.Component<INavigationProps, INavig
 
     public render() {
         return (
-            <Menu fixed='top'>
+            <Menu>
                 {this._renderMenuItem(RoutesEnum.Calendar, NavigationItems.Calendar)}
-                {this._renderMenuItem(RoutesEnum.Login, NavigationItems.Login, true)}
+                {this._renderMenuItem(RoutesEnum.Login, NavigationItems.Login, "right")}
             </Menu>
         );
     }
 
     private _renderMenuItem = (route: RoutesEnum, text: string, position: "right" | "left" = "left") => {
         return <Menu.Item position={position}>
-            <NavLink to={route} activeClassName='active'>{text}</NavLink>
+            <NavLink exact to={route} activeClassName='active'>{text}</NavLink>
         </Menu.Item>;
     }
 }

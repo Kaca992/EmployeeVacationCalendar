@@ -16,7 +16,19 @@ interface IAppState {
 
 }
 
-export default class App extends React.Component<IAppProps, IAppState> {
+function mapStateToProps(state: IRootReducerState): Partial<IAppProps> {
+    return {
+
+    };
+}
+
+function mapDispatchToProps(dispatch: any): Partial<IAppProps> {
+    return {
+
+    };
+}
+
+export class App extends React.Component<IAppProps, IAppState> {
     constructor(props: IAppProps) {
         super(props);
 
@@ -31,3 +43,8 @@ export default class App extends React.Component<IAppProps, IAppState> {
         );
     }
 }
+
+export default withRouter<any>(connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(App));
