@@ -8,7 +8,7 @@ export const LoginFormStrings = {
 export const NavigationItems = {
     Calendar: 'Calendar',
     Login: 'Login',
-    EditInfo: 'Edit User',
+    MyInfo: 'My Info',
     Logout: 'Log out'
 };
 

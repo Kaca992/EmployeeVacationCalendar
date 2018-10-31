@@ -1,8 +1,7 @@
 export enum RoutesEnum {
     Calendar = '/',
     Login = '/login',
-    EditUser = '/edit-user/:email',
-    Logout = '/logout'
+    MyInfo = '/my-info'
 }
 
 export enum EmployeeTypeEnum {

@@ -1,14 +1,14 @@
 import * as React from 'react';
 
-import { Menu, DropdownItemProps } from 'semantic-ui-react';
+import { Menu, DropdownItemProps, Icon } from 'semantic-ui-react';
 import { NavLink } from 'react-router-dom';
 import { RoutesEnum } from '../../common/enums';
 import { NavigationItems } from '../../common/strings';
 import { IUserInfo } from '../../common/data';
-import UserMenuItem from './userMenuItem';
 
 export interface INavigationProps {
     userInfo: IUserInfo | null;
+    onLogOut();
 }
 
 export default class Navigation extends React.Component<INavigationProps> {
@@ -38,6 +38,12 @@ export default class Navigation extends React.Component<INavigationProps> {
             return this._renderMenuItem(RoutesEnum.Login, NavigationItems.Login, "right");
         }
 
-        return <UserMenuItem userEmail={userInfo.email} />;
+        return this._renderLogoutItem();
+    }
+
+    private _renderLogoutItem = () => {
+        return <Menu.Item position="right">
+            <span className="menu__logout-item" onClick={this.props.onLogOut}>{NavigationItems.Logout}<Icon name='user circle' /></span>
+        </Menu.Item>;
     }
 }

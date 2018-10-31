@@ -10,7 +10,7 @@ import LoginForm from '../loginForm/loginForm';
 import { IUserInfo } from '../../common/data';
 
 interface IAppProps {
-    userInfo: IUserInfo | null;
+
 }
 
 interface IAppState {
@@ -19,7 +19,7 @@ interface IAppState {
 
 function mapStateToProps(state: IRootReducerState): Partial<IAppProps> {
     return {
-        userInfo: state.app.userInfo
+
     };
 }
 
@@ -36,9 +36,8 @@ export class App extends React.Component<IAppProps, IAppState> {
     }
 
     public render() {
-        const { userInfo } = this.props;
         return (
-            <Layout userInfo={userInfo}>
+            <Layout>
                 <Route exact path={RoutesEnum.Calendar} component={CalendarContainer} />
                 <Route path={RoutesEnum.Login} render={this._renderLoginForm} />
             </Layout>

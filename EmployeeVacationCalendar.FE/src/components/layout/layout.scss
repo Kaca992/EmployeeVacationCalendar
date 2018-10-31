@@ -25,6 +25,19 @@
                 color: $menu-selected-color;
             }
         }
+
+        &__logout-item {
+            color: $menu-color;
+        
+            &:hover {
+                color: $menu-selected-color;
+                cursor: pointer;
+            }
+            
+            i {
+                margin-left: 5px;
+            }
+        }
     }
 
     &__content {
