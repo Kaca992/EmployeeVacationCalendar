@@ -5,6 +5,8 @@ import { RoutesEnum } from '../common/enums';
 import { IAction } from '../common/appDataStructures';
 import { IUserInfo } from '../common/data';
 
+const loginControllerBaseUrl = "api/login";
+
 export function setLoggedUser(loggedUserId: string | null): IAction {
     return {
         type: appActions.SET_LOGGED_USER,
@@ -14,7 +16,7 @@ export function setLoggedUser(loggedUserId: string | null): IAction {
 
 export function loginUser(email: string, password: string, redirectUrl: string, history: History) {
     return (dispatch, getState) => {
-        return fetcher.reduxFetch('/api/login', {
+        return fetcher.reduxFetch(loginControllerBaseUrl, {
             jsonResponseExpected: true,
             requestInit: {
                 method: 'POST',
@@ -24,6 +26,17 @@ export function loginUser(email: string, password: string, redirectUrl: string, 
         }, dispatch).then((result: IUserInfo) => {
             dispatch(setLoggedUser(result.id));
             history.replace(redirectUrl);
+        });
+    };
+}
+
+export function initLoggedUserInfo() {
+    return (dispatch, getState) => {
+        return fetcher.reduxFetch(loginControllerBaseUrl, {
+            jsonResponseExpected: true,
+            action: appActions.GET_LOGGED_USER_INFO
+        }, dispatch).then((result: IUserInfo) => {
+            dispatch(setLoggedUser(result.id));
         });
     };
 }

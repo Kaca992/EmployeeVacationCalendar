@@ -32,7 +32,7 @@ class EmployeeInfoContainer extends React.Component<IEmployeeInfoContainerProps,
     public render() {
         return (
             <div>
-                Hello
+                Hello My Info
             </div>
         );
     }

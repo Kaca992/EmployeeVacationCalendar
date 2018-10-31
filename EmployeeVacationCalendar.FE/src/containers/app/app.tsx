@@ -11,9 +11,14 @@ import { IUserInfo } from '../../common/data';
 import { cookieExists } from '../../utils/common';
 import ProtectedRoute from '../../components/protectedRoute/protectedRoute';
 import EmployeeInfoContainer from '../employeeInfoContainer/employeeInfoContainer';
+import { initLoggedUserInfo } from '../../actions/app';
+import { Loader } from 'semantic-ui-react';
+import { initializing } from '../../common/strings';
 
 interface IAppProps {
     isUserLoggedIn: boolean;
+    userInfoInitialized: boolean;
+    initLoggedUserInfo(): Promise<IUserInfo>;
 }
 
 interface IAppState {
@@ -22,18 +27,22 @@ interface IAppState {
 
 function mapStateToProps(state: IRootReducerState): Partial<IAppProps> {
     return {
-        isUserLoggedIn: !!state.app.loggedUserId
+        isUserLoggedIn: !!state.app.loggedUserId,
+        userInfoInitialized: state.app.initialization.userInfoInitialized
     };
 }
 
 function mapDispatchToProps(dispatch: any): Partial<IAppProps> {
     return {
-
+        initLoggedUserInfo: () => dispatch(initLoggedUserInfo())
     };
 }
 
 export class App extends React.Component<IAppProps, IAppState> {
     private readonly COOKIE_NAME = "EMPLOYEE_IDENTITY";
+    private get isIdentityCookieSet(): boolean {
+        return cookieExists(this.COOKIE_NAME);
+    }
 
     constructor(props: IAppProps) {
         super(props);
@@ -41,16 +50,18 @@ export class App extends React.Component<IAppProps, IAppState> {
     }
 
     public componentDidMount() {
-        // if (cookieExists(this.COOKIE_NAME)) {
-        //     alert("postojim");
-        // }
+        if (this.isIdentityCookieSet && !this.props.userInfoInitialized) {
+            this.props.initLoggedUserInfo();
+        }
     }
 
     public render() {
-        const { isUserLoggedIn } = this.props;
+        const { isUserLoggedIn, userInfoInitialized } = this.props;
+        const isUserLogginInitialized = this.isIdentityCookieSet && !userInfoInitialized;
+        const isAppLoading = isUserLogginInitialized;
 
         return (
-            <Layout>
+            <Layout isLoading={isAppLoading}>
                 <Switch>
                     <Route exact path={RoutesEnum.Calendar} component={CalendarContainer} />
                     <Route path={RoutesEnum.Login} render={this._renderLoginForm} />

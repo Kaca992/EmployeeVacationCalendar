@@ -5,9 +5,11 @@ import './layout.scss';
 import Navigation from '../navigation/navigation';
 import { IUserInfo } from '../../common/data';
 import NavigationContainer from '@containers/navigationContainer/navigationContainer';
+import { Loader, Segment } from 'semantic-ui-react';
+import { initializing } from '../../common/strings';
 
 export interface ILayoutProps {
-
+    isLoading: boolean;
 }
 
 export default class Layout extends React.PureComponent<ILayoutProps> {
@@ -21,9 +23,13 @@ export default class Layout extends React.PureComponent<ILayoutProps> {
             <div className="layout">
                 <NavigationContainer />
                 <div className="layout__content">
-                    {this.props.children}
+                    {this.props.isLoading ? this._renderLoading() : this.props.children}
                 </div>
             </div>
         );
+    }
+
+    private _renderLoading = () => {
+        return <Loader active size='large'>{initializing}</Loader>;
     }
 }

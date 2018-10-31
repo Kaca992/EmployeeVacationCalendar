@@ -14,3 +14,5 @@ export const NavigationItems = {
 
 export const fieldRequiredMessage = "Value is required";
 export const emailInvalid = "Invalid email format";
+
+export const initializing = "Initializing";

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EmployeeVacationCalendar.WebAPI.App.Util;
 using EmployeeVacationCalendar.WebAPI.Common.DTO;
 using EmployeeVacationCalendar.WebAPI.Common.Exceptions;
 using EmployeeVacationCalendar.WebAPI.Database;
@@ -34,23 +35,18 @@ namespace EmployeeVacationCalendar.WebAPI.App.Controllers
             {
                 var normalizedEmail = loginDto.Email.ToUpper();
                 var user = _context.Users.FirstOrDefault(x => x.NormalizedEmail == normalizedEmail);
-                return Ok(new UserInfoDTO {
-                     Id = user.Id,
-                     Email = user.Email,
-                     FirstName = user.FirstName,
-                     LastName = user.LastName,
-                     Type = user.EmployeeType
-                });
+                return Ok(DtoMapper.MapEmployeeToDTO(user));
             }
 
             return BadRequest(new UserLoginFailedException());
         }
 
-        //[Authorize]
-        //[HttpGet]
-        //public async Task<IActionResult> GetLoggedEmployeeInfo()
-        //{
-        //    var user = await _userManager.GetUserAsync(User);    
-        //}
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> GetLoggedEmployeeInfo()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            return Ok(DtoMapper.MapEmployeeToDTO(user));
+        }
     }
 }
