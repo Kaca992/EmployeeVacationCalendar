@@ -12,6 +12,13 @@ export const NavigationItems = {
     Logout: 'Log out'
 };
 
+export const EmployeeInfoStrings = {
+    FirstNamePlaceholder: 'First Name',
+    LastNamePlaceholder: 'Last Name',
+    EmailPlaceholder: 'Email',
+    NewPasswordPlaceholder: 'New Password'
+};
+
 export const fieldRequiredMessage = "Value is required";
 export const emailInvalid = "Invalid email format";
 

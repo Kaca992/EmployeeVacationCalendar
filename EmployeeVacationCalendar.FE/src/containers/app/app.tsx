@@ -10,10 +10,8 @@ import LoginForm from '../loginForm/loginForm';
 import { IUserInfo } from '../../common/data';
 import { cookieExists } from '../../utils/common';
 import ProtectedRoute from '../../components/protectedRoute/protectedRoute';
-import EmployeeInfoContainer from '../employeeInfoContainer/employeeInfoContainer';
+import EmployeeManagementContainer from '../employeeManagementContainer/employeeManagementContainer';
 import { initLoggedUserInfo } from '../../actions/app';
-import { Loader } from 'semantic-ui-react';
-import { initializing } from '../../common/strings';
 
 interface IAppProps {
     isUserLoggedIn: boolean;
@@ -77,7 +75,7 @@ export class App extends React.Component<IAppProps, IAppState> {
     }
 
     private _renderMyInfo = (props: RouteComponentProps<any>) => {
-        return <EmployeeInfoContainer />;
+        return <EmployeeManagementContainer />;
     }
 
     private _renderNoMatch = () => {

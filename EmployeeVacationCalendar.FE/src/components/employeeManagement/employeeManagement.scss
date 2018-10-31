@@ -1,0 +1,10 @@
+.employee-management {
+    &__fields {
+        width: 100%;
+        
+        .field {
+            max-width: 450px !important;
+            margin-bottom: 10px;
+        }
+    }
+}

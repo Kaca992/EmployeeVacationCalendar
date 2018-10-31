@@ -11,6 +11,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import { History } from 'history';
 import * as appActions from '@actions/app';
 import { RoutesEnum } from '../../common/enums';
+import LabeledInput from '../../components/labeledInput/labeledInput';
 
 interface ILoginFormOwnProps extends RouteComponentProps<any> {
 
@@ -63,35 +64,25 @@ class LoginForm extends React.Component<ILoginFormProps, ILoginFormState> {
                     {LoginFormStrings.Header}
                 </Header>
                 <Segment className="login-form__fields">
-                    <Form.Field>
-                        <Input
-                            fluid
-                            icon='user'
-                            iconPosition='left'
-                            placeholder={LoginFormStrings.EmailPlaceholder}
-                            value={email}
-                            error={!!emailError}
-                            onChange={this._onEmailChanged}
-                        />
-                        {emailError && <Label basic color='red' pointing>
-                            {emailError}
-                        </Label>}
-                    </Form.Field>
-                    <Form.Field>
-                        <Input
-                            fluid
-                            icon='lock'
-                            iconPosition='left'
-                            placeholder={LoginFormStrings.PasswordPlaceholder}
-                            type='password'
-                            value={password}
-                            error={!!passwordError}
-                            onChange={this._onPasswordChanged}
-                        />
-                        {passwordError && <Label basic color='red' pointing>
-                            {passwordError}
-                        </Label>}
-                    </Form.Field>
+                    <LabeledInput
+                        fluid
+                        icon='user'
+                        iconPosition='left'
+                        placeholder={LoginFormStrings.EmailPlaceholder}
+                        value={email}
+                        onChange={this._onEmailChanged}
+                        errorMessage={emailError}
+                    />
+                    <LabeledInput
+                        fluid
+                        icon='lock'
+                        iconPosition='left'
+                        placeholder={LoginFormStrings.PasswordPlaceholder}
+                        type='password'
+                        value={password}
+                        onChange={this._onPasswordChanged}
+                        errorMessage={passwordError}
+                    />
                     <Button primary fluid size='large' onClick={this._onLogin} loading={loginInProgress} disabled={!loginBtnEnabled}>
                         {LoginFormStrings.LoginBtn}
                     </Button>
