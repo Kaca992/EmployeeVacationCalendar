@@ -34,7 +34,13 @@ namespace EmployeeVacationCalendar.WebAPI.App.Controllers
             {
                 var normalizedEmail = loginDto.Email.ToUpper();
                 var user = _context.Users.FirstOrDefault(x => x.NormalizedEmail == normalizedEmail);
-                return Ok(new UserInfoDTO(user.DisplayName, user.Email, user.EmployeeType));
+                return Ok(new UserInfoDTO {
+                     Id = user.Id,
+                     Email = user.Email,
+                     FirstName = user.FirstName,
+                     LastName = user.LastName,
+                     Type = user.EmployeeType
+                });
             }
 
             return BadRequest(new UserLoginFailedException());

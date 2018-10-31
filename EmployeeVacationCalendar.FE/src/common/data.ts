@@ -1,7 +1,9 @@
 import { EmployeeTypeEnum } from "./enums";
 
 export interface IUserInfo {
-    displayName: string;
+    id: string;
     email: string;
+    firstName: string;
+    lastName: string;
     type: EmployeeTypeEnum;
 }

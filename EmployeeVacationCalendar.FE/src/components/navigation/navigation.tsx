@@ -7,7 +7,7 @@ import { NavigationItems } from '../../common/strings';
 import { IUserInfo } from '../../common/data';
 
 export interface INavigationProps {
-    userInfo: IUserInfo | null;
+    userLoggedIn: boolean;
     onLogOut();
 }
 
@@ -18,11 +18,11 @@ export default class Navigation extends React.Component<INavigationProps> {
     }
 
     public render() {
-        const { userInfo } = this.props;
+        const { userLoggedIn } = this.props;
         return (
             <Menu>
                 {this._renderMenuItem(RoutesEnum.Calendar, NavigationItems.Calendar)}
-                {this._renderUserItem(userInfo)}
+                {this._renderUserItem(userLoggedIn)}
             </Menu>
         );
     }
@@ -33,8 +33,8 @@ export default class Navigation extends React.Component<INavigationProps> {
         </Menu.Item>;
     }
 
-    private _renderUserItem = (userInfo: IUserInfo | null) => {
-        if (!userInfo) {
+    private _renderUserItem = (userLoggedIn: boolean) => {
+        if (!userLoggedIn) {
             return this._renderMenuItem(RoutesEnum.Login, NavigationItems.Login, "right");
         }
 

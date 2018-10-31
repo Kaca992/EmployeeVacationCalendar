@@ -8,6 +8,7 @@ import { RoutesEnum } from '../../common/enums';
 import CalendarContainer from '../calendarContainer/calendarContainer';
 import LoginForm from '../loginForm/loginForm';
 import { IUserInfo } from '../../common/data';
+import { cookieExists } from '../../utils/common';
 
 interface IAppProps {
 
@@ -30,9 +31,17 @@ function mapDispatchToProps(dispatch: any): Partial<IAppProps> {
 }
 
 export class App extends React.Component<IAppProps, IAppState> {
+    private readonly COOKIE_NAME = "EMPLOYEE_IDENTITY";
+
     constructor(props: IAppProps) {
         super(props);
 
+    }
+
+    public componentDidMount() {
+        // if (cookieExists(this.COOKIE_NAME)) {
+        //     alert("postojim");
+        // }
     }
 
     public render() {

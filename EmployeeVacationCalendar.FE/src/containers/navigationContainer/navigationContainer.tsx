@@ -6,7 +6,7 @@ import Navigation from '../../components/navigation/navigation';
 import { IUserInfo } from '../../common/data';
 
 interface INavigationContainerProps {
-    userInfo: IUserInfo | null;
+    userLoggedIn: boolean;
     onLogOut();
 }
 
@@ -16,7 +16,7 @@ interface INavigationContainerState {
 
 function mapStateToProps(state: IRootReducerState): Partial<INavigationContainerProps> {
     return {
-        userInfo: state.app.userInfo
+        userLoggedIn: !!state.app.loggedUserId
     };
 }
 
@@ -33,10 +33,10 @@ class NavigationContainer extends React.Component<INavigationContainerProps, INa
     }
 
     public render() {
-        const { userInfo, onLogOut } = this.props;
+        const { userLoggedIn, onLogOut } = this.props;
 
         return <Navigation
-            userInfo={userInfo}
+            userLoggedIn={userLoggedIn}
             onLogOut={onLogOut}
         />;
     }

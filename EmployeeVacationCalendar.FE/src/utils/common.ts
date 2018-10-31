@@ -27,3 +27,8 @@ export function getObjectValue(theObject: any, path: string, separator = '.') {
  * Omit a single property: type OmitA = Omit<Test, "a">; // Equivalent to: {b: number, c: boolean}
  */
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+
+export function cookieExists(cookieName: string): boolean {
+    if (!cookieName || /^(?:expires|max\-age|path|domain|secure)$/i.test(cookieName)) { return false; }
+    return (new RegExp("(?:^|;\\s*)" + encodeURIComponent(cookieName).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=")).test(document.cookie);
+}

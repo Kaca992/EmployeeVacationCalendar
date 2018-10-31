@@ -1,24 +1,25 @@
 import { IAction } from "@common/appDataStructures";
-import { IUserInfo } from "../common/data";
-import { LOGIN_USER } from "../actionTypes/app";
-import { actionUtils } from "../utils/fetcher";
+import { LOGIN_USER, SET_LOGGED_USER } from "../actionTypes/app";
+import { IRootReducerState } from "./rootReducer";
 
 export interface IAppReducerState {
-    userInfo: IUserInfo | null;
+    loggedUserId: string | null;
 }
 
 const initialState: IAppReducerState = {
-    userInfo: null
+    loggedUserId: null
 };
 
 export default function appReducer(state: IAppReducerState = initialState, action: IAction = { type: '', payload: null }): IAppReducerState {
     switch (action.type) {
-        case actionUtils.responseAction(LOGIN_USER):
+        case SET_LOGGED_USER:
             return {
                 ...state,
-                userInfo: action.payload
+                loggedUserId: action.payload
             };
         default:
             return state;
     }
 }
+
+export const getLoggedUserId = (state: IRootReducerState) => state.app.loggedUserId;

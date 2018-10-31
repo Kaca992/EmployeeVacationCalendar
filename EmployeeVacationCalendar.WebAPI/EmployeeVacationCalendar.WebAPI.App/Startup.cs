@@ -55,10 +55,9 @@ namespace EmployeeVacationCalendar.WebAPI.App
             services.ConfigureApplicationCookie(options =>
             {
                 // Cookie settings
-                options.Cookie.HttpOnly = true;
+                options.Cookie.HttpOnly = false;
                 options.Cookie.Name = "EMPLOYEE_IDENTITY";
-                options.Cookie.Expiration = TimeSpan.FromMinutes(60);
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(15);
 
                 options.LoginPath = "/login";
                 options.AccessDeniedPath = "/access-denied";
