@@ -29,7 +29,7 @@ namespace EmployeeVacationCalendar.WebAPI.App.Controllers
         [HttpPost]
         public async Task<IActionResult> LoginEmployee([FromBody]LoginDTO loginDto)
         {
-            var result = await _signInManager.PasswordSignInAsync(loginDto.Email, loginDto.Password, false, false);
+            var result = await _signInManager.PasswordSignInAsync(loginDto.Email, loginDto.Password, true, false);
             if (result.Succeeded)
             {
                 var normalizedEmail = loginDto.Email.ToUpper();

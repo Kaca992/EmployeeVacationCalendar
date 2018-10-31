@@ -15,9 +15,11 @@ export class Fetcher {
     private readonly init: RequestInit = {
         mode: 'cors',
         method: 'GET',
-        credentials: 'omit',
+        credentials: 'include',
+        // X-Requested-With serves so ASP.NET Core wont return 302, but 401 on unauthorized
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
         }
     };
 
