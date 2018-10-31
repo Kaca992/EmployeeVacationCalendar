@@ -12,7 +12,7 @@ export function setLoggedUser(loggedUserId: string | null): IAction {
     };
 }
 
-export function loginUser(email: string, password: string, history: History) {
+export function loginUser(email: string, password: string, redirectUrl: string, history: History) {
     return (dispatch, getState) => {
         return fetcher.reduxFetch('/api/login', {
             jsonResponseExpected: true,
@@ -23,7 +23,7 @@ export function loginUser(email: string, password: string, history: History) {
             action: appActions.LOGIN_USER
         }, dispatch).then((result: IUserInfo) => {
             dispatch(setLoggedUser(result.id));
-            history.replace(RoutesEnum.Calendar);
+            history.replace(redirectUrl);
         });
     };
 }

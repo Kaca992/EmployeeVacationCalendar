@@ -9,9 +9,11 @@ import CalendarContainer from '../calendarContainer/calendarContainer';
 import LoginForm from '../loginForm/loginForm';
 import { IUserInfo } from '../../common/data';
 import { cookieExists } from '../../utils/common';
+import ProtectedRoute from '../../components/protectedRoute/protectedRoute';
+import EmployeeInfoContainer from '../employeeInfoContainer/employeeInfoContainer';
 
 interface IAppProps {
-
+    isUserLoggedIn: boolean;
 }
 
 interface IAppState {
@@ -20,7 +22,7 @@ interface IAppState {
 
 function mapStateToProps(state: IRootReducerState): Partial<IAppProps> {
     return {
-
+        isUserLoggedIn: !!state.app.loggedUserId
     };
 }
 
@@ -45,11 +47,14 @@ export class App extends React.Component<IAppProps, IAppState> {
     }
 
     public render() {
+        const { isUserLoggedIn } = this.props;
+
         return (
             <Layout>
                 <Switch>
                     <Route exact path={RoutesEnum.Calendar} component={CalendarContainer} />
                     <Route path={RoutesEnum.Login} render={this._renderLoginForm} />
+                    <ProtectedRoute isUserLoggedIn={isUserLoggedIn} path={RoutesEnum.MyInfo} render={this._renderMyInfo} />
                     <Route render={this._renderNoMatch} />
                 </Switch>
             </Layout>
@@ -58,6 +63,10 @@ export class App extends React.Component<IAppProps, IAppState> {
 
     private _renderLoginForm = (props: RouteComponentProps<any>) => {
         return <LoginForm {...props} />;
+    }
+
+    private _renderMyInfo = (props: RouteComponentProps<any>) => {
+        return <EmployeeInfoContainer />;
     }
 
     private _renderNoMatch = () => {

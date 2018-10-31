@@ -10,13 +10,14 @@ import { IErrorObject } from '../../common/appDataStructures';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { History } from 'history';
 import * as appActions from '@actions/app';
+import { RoutesEnum } from '../../common/enums';
 
 interface ILoginFormOwnProps extends RouteComponentProps<any> {
 
 }
 
 interface ILoginFormProps extends ILoginFormOwnProps {
-    loginUser(email: string, password: string, history: History);
+    loginUser(email: string, password: string, redirectUrl: string, history: History);
 }
 
 function mapStateToProps(state: IRootReducerState, ownProps: ILoginFormOwnProps): Partial<ILoginFormProps> {
@@ -27,7 +28,7 @@ function mapStateToProps(state: IRootReducerState, ownProps: ILoginFormOwnProps)
 
 function mapDispatchToProps(dispatch: any): Partial<ILoginFormProps> {
     return {
-        loginUser: (email: string, password: string, history: History) => dispatch(appActions.loginUser(email, password, history))
+        loginUser: (email: string, password: string, redirectUrl: string, history: History) => dispatch(appActions.loginUser(email, password, redirectUrl, history))
     };
 }
 
@@ -110,13 +111,16 @@ class LoginForm extends React.Component<ILoginFormProps, ILoginFormState> {
     private _onLogin = () => {
         const { loginUser, history } = this.props;
         const { email, password } = this.state;
+        // redirect url
+        const { from } = this.props.location.state || { from: { pathname: RoutesEnum.Calendar } };
+
         if (!this._isValidInput()) {
             return;
         }
 
         this.setState({ loginInProgress: true });
 
-        loginUser(email, password, history)
+        loginUser(email, password, from, history)
             .catch((error: IErrorObject) => {
                 this.setState({
                     emailError: error.body.message,

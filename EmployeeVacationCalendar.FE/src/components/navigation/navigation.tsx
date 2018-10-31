@@ -22,12 +22,13 @@ export default class Navigation extends React.Component<INavigationProps> {
         return (
             <Menu>
                 {this._renderMenuItem(RoutesEnum.Calendar, NavigationItems.Calendar)}
+                {this._renderMenuItem(RoutesEnum.MyInfo, NavigationItems.MyInfo)}
                 {this._renderUserItem(userLoggedIn)}
             </Menu>
         );
     }
 
-    private _renderMenuItem = (route: RoutesEnum, text: string, position: "right" | "left" = "left") => {
+    private _renderMenuItem = (route: RoutesEnum, text: string, position?: "right" | "left") => {
         return <Menu.Item position={position}>
             <NavLink exact to={route} activeClassName='active'>{text}</NavLink>
         </Menu.Item>;
