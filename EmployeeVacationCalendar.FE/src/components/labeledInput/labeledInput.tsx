@@ -17,7 +17,7 @@ export default class LabeledInput extends React.Component<ILabeledInputProps> {
                 {...inputProps}
                 error={!!errorMessage}
             />
-            {errorMessage && <Label basic color='red' pointing>
+            {errorMessage && <Label className="labeled-input__error-label" basic color='red' pointing>
                 {errorMessage}
             </Label>}
         </div>;

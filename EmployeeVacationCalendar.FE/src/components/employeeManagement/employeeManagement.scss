@@ -8,4 +8,12 @@
             margin-bottom: 10px;
         }
     }
+
+    &__buttons-container {
+        display: flex;
+    }
+
+    &__type-checkbox {
+        margin-bottom: 10px;
+    }
 }

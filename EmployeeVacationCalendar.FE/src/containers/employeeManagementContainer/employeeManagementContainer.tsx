@@ -23,7 +23,8 @@ interface IEmployeeManagementContainerState {
 function mapStateToProps(state: IRootReducerState, ownProps: IEmployeeManagementContainerOwnProps): Partial<IEmployeeManagementContainerProps> {
     return {
         ...ownProps,
-        employeeInfo: ownProps.match.params.id && state.employeeInfos ? state.employeeInfos.employeeInfosById[ownProps.match.params.id] : {
+        // we set a dummy password for existing employee so he doesnt have to retype the old one when changing some other property
+        employeeInfo: ownProps.match.params.id && state.employeeInfos ? { ...state.employeeInfos.employeeInfosById[ownProps.match.params.id], newPassword: "12345Dummy" } : {
             id: "",
             firstName: "",
             lastName: "",
@@ -54,7 +55,9 @@ class EmployeeManagementContainer extends React.Component<IEmployeeManagementCon
         return <EmployeeManagement
             employeeInfo={newEmployeeInfo}
             validation={validation}
+            isSavingChanges={false}
             onEmployeeInfoChanged={this._onEmployeeInfoChanged}
+            onSaveChanges={this._onSaveChanges}
         />;
     }
 
@@ -64,21 +67,29 @@ class EmployeeManagementContainer extends React.Component<IEmployeeManagementCon
         });
     }
 
-    private _validateInputs = () => {
+    private _areInputsValid = (): boolean => {
         const { firstName, lastName, email, newPassword, type } = this.state.newEmployeeInfo;
         const firstNameError = emptyAndNonWhitespaceInput(firstName);
         const lastNameError = emptyAndNonWhitespaceInput(lastName);
-        const newPasswordError = emptyAndNonWhitespaceInput(newPassword);
+        const passwordError = emptyAndNonWhitespaceInput(newPassword);
         const emailError = emailValidation(email);
 
         this.setState({
             validation: {
                 firstNameError,
                 lastNameError,
-                newPasswordError,
+                passwordError,
                 emailError
             }
         });
+
+        return !firstNameError && !lastNameError && !passwordError && !emailError;
+    }
+
+    private _onSaveChanges = () => {
+        if (!this._areInputsValid()) {
+            return;
+        }
     }
 }
 

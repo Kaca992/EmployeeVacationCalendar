@@ -13,10 +13,17 @@ export const NavigationItems = {
 };
 
 export const EmployeeInfoStrings = {
-    FirstNamePlaceholder: 'First Name',
-    LastNamePlaceholder: 'Last Name',
-    EmailPlaceholder: 'Email',
-    NewPasswordPlaceholder: 'New Password'
+    FirstNamePlaceholder: 'Enter First Name',
+    LastNamePlaceholder: 'Enter Last Name',
+    EmailPlaceholder: 'Enter Email',
+    NewPasswordPlaceholder: 'Enter New Password',
+    FirstNameLabel: 'First Name',
+    LastNameLabel: 'Last Name',
+    EmailLabel: 'Email',
+    NewPasswordLabel: 'Password',
+
+    SaveChangesBtn: 'Save Changes',
+    IsUserAdminLabel: 'Is User Admin'
 };
 
 export const fieldRequiredMessage = "Value is required";
