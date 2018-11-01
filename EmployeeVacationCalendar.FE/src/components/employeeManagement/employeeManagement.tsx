@@ -66,7 +66,7 @@ export default class EmployeeManagement extends React.Component<IEmployeeManagem
                 label={EmployeeInfoStrings.NewPasswordLabel}
                 type='password'
                 placeholder={EmployeeInfoStrings.NewPasswordPlaceholder}
-                value={newPassword}
+                value={newPassword || ""}
                 onChange={(event, value) => this._onEmployeeInfoChanged({ newPassword: value.value }, { passwordError: undefined })}
                 errorMessage={passwordError}
             />

@@ -6,6 +6,7 @@ import { INewUserInfo, IEmployeeManagementValidation } from '../../common/data';
 import { EmployeeTypeEnum } from '../../common/enums';
 import EmployeeManagement from '../../components/employeeManagement/employeeManagement';
 import { emptyAndNonWhitespaceInput, emailValidation } from '../../utils/validation';
+import { addOrUpdateEmployeeInfo } from '../../actions/employeeInfos';
 
 interface IEmployeeManagementContainerOwnProps extends RouteComponentProps<{ id: string }> {
 
@@ -13,9 +14,11 @@ interface IEmployeeManagementContainerOwnProps extends RouteComponentProps<{ id:
 
 interface IEmployeeManagementContainerProps extends IEmployeeManagementContainerOwnProps {
     employeeInfo: INewUserInfo;
+    addOrUpdateEmployeeInfo(employeeInfo: INewUserInfo): Promise<any>;
 }
 
 interface IEmployeeManagementContainerState {
+    isLoading: boolean;
     newEmployeeInfo: INewUserInfo;
     validation: IEmployeeManagementValidation;
 }
@@ -23,8 +26,7 @@ interface IEmployeeManagementContainerState {
 function mapStateToProps(state: IRootReducerState, ownProps: IEmployeeManagementContainerOwnProps): Partial<IEmployeeManagementContainerProps> {
     return {
         ...ownProps,
-        // we set a dummy password for existing employee so he doesnt have to retype the old one when changing some other property
-        employeeInfo: ownProps.match.params.id && state.employeeInfos ? { ...state.employeeInfos.employeeInfosById[ownProps.match.params.id], newPassword: "12345Dummy" } : {
+        employeeInfo: ownProps.match.params.id && state.employeeInfos ? state.employeeInfos.employeeInfosById[ownProps.match.params.id] : {
             id: "",
             firstName: "",
             lastName: "",
@@ -37,7 +39,7 @@ function mapStateToProps(state: IRootReducerState, ownProps: IEmployeeManagement
 
 function mapDispatchToProps(dispatch: any): Partial<IEmployeeManagementContainerProps> {
     return {
-
+        addOrUpdateEmployeeInfo: (employeeInfo: INewUserInfo) => dispatch(addOrUpdateEmployeeInfo(employeeInfo))
     };
 }
 
@@ -45,6 +47,7 @@ class EmployeeManagementContainer extends React.Component<IEmployeeManagementCon
     constructor(props: IEmployeeManagementContainerProps) {
         super(props);
         this.state = {
+            isLoading: false,
             newEmployeeInfo: props.employeeInfo,
             validation: {}
         };
@@ -68,11 +71,16 @@ class EmployeeManagementContainer extends React.Component<IEmployeeManagementCon
     }
 
     private _areInputsValid = (): boolean => {
-        const { firstName, lastName, email, newPassword, type } = this.state.newEmployeeInfo;
+        const { id, firstName, lastName, email, newPassword, type } = this.state.newEmployeeInfo;
         const firstNameError = emptyAndNonWhitespaceInput(firstName);
         const lastNameError = emptyAndNonWhitespaceInput(lastName);
-        const passwordError = emptyAndNonWhitespaceInput(newPassword);
         const emailError = emailValidation(email);
+
+        let passwordError;
+        // if existing user changed some value, or if new user
+        if (id && newPassword || !id) {
+            passwordError = emptyAndNonWhitespaceInput(newPassword);
+        }
 
         this.setState({
             validation: {
@@ -90,6 +98,15 @@ class EmployeeManagementContainer extends React.Component<IEmployeeManagementCon
         if (!this._areInputsValid()) {
             return;
         }
+
+        this.setState({ isLoading: true });
+        this.props.addOrUpdateEmployeeInfo(this.state.newEmployeeInfo)
+            .then(() => {
+                this.setState({ isLoading: false });
+            })
+            .catch(() => {
+                this.setState({ isLoading: false });
+            });
     }
 }
 

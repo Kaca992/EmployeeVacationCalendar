@@ -29,14 +29,3 @@ export function loginUser(email: string, password: string, redirectUrl: string, 
         });
     };
 }
-
-export function initLoggedUserInfo() {
-    return (dispatch, getState) => {
-        return fetcher.reduxFetch(loginControllerBaseUrl, {
-            jsonResponseExpected: true,
-            action: appActions.GET_LOGGED_USER_INFO
-        }, dispatch).then((result: IUserInfo) => {
-            dispatch(setLoggedUser(result.id));
-        });
-    };
-}

@@ -1,8 +1,9 @@
 import { IAction } from "@common/appDataStructures";
 import { IUserInfo } from "../common/data";
 import { actionUtils } from "../utils/fetcher";
-import { LOGIN_USER, GET_LOGGED_USER_INFO } from "../actionTypes/app";
+import { LOGIN_USER } from "../actionTypes/app";
 import { IRootReducerState } from "./rootReducer";
+import { GET_LOGGED_USER_INFO, ADD_OR_UPDATE_EMPLOYEE_INFO } from "../actionTypes/employeeInfos";
 
 export interface IEmployeeInfosReducerState {
     employeeInfosById: { [id: string]: IUserInfo };
@@ -16,6 +17,7 @@ export default function employeeInfosReducer(state: IEmployeeInfosReducerState =
     switch (action.type) {
         case actionUtils.responseAction(LOGIN_USER):
         case actionUtils.responseAction(GET_LOGGED_USER_INFO):
+        case actionUtils.responseAction(ADD_OR_UPDATE_EMPLOYEE_INFO):
             {
                 const userInfo: IUserInfo = action.payload;
                 return {

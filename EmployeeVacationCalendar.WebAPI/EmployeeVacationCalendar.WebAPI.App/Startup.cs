@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using EmployeeVacationCalendar.WebAPI.App.Services;
 using EmployeeVacationCalendar.WebAPI.Common;
 using EmployeeVacationCalendar.WebAPI.Common.Interfaces;
 using EmployeeVacationCalendar.WebAPI.Database;
@@ -78,6 +79,7 @@ namespace EmployeeVacationCalendar.WebAPI.App
         private void configureDI(IServiceCollection services)
         {
             services.AddSingleton<IAppSettings, AppSettings>();
+            services.AddTransient<IEmployeeService, EmployeeService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<Employee> userManager, IAppSettings appSettings)

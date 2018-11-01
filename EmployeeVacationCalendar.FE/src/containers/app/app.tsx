@@ -11,7 +11,7 @@ import { IUserInfo } from '../../common/data';
 import { cookieExists } from '../../utils/common';
 import ProtectedRoute from '../../components/protectedRoute/protectedRoute';
 import EmployeeManagementContainer from '../employeeManagementContainer/employeeManagementContainer';
-import { initLoggedUserInfo } from '../../actions/app';
+import { initLoggedUserInfo } from '../../actions/employeeInfos';
 
 interface IAppProps {
     loggedUserInfo: IUserInfo | undefined;

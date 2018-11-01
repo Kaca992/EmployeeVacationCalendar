@@ -1,7 +1,8 @@
 import { IAction } from "@common/appDataStructures";
-import { LOGIN_USER, SET_LOGGED_USER, GET_LOGGED_USER_INFO } from "../actionTypes/app";
+import { LOGIN_USER, SET_LOGGED_USER } from "../actionTypes/app";
 import { IRootReducerState } from "./rootReducer";
 import { actionUtils } from "../utils/fetcher";
+import { GET_LOGGED_USER_INFO } from "../actionTypes/employeeInfos";
 
 export interface IAppReducerState {
     loggedUserId: string | null;

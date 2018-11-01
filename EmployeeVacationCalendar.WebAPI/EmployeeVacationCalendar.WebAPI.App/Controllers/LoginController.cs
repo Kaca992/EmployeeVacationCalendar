@@ -40,13 +40,5 @@ namespace EmployeeVacationCalendar.WebAPI.App.Controllers
 
             return BadRequest(new UserLoginFailedException());
         }
-
-        [Authorize]
-        [HttpGet]
-        public async Task<IActionResult> GetLoggedEmployeeInfo()
-        {
-            var user = await _userManager.GetUserAsync(User);
-            return Ok(DtoMapper.MapEmployeeToDTO(user));
-        }
     }
 }
