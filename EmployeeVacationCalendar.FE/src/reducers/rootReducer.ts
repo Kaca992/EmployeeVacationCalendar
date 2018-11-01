@@ -23,5 +23,5 @@ export default rootReducer;
 export const getLoggedUserInfo = createSelector(
     [getLoggedUserId, getAllEmployeeInfosById],
     (loggedUserId, employeeInfosById) => {
-        return employeeInfosById && loggedUserId && employeeInfosById[loggedUserId];
+        return employeeInfosById && loggedUserId ? employeeInfosById[loggedUserId] : undefined;
     });

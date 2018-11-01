@@ -17,6 +17,7 @@ namespace EmployeeVacationCalendar.WebAPI.App.Util
                 Email = employee.Email,
                 FirstName = employee.FirstName,
                 LastName = employee.LastName,
+                ConcurrencyStamp = employee.ConcurrencyStamp,
                 Type = employee.EmployeeType
             };
         }

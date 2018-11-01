@@ -37,8 +37,8 @@ interface ILoginFormState {
     email: string;
     password: string;
     loginInProgress: boolean;
-    emailError: string | null;
-    passwordError: string | null;
+    emailError?: string;
+    passwordError?: string;
 }
 
 class LoginForm extends React.Component<ILoginFormProps, ILoginFormState> {
@@ -47,9 +47,7 @@ class LoginForm extends React.Component<ILoginFormProps, ILoginFormState> {
         this.state = {
             email: '',
             password: '',
-            loginInProgress: false,
-            emailError: null,
-            passwordError: null
+            loginInProgress: false
         };
     }
 
@@ -92,11 +90,11 @@ class LoginForm extends React.Component<ILoginFormProps, ILoginFormState> {
     }
 
     private _onEmailChanged = (event: React.SyntheticEvent<HTMLInputElement>, data: InputOnChangeData) => {
-        this.setState({ email: data.value, emailError: null, passwordError: null });
+        this.setState({ email: data.value, emailError: undefined, passwordError: undefined });
     }
 
     private _onPasswordChanged = (event: React.SyntheticEvent<HTMLInputElement>, data: InputOnChangeData) => {
-        this.setState({ password: data.value, emailError: null, passwordError: null });
+        this.setState({ password: data.value, emailError: undefined, passwordError: undefined });
     }
 
     private _onLogin = () => {

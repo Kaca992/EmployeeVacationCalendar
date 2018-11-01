@@ -1,6 +1,6 @@
 import { fieldRequiredMessage, emailInvalid } from "@common/strings";
 
-export function emptyAndNonWhitespaceInput(newInput: string) {
+export function emptyAndNonWhitespaceInput(newInput?: string) {
     let isEmpty = false;
 
     if (!newInput) {
@@ -9,10 +9,10 @@ export function emptyAndNonWhitespaceInput(newInput: string) {
         isEmpty = true;
     }
 
-    return isEmpty ? fieldRequiredMessage : null;
+    return isEmpty ? fieldRequiredMessage : undefined;
 }
 
-export function emailValidation(email: string) {
+export function emailValidation(email?: string) {
     const cleanEmail = email ? email.trim() : email;
 
     const regex = /^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i;
@@ -21,9 +21,10 @@ export function emailValidation(email: string) {
         return check;
     }
 
-    if (!regex.test(cleanEmail)) {
+    // upper check validates that email is not undefined, so we can put !
+    if (!regex.test(cleanEmail!)) {
         return emailInvalid;
     }
 
-    return null;
+    return undefined;
 }

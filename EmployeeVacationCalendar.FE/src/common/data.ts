@@ -5,5 +5,18 @@ export interface IUserInfo {
     email: string;
     firstName: string;
     lastName: string;
+    concurrencyStamp?: string;
     type: EmployeeTypeEnum;
+}
+
+export interface INewUserInfo extends IUserInfo {
+    newPassword?: string;
+}
+
+export interface IEmployeeManagementValidation {
+    firstNameError?: string;
+    lastNameError?: string;
+    emailError?: string;
+    passwordError?: string;
+    serverError?: string;
 }

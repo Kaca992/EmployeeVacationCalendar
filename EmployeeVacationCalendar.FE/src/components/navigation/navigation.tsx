@@ -7,7 +7,7 @@ import { NavigationItems } from '../../common/strings';
 import { IUserInfo } from '../../common/data';
 
 export interface INavigationProps {
-    userLoggedIn: boolean;
+    loggedInUserId: string | null;
     onLogOut();
 }
 
@@ -18,17 +18,17 @@ export default class Navigation extends React.Component<INavigationProps> {
     }
 
     public render() {
-        const { userLoggedIn } = this.props;
+        const { loggedInUserId } = this.props;
         return (
             <Menu>
                 {this._renderMenuItem(RoutesEnum.Calendar, NavigationItems.Calendar)}
-                {this._renderMenuItem(RoutesEnum.MyInfo, NavigationItems.MyInfo)}
-                {this._renderUserItem(userLoggedIn)}
+                {loggedInUserId && this._renderMenuItem(`${RoutesEnum.EmployeeInfo}/${loggedInUserId}`, NavigationItems.MyInfo)}
+                {this._renderUserItem(!!loggedInUserId)}
             </Menu>
         );
     }
 
-    private _renderMenuItem = (route: RoutesEnum, text: string, position?: "right" | "left") => {
+    private _renderMenuItem = (route: string, text: string, position?: "right" | "left") => {
         return <Menu.Item position={position}>
             <NavLink exact to={route} activeClassName='active'>{text}</NavLink>
         </Menu.Item>;

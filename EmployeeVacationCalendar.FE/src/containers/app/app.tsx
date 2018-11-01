@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { IRootReducerState } from '@reducers/rootReducer';
+import { IRootReducerState, getLoggedUserInfo } from '@reducers/rootReducer';
 import './app.scss';
 import Layout from '../../components/layout/layout';
 import { Route, withRouter, RouteComponentProps, Switch } from 'react-router';
@@ -14,8 +14,7 @@ import EmployeeManagementContainer from '../employeeManagementContainer/employee
 import { initLoggedUserInfo } from '../../actions/app';
 
 interface IAppProps {
-    isUserLoggedIn: boolean;
-    userInfoInitialized: boolean;
+    loggedUserInfo: IUserInfo | undefined;
     initLoggedUserInfo(): Promise<IUserInfo>;
 }
 
@@ -25,8 +24,7 @@ interface IAppState {
 
 function mapStateToProps(state: IRootReducerState): Partial<IAppProps> {
     return {
-        isUserLoggedIn: !!state.app.loggedUserId,
-        userInfoInitialized: state.app.initialization.userInfoInitialized
+        loggedUserInfo: getLoggedUserInfo(state)
     };
 }
 
@@ -48,22 +46,22 @@ export class App extends React.Component<IAppProps, IAppState> {
     }
 
     public componentDidMount() {
-        if (this.isIdentityCookieSet && !this.props.userInfoInitialized) {
+        if (this.isIdentityCookieSet && !this.props.loggedUserInfo) {
             this.props.initLoggedUserInfo();
         }
     }
 
     public render() {
-        const { isUserLoggedIn, userInfoInitialized } = this.props;
-        const isUserLogginInitialized = this.isIdentityCookieSet && !userInfoInitialized;
-        const isAppLoading = isUserLogginInitialized;
+        const { loggedUserInfo } = this.props;
+        const isUserLogginInitializing = this.isIdentityCookieSet && !loggedUserInfo;
+        const isAppLoading = isUserLogginInitializing;
 
         return (
             <Layout isLoading={isAppLoading}>
                 <Switch>
                     <Route exact path={RoutesEnum.Calendar} component={CalendarContainer} />
                     <Route path={RoutesEnum.Login} render={this._renderLoginForm} />
-                    <ProtectedRoute isUserLoggedIn={isUserLoggedIn} path={RoutesEnum.MyInfo} render={this._renderMyInfo} />
+                    <ProtectedRoute isUserLoggedIn={!!loggedUserInfo} path={`${RoutesEnum.EmployeeInfo}/:id`} render={this._renderEmployeeInfo} />
                     <Route render={this._renderNoMatch} />
                 </Switch>
             </Layout>
@@ -74,8 +72,8 @@ export class App extends React.Component<IAppProps, IAppState> {
         return <LoginForm {...props} />;
     }
 
-    private _renderMyInfo = (props: RouteComponentProps<any>) => {
-        return <EmployeeManagementContainer />;
+    private _renderEmployeeInfo = (props: RouteComponentProps<any>) => {
+        return <EmployeeManagementContainer {...props} />;
     }
 
     private _renderNoMatch = () => {

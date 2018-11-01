@@ -31,4 +31,4 @@ export default function employeeInfosReducer(state: IEmployeeInfosReducerState =
     }
 }
 
-export const getAllEmployeeInfosById = (state: IRootReducerState) => state.employeeInfos;
+export const getAllEmployeeInfosById = (state: IRootReducerState) => state.employeeInfos.employeeInfosById;

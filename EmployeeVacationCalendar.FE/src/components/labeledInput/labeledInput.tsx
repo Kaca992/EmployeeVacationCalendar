@@ -5,7 +5,7 @@ import { InputProps, Label, Input } from 'semantic-ui-react';
 import './labeledInput.scss';
 
 export interface ILabeledInputProps extends InputProps {
-    errorMessage: string | null;
+    errorMessage?: string | null;
 }
 
 export default class LabeledInput extends React.Component<ILabeledInputProps> {
