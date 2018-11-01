@@ -50,7 +50,13 @@ namespace EmployeeVacationCalendar.WebAPI.App.Services
                 oldUserInfo.PasswordHash = _userManager.PasswordHasher.HashPassword(oldUserInfo, newUserInfoDTO.NewPassword);
             }
 
-            await _context.SaveChangesAsync();
+            IdentityResult result = await _userManager.UpdateAsync(oldUserInfo);
+
+            if (result.Succeeded)
+            {
+                return oldUserInfo;
+            }
+
             return oldUserInfo;
         }
 
