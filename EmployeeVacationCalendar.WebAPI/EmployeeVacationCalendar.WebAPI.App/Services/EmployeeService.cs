@@ -55,6 +55,9 @@ namespace EmployeeVacationCalendar.WebAPI.App.Services
 
             if (!string.IsNullOrEmpty(newUserInfoDTO.NewPassword))
             {
+                var passwordResult = await _userManager.PasswordValidators.FirstOrDefault().ValidateAsync(_userManager, oldUserInfo, newUserInfoDTO.NewPassword);
+
+                if (!passwordResult.Succeeded) throw new ArgumentException(passwordResult.Errors.FirstOrDefault()?.Description);
                 oldUserInfo.PasswordHash = _userManager.PasswordHasher.HashPassword(oldUserInfo, newUserInfoDTO.NewPassword);
             }
 

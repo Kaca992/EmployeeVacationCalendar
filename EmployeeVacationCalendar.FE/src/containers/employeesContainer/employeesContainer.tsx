@@ -6,7 +6,7 @@ import { IUserInfo } from '../../common/data';
 import { LoadingStatusEnum, EmployeeTypeEnum, RoutesEnum } from '../../common/enums';
 import { getAllEmployeesInfo, deleteEmployee } from '../../actions/employeeInfos';
 import { getAllEmployeeList } from '../../reducers/employeeInfosReducer';
-import { Loader, List, Message, Icon } from 'semantic-ui-react';
+import { Loader, List, Message, Icon, Button } from 'semantic-ui-react';
 import { initializing } from '../../common/strings';
 import EmployeeListItem from './employeeListItem';
 import { Redirect, withRouter, RouteComponentProps } from 'react-router';
@@ -73,6 +73,7 @@ class EmployeesContainer extends React.Component<IEmployeesContainerProps> {
                 <Icon name='delete' />
                 {deleteEmployeeErrorMessage}
             </Message>}
+            {loggedUserInfo && <Button className="employee-container__add-button" onClick={this._onEmployeeAddNew}>Add New Employee</Button>}
             <List className="employee-container__employee-list" divided verticalAlign='middle' size='large'>
                 {this.props.employeesList.map(employee => {
                     const { id, firstName, lastName, email } = employee;
@@ -93,6 +94,10 @@ class EmployeesContainer extends React.Component<IEmployeesContainerProps> {
 
     private _onEmployeeEdit = (employeeId: string) => {
         return this.props.history.push(`${RoutesEnum.EmployeeInfo}/${employeeId}`);
+    }
+
+    private _onEmployeeAddNew = () => {
+        return this.props.history.push(`${RoutesEnum.EmployeeInfo}`);
     }
 
     private _onEmployeeDelete = (employeeId: string) => {
