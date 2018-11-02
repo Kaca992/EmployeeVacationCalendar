@@ -1,4 +1,4 @@
-import { EmployeeTypeEnum } from "./enums";
+import { EmployeeTypeEnum, VacationTypeEnum } from "./enums";
 
 export interface IUserInfo {
     id: string;
@@ -19,4 +19,11 @@ export interface IEmployeeManagementValidation {
     emailError?: string;
     passwordError?: string;
     serverError?: string;
+}
+
+export interface ICalendarEntry {
+    id: string;
+    vacationType: VacationTypeEnum;
+    employeeId?: string;
+    concurrencyStamp?: string;
 }

@@ -2,7 +2,8 @@ export enum RoutesEnum {
     Calendar = '/',
     Login = '/login',
     EmployeeInfo = '/employee-info',
-    Employees = '/employee-list'
+    Employees = '/employee-list',
+    NewCalendarEntry = '/calendar-entry'
 }
 
 export enum EmployeeTypeEnum {
@@ -16,4 +17,10 @@ export enum LoadingStatusEnum {
     Loading,
     Loaded,
     Error
+}
+
+export enum VacationTypeEnum {
+    VacationLeave,
+    SickLeave,
+    Holiday
 }

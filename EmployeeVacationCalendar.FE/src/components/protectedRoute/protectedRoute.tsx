@@ -28,7 +28,7 @@ export default class ProtectedRoute extends React.Component<IProtectedRouteProps
         if (isUserLoggedIn) {
             return render(props);
         } else {
-            return <Redirect to={{ pathname: "/login", state: { from: path } }} />;
+            return <Redirect to={{ pathname: "/login", state: { from: location.pathname } }} />;
         }
     }
 }

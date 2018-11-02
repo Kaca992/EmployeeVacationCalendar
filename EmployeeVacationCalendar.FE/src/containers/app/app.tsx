@@ -13,6 +13,7 @@ import ProtectedRoute from '../../components/protectedRoute/protectedRoute';
 import EmployeeManagementContainer from '../employeeManagementContainer/employeeManagementContainer';
 import { initLoggedUserInfo } from '../../actions/employeeInfos';
 import EmployeesContainer from '../employeesContainer/employeesContainer';
+import CalendarEntryManagementContainer from '../calendarEntryManagementContainer/calendarEntryManagementContainer';
 
 interface IAppProps {
     loggedUserInfo: IUserInfo | undefined;
@@ -64,6 +65,7 @@ export class App extends React.Component<IAppProps, IAppState> {
                     <Route path={RoutesEnum.Login} render={this._renderLoginForm} />
                     <Route path={RoutesEnum.Employees} render={this._renderEmployeesContainer} />
                     <ProtectedRoute isUserLoggedIn={!!loggedUserInfo} path={`${RoutesEnum.EmployeeInfo}/:id?`} render={this._renderEmployeeInfo} />
+                    <ProtectedRoute isUserLoggedIn={!!loggedUserInfo} path={`${RoutesEnum.NewCalendarEntry}/:id?`} render={this._renderNewCalendarEntry} />
                     <Route render={this._renderNoMatch} />
                 </Switch>
             </Layout>
@@ -80,6 +82,10 @@ export class App extends React.Component<IAppProps, IAppState> {
 
     private _renderEmployeesContainer = (props: RouteComponentProps<any>) => {
         return <EmployeesContainer {...props} />;
+    }
+
+    private _renderNewCalendarEntry = (props: RouteComponentProps<any>) => {
+        return <CalendarEntryManagementContainer {...props} />;
     }
 
     private _renderNoMatch = () => {

@@ -14,7 +14,7 @@ interface IEmployeeManagementContainerOwnProps extends RouteComponentProps<{ id:
 }
 
 interface IEmployeeManagementContainerProps extends IEmployeeManagementContainerOwnProps {
-    isAppInitializing: boolean;
+    isAppInitialized: boolean;
     employeeInfo: INewUserInfo;
     addOrUpdateEmployeeInfo(employeeInfo: INewUserInfo): Promise<any>;
 }
@@ -29,7 +29,7 @@ interface IEmployeeManagementContainerState {
 function mapStateToProps(state: IRootReducerState, ownProps: IEmployeeManagementContainerOwnProps): Partial<IEmployeeManagementContainerProps> {
     return {
         ...ownProps,
-        isAppInitializing: state.app.initialization.userInfoInitialized,
+        isAppInitialized: state.app.initialization.userInfoInitialized,
         employeeInfo: ownProps.match.params.id && state.employeeInfos ? state.employeeInfos.employeeInfosById[ownProps.match.params.id] : {
             id: "",
             firstName: "",
@@ -77,7 +77,7 @@ class EmployeeManagementContainer extends React.Component<IEmployeeManagementCon
         const { newEmployeeInfo, validation, isLoading, successMessage } = this.state;
 
         // refresh for non logged user
-        if (this.props.isAppInitializing && !newEmployeeInfo) {
+        if (this.props.isAppInitialized && !newEmployeeInfo) {
             return <Redirect to={RoutesEnum.Employees} />;
         }
 

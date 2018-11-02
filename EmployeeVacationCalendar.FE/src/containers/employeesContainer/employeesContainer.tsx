@@ -53,7 +53,7 @@ class EmployeesContainer extends React.Component<IEmployeesContainerProps> {
     }
 
     public render() {
-        const { employeeLoadingStatus, employeesList } = this.props;
+        const { employeeLoadingStatus } = this.props;
 
         switch (employeeLoadingStatus) {
             case LoadingStatusEnum.None:
