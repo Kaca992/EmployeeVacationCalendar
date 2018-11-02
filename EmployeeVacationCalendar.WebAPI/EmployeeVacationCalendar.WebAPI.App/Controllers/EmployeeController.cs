@@ -51,11 +51,19 @@ namespace EmployeeVacationCalendar.WebAPI.App.Controllers
             {
                 if (ex is ArgumentException || ex is AdminRoleRequiredException || ex is ValuesChangedByAnotherUserException)
                 {
-                    return BadRequest(ex);
+                    return BadRequest(new Exception(ex.Message));
                 }
 
                 throw;
             }
+        }
+
+        [HttpGet]
+        [Route("list")]
+        public IActionResult GetAllEmployeesInfo()
+        {
+            var employees = _employeeService.GetAllEmployeesGroupedById();
+            return Ok(employees);
         }
     }
 }

@@ -15,6 +15,7 @@ namespace EmployeeVacationCalendar.WebAPI.App.Services
     public interface IEmployeeService
     {
         Task<UserInfoDTO> AddUpdateUserInfo(string loggedUserId, EmployeeTypeEnum loggedUserType, NewUserInfoDTO newUserInfoDTO);
+        Dictionary<string, UserInfoDTO> GetAllEmployeesGroupedById();
     }
 
     public class EmployeeService : IEmployeeService
@@ -28,6 +29,7 @@ namespace EmployeeVacationCalendar.WebAPI.App.Services
             _userManager = userManager;
         }
 
+        #region Insert/Update user
         public async Task<UserInfoDTO> AddUpdateUserInfo(string loggedUserId, EmployeeTypeEnum loggedUserType, NewUserInfoDTO newUserInfoDTO)
         {
             Employee employee = newUserInfoDTO.IsNewUser ? await addNewUserInfo(loggedUserType, newUserInfoDTO) : await updateUserInfo(loggedUserId, loggedUserType, newUserInfoDTO);
@@ -37,8 +39,12 @@ namespace EmployeeVacationCalendar.WebAPI.App.Services
         private async Task<Employee> updateUserInfo(string loggedUserId, EmployeeTypeEnum loggedUserType, NewUserInfoDTO newUserInfoDTO)
         {
             if (newUserInfoDTO.Id != loggedUserId && loggedUserType == EmployeeTypeEnum.User) throw new AdminRoleRequiredException();
-            // TODO provjeriti kaj se desi ak ne postoji user
-            var oldUserInfo = await _context.Users.FindAsync(loggedUserId);
+            var oldUserInfo = await _context.Users.FindAsync(newUserInfoDTO.Id);
+
+            if (oldUserInfo == null)
+            {
+                throw new ArgumentException("User was deleted by someone else.");
+            }
 
             if (oldUserInfo.ConcurrencyStamp != newUserInfoDTO.ConcurrencyStamp) throw new ValuesChangedByAnotherUserException();
             oldUserInfo.FirstName = newUserInfoDTO.FirstName;
@@ -88,6 +94,12 @@ namespace EmployeeVacationCalendar.WebAPI.App.Services
             }
 
             return newEmployeeInfo;
+        }
+        #endregion
+
+        public Dictionary<string, UserInfoDTO> GetAllEmployeesGroupedById()
+        {
+            return _context.Users.Select(x => DtoMapper.MapEmployeeToDTO(x)).ToDictionary(x => x.Id, x => x);
         }
     }
 }

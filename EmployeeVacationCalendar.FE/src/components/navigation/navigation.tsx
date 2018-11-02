@@ -23,6 +23,7 @@ export default class Navigation extends React.Component<INavigationProps> {
             <Menu>
                 {this._renderMenuItem(RoutesEnum.Calendar, NavigationItems.Calendar)}
                 {loggedInUserId && this._renderMenuItem(`${RoutesEnum.EmployeeInfo}/${loggedInUserId}`, NavigationItems.MyInfo)}
+                {this._renderMenuItem(RoutesEnum.Employees, NavigationItems.Employees)}
                 {this._renderUserItem(!!loggedInUserId)}
             </Menu>
         );

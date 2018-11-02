@@ -13,5 +13,7 @@ namespace EmployeeVacationCalendar.WebAPI.Common.DTO
         public string Email { get; set; }
         public string ConcurrencyStamp { get; set; }
         public EmployeeTypeEnum Type { get; set; }
+
+        public string DisplayName => $"{LastName}, {FirstName}";
     }
 }

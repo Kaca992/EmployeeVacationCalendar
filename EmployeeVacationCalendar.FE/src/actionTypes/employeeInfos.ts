@@ -1,2 +1,3 @@
 export const GET_LOGGED_USER_INFO = '@Employee/GET_LOGGED_USER_INFO';
 export const ADD_OR_UPDATE_EMPLOYEE_INFO = '@Employee/ADD_OR_UPDATE_EMPLOYEE_INFO';
+export const GET_ALL_EMPLOYEES = '@Employee/GET_ALL_EMPLOYEES';

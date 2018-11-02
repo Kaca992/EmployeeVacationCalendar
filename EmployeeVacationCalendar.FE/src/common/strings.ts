@@ -9,7 +9,8 @@ export const NavigationItems = {
     Calendar: 'Calendar',
     Login: 'Login',
     MyInfo: 'My Info',
-    Logout: 'Log out'
+    Logout: 'Log out',
+    Employees: 'Employees'
 };
 
 export const EmployeeInfoStrings = {

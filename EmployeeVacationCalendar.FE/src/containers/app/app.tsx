@@ -12,6 +12,7 @@ import { cookieExists } from '../../utils/common';
 import ProtectedRoute from '../../components/protectedRoute/protectedRoute';
 import EmployeeManagementContainer from '../employeeManagementContainer/employeeManagementContainer';
 import { initLoggedUserInfo } from '../../actions/employeeInfos';
+import EmployeesContainer from '../employeesContainer/employeesContainer';
 
 interface IAppProps {
     loggedUserInfo: IUserInfo | undefined;
@@ -61,6 +62,7 @@ export class App extends React.Component<IAppProps, IAppState> {
                 <Switch>
                     <Route exact path={RoutesEnum.Calendar} component={CalendarContainer} />
                     <Route path={RoutesEnum.Login} render={this._renderLoginForm} />
+                    <Route path={RoutesEnum.Employees} render={this._renderEmployeesContainer} />
                     <ProtectedRoute isUserLoggedIn={!!loggedUserInfo} path={`${RoutesEnum.EmployeeInfo}/:id`} render={this._renderEmployeeInfo} />
                     <Route render={this._renderNoMatch} />
                 </Switch>
@@ -74,6 +76,10 @@ export class App extends React.Component<IAppProps, IAppState> {
 
     private _renderEmployeeInfo = (props: RouteComponentProps<any>) => {
         return <EmployeeManagementContainer {...props} />;
+    }
+
+    private _renderEmployeesContainer = (props: RouteComponentProps<any>) => {
+        return <EmployeesContainer {...props} />;
     }
 
     private _renderNoMatch = () => {

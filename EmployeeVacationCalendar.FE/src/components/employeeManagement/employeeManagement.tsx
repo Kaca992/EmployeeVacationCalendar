@@ -12,6 +12,7 @@ export interface IEmployeeManagementProps {
     employeeInfo: INewUserInfo;
     validation: IEmployeeManagementValidation;
     isSavingChanges: boolean;
+    successMessage: string | null;
     onEmployeeInfoChanged(newEmployeeInfo: INewUserInfo, newValidation: IEmployeeManagementValidation);
     onSaveChanges();
 }
@@ -27,7 +28,7 @@ export default class EmployeeManagement extends React.Component<IEmployeeManagem
     }
 
     public render() {
-        const { onSaveChanges, isSavingChanges } = this.props;
+        const { onSaveChanges, isSavingChanges, successMessage } = this.props;
         const { id, firstName, lastName, email, newPassword, type } = this.props.employeeInfo;
         const { firstNameError, lastNameError, emailError, passwordError, serverError } = this.props.validation;
         // only for new users type can be changed
@@ -81,6 +82,10 @@ export default class EmployeeManagement extends React.Component<IEmployeeManagem
             {serverError && <Message visible error>
                 <Icon name='delete' />
                 {serverError}
+            </Message>}
+            {successMessage && <Message visible success>
+                <Icon name='check' />
+                {successMessage}
             </Message>}
         </div>;
     }

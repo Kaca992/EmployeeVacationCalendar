@@ -1,5 +1,5 @@
 import fetcher from "../utils/fetcher";
-import { GET_LOGGED_USER_INFO, ADD_OR_UPDATE_EMPLOYEE_INFO } from "../actionTypes/employeeInfos";
+import { GET_LOGGED_USER_INFO, ADD_OR_UPDATE_EMPLOYEE_INFO, GET_ALL_EMPLOYEES } from "../actionTypes/employeeInfos";
 import { setLoggedUser } from "./app";
 import { IUserInfo, INewUserInfo } from "../common/data";
 
@@ -25,6 +25,15 @@ export function addOrUpdateEmployeeInfo(employeeInfo: INewUserInfo) {
                 method: 'POST',
                 body: JSON.stringify(employeeInfo)
             }
+        }, dispatch);
+    };
+}
+
+export function getAllEmployeesInfo() {
+    return (dispatch, getState) => {
+        return fetcher.reduxFetch(`${employeeControllerBaseUrl}/list`, {
+            jsonResponseExpected: true,
+            action: GET_ALL_EMPLOYEES
         }, dispatch);
     };
 }
