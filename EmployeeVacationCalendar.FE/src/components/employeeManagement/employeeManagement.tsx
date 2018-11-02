@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import './employeeManagement.scss';
 import { IUserInfo, INewUserInfo, IEmployeeManagementValidation } from '../../common/data';
-import { Form, Input, InputOnChangeData, Button, Checkbox, CheckboxProps, Message, Icon } from 'semantic-ui-react';
+import { Form, Input, InputOnChangeData, Button, Checkbox, CheckboxProps, Message, Icon, Header, Divider } from 'semantic-ui-react';
 import { EmployeeInfoStrings } from '../../common/strings';
 import LabeledInput from '../labeledInput/labeledInput';
 import { EmployeeTypeEnum } from '../../common/enums';
@@ -35,6 +35,8 @@ export default class EmployeeManagement extends React.Component<IEmployeeManagem
         const isUserTypeVisible = !id;
 
         return <div className="employee-management">
+            <Header content={id ? "Edit Employee Info" : "Create New Employee"} />
+            <Divider />
             <LabeledInput
                 fluid
                 label={EmployeeInfoStrings.FirstNameLabel}
@@ -74,11 +76,9 @@ export default class EmployeeManagement extends React.Component<IEmployeeManagem
 
             {isUserTypeVisible && <Checkbox className="employee-management__type-checkbox" label={EmployeeInfoStrings.IsUserAdminLabel} checked={type !== EmployeeTypeEnum.User} onChange={this._onUserTypeChanged} />}
 
-            <div className="employee-management__buttons-container">
-                <Button primary size='large' onClick={onSaveChanges} loading={isSavingChanges}>
-                    {EmployeeInfoStrings.SaveChangesBtn}
-                </Button>
-            </div>
+            <Button primary size='large' onClick={onSaveChanges} loading={isSavingChanges}>
+                {EmployeeInfoStrings.SaveChangesBtn}
+            </Button>
             {serverError && <Message visible error>
                 <Icon name='delete' />
                 {serverError}

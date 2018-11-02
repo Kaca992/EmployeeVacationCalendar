@@ -20,6 +20,13 @@ export default class EmployeeSelector extends React.Component<IEmployeeSelectorP
 
     }
 
+    public componentDidMount() {
+        const { selectedValue, employees, onSelectedEmployeeChanged } = this.props;
+        if (!selectedValue && employees && employees.length > 0) {
+            onSelectedEmployeeChanged(employees[0].id);
+        }
+    }
+
     public render() {
         const { selectedValue, hasError, isDisabled } = this.props;
 

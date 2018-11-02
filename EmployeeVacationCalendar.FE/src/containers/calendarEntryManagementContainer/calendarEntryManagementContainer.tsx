@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { IRootReducerState, getLoggedUserInfo } from '@reducers/rootReducer';
 import CalendarEntryManagement from '../../components/calendarEntryManagement/calendarEntryManagement';
-import { IUserInfo, ICalendarEntry, ICalendarEntryValidation } from '../../common/data';
+import { IUserInfo, ICalendarEntry } from '../../common/data';
 import { getAllEmployeeList } from '../../reducers/employeeInfosReducer';
 import { LoadingStatusEnum, RoutesEnum, EmployeeTypeEnum, VacationTypeEnum } from '../../common/enums';
 import { Loader } from 'semantic-ui-react';
@@ -29,8 +29,9 @@ interface ICalendarEntryManagementContainerProps extends ICalendarEntryManagemen
 interface ICalendarEntryManagementContainerState {
     isInitialized: boolean;
     newCalendarEntry: ICalendarEntry;
-    validation: ICalendarEntryValidation;
+    isSavingChanges: boolean;
     successMessage: string | null;
+    errorMessage: string | null;
 }
 
 function mapStateToProps(state: IRootReducerState, ownProps: ICalendarEntryManagementContainerOwnProps): Partial<ICalendarEntryManagementContainerProps> {
@@ -68,7 +69,8 @@ class CalendarEntryManagementContainer extends React.Component<ICalendarEntryMan
                 employeeId: props.loggedUserInfo.type === EmployeeTypeEnum.User ? props.loggedUserInfo.id : undefined,
                 vacationType: VacationTypeEnum.Holiday
             },
-            validation: {},
+            isSavingChanges: false,
+            errorMessage: null,
             successMessage: null
         };
     }
@@ -86,33 +88,40 @@ class CalendarEntryManagementContainer extends React.Component<ICalendarEntryMan
     }
 
     public render() {
-        const { newCalendarEntry, validation, isInitialized } = this.state;
-        const { employees, employeeLoadingStatus } = this.props;
+        const { newCalendarEntry, isInitialized, successMessage, errorMessage, isSavingChanges } = this.state;
+        const { employees, employeeLoadingStatus, isNewEntry } = this.props;
 
         if (!isInitialized || this._shouldInitializeEmployees() && employeeLoadingStatus !== LoadingStatusEnum.Loaded) {
             return <Loader active size='large'>{initializing}</Loader>;
         }
 
         return <CalendarEntryManagement
-            calendarEntry={newCalendarEntry}
-            validation={validation}
+            header={isNewEntry ? "Add New Calendar Entry" : "Edit Calendar Entry"}
+            buttonText={isNewEntry ? "Create Entry" : "Save Changes"}
             isEmployeeSelectable={this._shouldInitializeEmployees()}
             employees={employees}
+            calendarEntry={newCalendarEntry}
+            successMessage={successMessage}
+            errorMessage={errorMessage}
+            isSavingChanges={isSavingChanges}
             onCalendarEntryChanged={this._onCalendarEntryChanged}
+            onSaveChanges={this._onSaveChanges}
         />;
     }
 
-    private _onCalendarEntryChanged = (newCalendarEntry: ICalendarEntry, newValidation: ICalendarEntryValidation) => {
+    private _onCalendarEntryChanged = (newCalendarEntry: ICalendarEntry) => {
         // we want to reset server error on change
-        this.setState({
-            newCalendarEntry, validation: { ...newValidation, serverError: undefined }, successMessage: null
-        });
+        this.setState({ newCalendarEntry, successMessage: null, errorMessage: null });
     }
 
     /** Only admins can choose add entries for other users */
     private _shouldInitializeEmployees = () => {
         const { isNewEntry, loggedUserInfo } = this.props;
         return isNewEntry && loggedUserInfo && loggedUserInfo.type !== EmployeeTypeEnum.User;
+    }
+
+    private _onSaveChanges = () => {
+
     }
 }
 

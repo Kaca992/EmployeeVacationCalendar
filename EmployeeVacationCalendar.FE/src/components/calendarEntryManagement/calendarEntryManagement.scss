@@ -13,4 +13,12 @@
     .labeled-date-picker {
         margin-bottom: 10px;
     }
+
+    .vacation-type-selector {
+        max-width: 200px;
+        margin-bottom: 10px;
+        .menu {
+            height: 140px;
+        }
+    }
 }

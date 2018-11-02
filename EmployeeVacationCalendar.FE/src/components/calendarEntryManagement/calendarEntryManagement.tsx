@@ -3,17 +3,26 @@ import * as React from 'react';
 
 import './calendarEntryManagement.scss';
 import EmployeeSelector from '../employeeSelector/employeeSelector';
-import { IUserInfo, ICalendarEntry, ICalendarEntryValidation } from '../../common/data';
+import { IUserInfo, ICalendarEntry } from '../../common/data';
 import { Moment } from 'moment';
 import LabeledDatePicker from '../labeledDatePicker/labeledDatePicker';
 import moment = require('moment');
+import { Dropdown, DropdownItemProps, DropdownProps, Header, Divider, Button, Message, Icon } from 'semantic-ui-react';
+import { VacationTypeEnum } from '../../common/enums';
 
 export interface ICalendarEntryManagementProps {
+    header: string;
+    buttonText: string;
     isEmployeeSelectable: boolean;
-    calendarEntry: ICalendarEntry;
-    validation: ICalendarEntryValidation;
     employees: IUserInfo[] | null;
-    onCalendarEntryChanged(newCalendarEntry: ICalendarEntry, newValidation: ICalendarEntryValidation);
+
+    calendarEntry: ICalendarEntry;
+
+    isSavingChanges: boolean;
+    successMessage: string | null;
+    errorMessage: string | null;
+    onCalendarEntryChanged(newCalendarEntry: ICalendarEntry);
+    onSaveChanges();
 }
 
 export interface ICalendarEntryManagementState {
@@ -21,20 +30,26 @@ export interface ICalendarEntryManagementState {
 }
 
 export default class CalendarEntryManagement extends React.Component<ICalendarEntryManagementProps, ICalendarEntryManagementState> {
+    private readonly _calendarEntryTypeOptions: DropdownItemProps[] = [
+        { key: VacationTypeEnum.Holiday, value: VacationTypeEnum.Holiday, text: 'Holiday', icon: 'bath' },
+        { key: VacationTypeEnum.SickLeave, value: VacationTypeEnum.SickLeave, text: 'Sick Leave', icon: 'hospital' },
+        { key: VacationTypeEnum.VacationLeave, value: VacationTypeEnum.VacationLeave, text: 'Vacation Leave', icon: 'beer' }
+    ];
+
     constructor(props: ICalendarEntryManagementProps) {
         super(props);
 
     }
 
     public render() {
-        const { employees, isEmployeeSelectable } = this.props;
-        const { employeeId, startDate, endDate } = this.props.calendarEntry;
-        const { employeeNotSelected } = this.props.validation;
+        const { employees, isEmployeeSelectable, header, buttonText, onSaveChanges, isSavingChanges, successMessage, errorMessage } = this.props;
+        const { employeeId, startDate, endDate, vacationType } = this.props.calendarEntry;
 
         return <div className="calendar-entry">
+            <Header content={header} />
+            <Divider />
             <EmployeeSelector
                 selectedValue={employeeId}
-                hasError={employeeNotSelected}
                 isDisabled={!isEmployeeSelectable}
                 employees={employees}
                 onSelectedEmployeeChanged={this._onSelectedEmployeeChanged}
@@ -53,23 +68,48 @@ export default class CalendarEntryManagement extends React.Component<ICalendarEn
                 minSelectableDate={moment(startDate).add(1, 'day')}
                 onStartDateChanged={this._onEndDateChanged}
             />
+
+            <Dropdown
+                className="vacation-type-selector"
+                options={this._calendarEntryTypeOptions}
+                value={vacationType}
+                fluid
+                selection
+                onChange={this._onVacationTypeChanged}
+            />
+
+            <Button primary size='large' onClick={onSaveChanges} loading={isSavingChanges}>
+                {buttonText}
+            </Button>
+            {errorMessage && <Message visible error>
+                <Icon name='delete' />
+                {errorMessage}
+            </Message>}
+            {successMessage && <Message visible success>
+                <Icon name='check' />
+                {successMessage}
+            </Message>}
         </div>;
     }
 
     private _onSelectedEmployeeChanged = (id: string) => {
-        this._onCalendarEntryChanged({ employeeId: id }, { employeeNotSelected: false });
+        this._onCalendarEntryChanged({ employeeId: id });
     }
 
     private _onStartDateChanged = (date: Moment) => {
-        this._onCalendarEntryChanged({ startDate: date }, {});
+        this._onCalendarEntryChanged({ startDate: date });
     }
 
     private _onEndDateChanged = (date: Moment) => {
-        this._onCalendarEntryChanged({ endDate: date }, {});
+        this._onCalendarEntryChanged({ endDate: date });
     }
 
-    private _onCalendarEntryChanged = (changedValue: Partial<ICalendarEntry>, newValidation: Partial<ICalendarEntryValidation>) => {
-        const { calendarEntry, onCalendarEntryChanged, validation } = this.props;
-        onCalendarEntryChanged({ ...calendarEntry, ...changedValue }, { ...validation, ...newValidation });
+    private _onVacationTypeChanged = (event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) => {
+        this._onCalendarEntryChanged({ vacationType: data.value as any });
+    }
+
+    private _onCalendarEntryChanged = (changedValue: Partial<ICalendarEntry>) => {
+        const { calendarEntry, onCalendarEntryChanged } = this.props;
+        onCalendarEntryChanged({ ...calendarEntry, ...changedValue });
     }
 }
