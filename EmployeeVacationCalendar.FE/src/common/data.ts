@@ -27,3 +27,8 @@ export interface ICalendarEntry {
     employeeId?: string;
     concurrencyStamp?: string;
 }
+
+export interface ICalendarEntryValidation {
+    employeeNotSelected?: boolean;
+    serverError?: string;
+}

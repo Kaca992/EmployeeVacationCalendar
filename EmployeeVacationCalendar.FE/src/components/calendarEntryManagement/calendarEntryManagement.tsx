@@ -3,10 +3,14 @@ import * as React from 'react';
 
 import './calendarEntryManagement.scss';
 import EmployeeSelector from '../employeeSelector/employeeSelector';
-import { IUserInfo } from '../../common/data';
+import { IUserInfo, ICalendarEntry, ICalendarEntryValidation } from '../../common/data';
 
 export interface ICalendarEntryManagementProps {
+    isEmployeeSelectable: boolean;
+    calendarEntry: ICalendarEntry;
+    validation: ICalendarEntryValidation;
     employees: IUserInfo[] | null;
+    onCalendarEntryChanged(newCalendarEntry: ICalendarEntry, newValidation: ICalendarEntryValidation);
 }
 
 export interface ICalendarEntryManagementState {
@@ -20,9 +24,15 @@ export default class CalendarEntryManagement extends React.Component<ICalendarEn
     }
 
     public render() {
-        const { employees } = this.props;
+        const { employees, isEmployeeSelectable } = this.props;
+        const { employeeId } = this.props.calendarEntry;
+        const { employeeNotSelected } = this.props.validation;
+
         return <div className="calendar-entry">
             <EmployeeSelector
+                isDisabled={!isEmployeeSelectable}
+                selectedValue={employeeId}
+                hasError={employeeNotSelected}
                 employees={employees}
                 onSelectedEmployeeChanged={this._onSelectedEmployeeChanged}
             />
@@ -30,6 +40,11 @@ export default class CalendarEntryManagement extends React.Component<ICalendarEn
     }
 
     private _onSelectedEmployeeChanged = (id: string) => {
-        return;
+        this._onCalendarEntryChanged({ employeeId: id }, { employeeNotSelected: false });
+    }
+
+    private _onCalendarEntryChanged = (changedValue: Partial<ICalendarEntry>, newValidation: Partial<ICalendarEntryValidation>) => {
+        const { calendarEntry, onCalendarEntryChanged, validation } = this.props;
+        onCalendarEntryChanged({ ...calendarEntry, ...changedValue }, { ...validation, ...newValidation });
     }
 }

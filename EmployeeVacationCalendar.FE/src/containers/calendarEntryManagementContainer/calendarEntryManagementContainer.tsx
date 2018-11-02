@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { IRootReducerState, getLoggedUserInfo } from '@reducers/rootReducer';
 import CalendarEntryManagement from '../../components/calendarEntryManagement/calendarEntryManagement';
-import { IUserInfo, ICalendarEntry } from '../../common/data';
+import { IUserInfo, ICalendarEntry, ICalendarEntryValidation } from '../../common/data';
 import { getAllEmployeeList } from '../../reducers/employeeInfosReducer';
 import { LoadingStatusEnum, RoutesEnum, EmployeeTypeEnum, VacationTypeEnum } from '../../common/enums';
 import { Loader } from 'semantic-ui-react';
@@ -26,7 +26,10 @@ interface ICalendarEntryManagementContainerProps extends ICalendarEntryManagemen
 }
 
 interface ICalendarEntryManagementContainerState {
+    isInitialized: boolean;
     newCalendarEntry: ICalendarEntry;
+    validation: ICalendarEntryValidation;
+    successMessage: string | null;
 }
 
 function mapStateToProps(state: IRootReducerState, ownProps: ICalendarEntryManagementContainerOwnProps): Partial<ICalendarEntryManagementContainerProps> {
@@ -52,30 +55,51 @@ class CalendarEntryManagementContainer extends React.Component<ICalendarEntryMan
     constructor(props: ICalendarEntryManagementContainerProps) {
         super(props);
         this.state = {
+            isInitialized: false,
             newCalendarEntry: props.initEntry || {
                 id: "",
                 employeeId: props.loggedUserInfo.type === EmployeeTypeEnum.User ? props.loggedUserInfo.id : undefined,
                 vacationType: VacationTypeEnum.Holiday
-            }
+            },
+            validation: {},
+            successMessage: null
         };
     }
 
     public componentDidMount() {
-        const { employeeLoadingStatus } = this.props;
+        const { employeeLoadingStatus, initEntry, isNewEntry } = this.props;
         // only admins can choose add entries for other users
         if (this._shouldInitializeEmployees() && employeeLoadingStatus !== LoadingStatusEnum.Loading && employeeLoadingStatus !== LoadingStatusEnum.Loaded) {
             this.props.getAllEmployeesInfo();
         }
+
+        if (!initEntry && !isNewEntry) {
+            // TODO fetch entry so refresh will work on entry
+        }
     }
 
     public render() {
+        const { newCalendarEntry, validation, isInitialized } = this.state;
         const { employees, employeeLoadingStatus } = this.props;
 
-        if (this._shouldInitializeEmployees() && employeeLoadingStatus !== LoadingStatusEnum.Loaded) {
+        if (isInitialized || this._shouldInitializeEmployees() && employeeLoadingStatus !== LoadingStatusEnum.Loaded) {
             return <Loader active size='large'>{initializing}</Loader>;
         }
 
-        return <CalendarEntryManagement employees={employees} />;
+        return <CalendarEntryManagement
+            isEmployeeSelectable={this._shouldInitializeEmployees()}
+            calendarEntry={newCalendarEntry}
+            validation={validation}
+            employees={employees}
+            onCalendarEntryChanged={this._onCalendarEntryChanged}
+        />;
+    }
+
+    private _onCalendarEntryChanged = (newCalendarEntry: ICalendarEntry, newValidation: ICalendarEntryValidation) => {
+        // we want to reset server error on change
+        this.setState({
+            newCalendarEntry, validation: { ...newValidation, serverError: undefined }, successMessage: null
+        });
     }
 
     /** Only admins can choose add entries for other users */

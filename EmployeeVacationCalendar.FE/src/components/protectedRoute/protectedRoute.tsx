@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { RouteComponentProps, Redirect, Route } from 'react-router';
 import { RoutesEnum } from '../../common/enums';
+import { identityCookieExists } from '../../utils/common';
 
 export interface IProtectedRouteProps {
     isUserLoggedIn: boolean;
@@ -25,7 +26,7 @@ export default class ProtectedRoute extends React.Component<IProtectedRouteProps
     private _renderRoute = (props: RouteComponentProps<any>) => {
         const { isUserLoggedIn, path, render } = this.props;
 
-        if (isUserLoggedIn) {
+        if (identityCookieExists() && isUserLoggedIn) {
             return render(props);
         } else {
             return <Redirect to={{ pathname: "/login", state: { from: location.pathname } }} />;

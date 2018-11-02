@@ -28,7 +28,8 @@ export function getObjectValue(theObject: any, path: string, separator = '.') {
  */
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
-export function cookieExists(cookieName: string): boolean {
+export function identityCookieExists(): boolean {
+    const cookieName = "EMPLOYEE_IDENTITY";
     if (!cookieName || /^(?:expires|max\-age|path|domain|secure)$/i.test(cookieName)) { return false; }
     return (new RegExp("(?:^|;\\s*)" + encodeURIComponent(cookieName).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=")).test(document.cookie);
 }

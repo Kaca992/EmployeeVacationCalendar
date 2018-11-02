@@ -8,7 +8,7 @@ import { RoutesEnum } from '../../common/enums';
 import CalendarContainer from '../calendarContainer/calendarContainer';
 import LoginForm from '../loginForm/loginForm';
 import { IUserInfo } from '../../common/data';
-import { cookieExists } from '../../utils/common';
+import { identityCookieExists } from '../../utils/common';
 import ProtectedRoute from '../../components/protectedRoute/protectedRoute';
 import EmployeeManagementContainer from '../employeeManagementContainer/employeeManagementContainer';
 import { initLoggedUserInfo } from '../../actions/employeeInfos';
@@ -37,9 +37,8 @@ function mapDispatchToProps(dispatch: any): Partial<IAppProps> {
 }
 
 export class App extends React.Component<IAppProps, IAppState> {
-    private readonly COOKIE_NAME = "EMPLOYEE_IDENTITY";
     private get isIdentityCookieSet(): boolean {
-        return cookieExists(this.COOKIE_NAME);
+        return identityCookieExists();
     }
 
     constructor(props: IAppProps) {
