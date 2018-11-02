@@ -16,7 +16,15 @@ namespace EmployeeVacationCalendar.WebAPI.Database
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<CalendarEntry>()
+                .HasOne(c => c.Employee)
+                .WithMany(x => x.CalendarEntries)
+                .IsRequired();
+
             EmployeeVacationDbInitializer.SeedDefaultRoles(builder);
         }
+
+        public DbSet<CalendarEntry> CalendarEntries { get; set; }
     }
 }

@@ -4,14 +4,16 @@ using EmployeeVacationCalendar.WebAPI.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EmployeeVacationCalendar.WebAPI.Database.Migrations
 {
     [DbContext(typeof(EmployeeVacationDbContext))]
-    partial class EmployeeVacationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181102134514_Calendar Entry Added")]
+    partial class CalendarEntryAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,8 +27,7 @@ namespace EmployeeVacationCalendar.WebAPI.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("EmployeeId")
-                        .IsRequired();
+                    b.Property<string>("EmployeeId1");
 
                     b.Property<DateTime>("EndDate");
 
@@ -36,7 +37,7 @@ namespace EmployeeVacationCalendar.WebAPI.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeeId");
+                    b.HasIndex("EmployeeId1");
 
                     b.ToTable("CalendarEntries");
                 });
@@ -122,9 +123,9 @@ namespace EmployeeVacationCalendar.WebAPI.Database.Migrations
                     b.ToTable("AspNetRoles");
 
                     b.HasData(
-                        new { Id = "f3988ab0-4a17-4344-a8f4-2b3a065e98f8", ConcurrencyStamp = "2d431931-b53b-4f83-b0b0-6160b7e55ad7", Name = "MasterAdmin", NormalizedName = "MASTERADMIN" },
-                        new { Id = "c6564dd9-eac7-4914-bee1-7cad460c0b70", ConcurrencyStamp = "0a40fc61-4bd4-402f-90aa-54d0636e1bb9", Name = "Admin", NormalizedName = "ADMIN" },
-                        new { Id = "d58b8af9-e117-4c61-a5f9-6ad4e8a118d0", ConcurrencyStamp = "94afc33b-708e-4a5d-85b0-720ead564c84", Name = "User", NormalizedName = "USER" }
+                        new { Id = "1ed2c825-fbd2-4e50-89e6-14d64103cfa3", ConcurrencyStamp = "1bff630b-da8c-40a7-8d2d-711586ea6aa2", Name = "MasterAdmin", NormalizedName = "MASTERADMIN" },
+                        new { Id = "d6c7d5f7-2f41-4830-b74e-7f9cea1013fd", ConcurrencyStamp = "c965c3aa-7b9c-4911-8157-a81adab22e43", Name = "Admin", NormalizedName = "ADMIN" },
+                        new { Id = "25cfce8a-dda7-4b68-a348-c854ba0b7efe", ConcurrencyStamp = "d48c2597-0848-4958-9bd5-98779ec80f57", Name = "User", NormalizedName = "USER" }
                     );
                 });
 
@@ -216,10 +217,9 @@ namespace EmployeeVacationCalendar.WebAPI.Database.Migrations
 
             modelBuilder.Entity("EmployeeVacationCalendar.WebAPI.Database.Models.CalendarEntry", b =>
                 {
-                    b.HasOne("EmployeeVacationCalendar.WebAPI.Database.Models.Employee", "Employee")
+                    b.HasOne("EmployeeVacationCalendar.WebAPI.Database.Models.Employee")
                         .WithMany("CalendarEntries")
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("EmployeeId1");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

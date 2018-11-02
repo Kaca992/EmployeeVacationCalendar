@@ -17,5 +17,7 @@ namespace EmployeeVacationCalendar.WebAPI.Database.Models
         public string DisplayName => $"{LastName} {FirstName}";
 
         public EmployeeTypeEnum EmployeeType { get; set; }
+
+        public List<CalendarEntry> CalendarEntries { get; set; }
     }
 }

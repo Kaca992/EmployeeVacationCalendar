@@ -73,6 +73,7 @@ namespace EmployeeVacationCalendar.WebAPI.App
         {
             services.AddSingleton<IAppSettings, AppSettings>();
             services.AddTransient<IEmployeeService, EmployeeService>();
+            services.AddTransient<ICalendarService, CalendarService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<Employee> userManager, IAppSettings appSettings)
