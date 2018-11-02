@@ -16,6 +16,7 @@ namespace EmployeeVacationCalendar.WebAPI.App.Services
     {
         Task<UserInfoDTO> AddUpdateUserInfo(string loggedUserId, EmployeeTypeEnum loggedUserType, NewUserInfoDTO newUserInfoDTO);
         Dictionary<string, UserInfoDTO> GetAllEmployeesGroupedById();
+        Task DeleteEmployee(string loggedUserId, EmployeeTypeEnum loggedUserType, string employeeId, string employeeConcurrencyToken);
     }
 
     public class EmployeeService : IEmployeeService
@@ -100,6 +101,21 @@ namespace EmployeeVacationCalendar.WebAPI.App.Services
         public Dictionary<string, UserInfoDTO> GetAllEmployeesGroupedById()
         {
             return _context.Users.Select(x => DtoMapper.MapEmployeeToDTO(x)).ToDictionary(x => x.Id, x => x);
+        }
+
+        public async Task DeleteEmployee(string loggedUserId, EmployeeTypeEnum loggedUserType, string employeeId, string employeeConcurrencyToken)
+        {
+            if (loggedUserId == employeeId) throw new ArgumentException("Cannot delete logged user.");
+            if (loggedUserType == EmployeeTypeEnum.User) throw new AdminRoleRequiredException();
+
+            var employee = await _context.Users.FindAsync(employeeId);
+
+            if (employee == null) return;
+            if (employee.EmployeeType == EmployeeTypeEnum.MasterAdmin) throw new ArgumentException("Master admin cannot be deleted.");
+            if (employee.ConcurrencyStamp != employeeConcurrencyToken) throw new ValuesChangedByAnotherUserException();
+
+            _context.Users.Remove(employee);
+            await _context.SaveChangesAsync();
         }
     }
 }

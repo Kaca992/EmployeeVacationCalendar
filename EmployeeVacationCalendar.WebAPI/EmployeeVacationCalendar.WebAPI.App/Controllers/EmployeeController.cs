@@ -65,5 +65,27 @@ namespace EmployeeVacationCalendar.WebAPI.App.Controllers
             var employees = _employeeService.GetAllEmployeesGroupedById();
             return Ok(employees);
         }
+
+        [Authorize]
+        [HttpPost]
+        [Route("delete")]
+        public async Task<IActionResult> DeleteUser([FromBody]DeleteUserDTO deleteInfoDTO)
+        {
+            try
+            {
+                var loggedUser = await _userManager.GetUserAsync(User);
+                await _employeeService.DeleteEmployee(loggedUser.Id, loggedUser.EmployeeType, deleteInfoDTO.Id, deleteInfoDTO.ConcurrencyStamp);
+                return Ok(new { Id = deleteInfoDTO.Id });
+            }
+            catch (Exception ex)
+            {
+                if (ex is ArgumentException || ex is AdminRoleRequiredException || ex is ValuesChangedByAnotherUserException)
+                {
+                    return BadRequest(new Exception(ex.Message));
+                }
+
+                throw;
+            }
+        }
     }
 }

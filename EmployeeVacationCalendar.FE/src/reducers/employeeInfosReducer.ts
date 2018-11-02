@@ -3,19 +3,22 @@ import { IUserInfo } from "../common/data";
 import { actionUtils } from "../utils/fetcher";
 import { LOGIN_USER } from "../actionTypes/app";
 import { IRootReducerState } from "./rootReducer";
-import { GET_LOGGED_USER_INFO, ADD_OR_UPDATE_EMPLOYEE_INFO, GET_ALL_EMPLOYEES } from "../actionTypes/employeeInfos";
+import { GET_LOGGED_USER_INFO, ADD_OR_UPDATE_EMPLOYEE_INFO, GET_ALL_EMPLOYEES, DELETE_EMPLOYEE } from "../actionTypes/employeeInfos";
 import { LoadingStatusEnum } from "../common/enums";
 import { createSelector } from "reselect";
 import _ = require("lodash");
+import { getMessageFromServerError } from "../utils/serverExceptionsUtil";
 
 export interface IEmployeeInfosReducerState {
     employeeLoadingStatus: LoadingStatusEnum;
     employeeInfosById: { [id: string]: IUserInfo };
+    deleteEmployeeErrorMessage: string | null;
 }
 
 const initialState: IEmployeeInfosReducerState = {
     employeeLoadingStatus: LoadingStatusEnum.None,
-    employeeInfosById: {}
+    employeeInfosById: {},
+    deleteEmployeeErrorMessage: null
 };
 
 export default function employeeInfosReducer(state: IEmployeeInfosReducerState = initialState, action: IAction = { type: '', payload: null }): IEmployeeInfosReducerState {
@@ -36,6 +39,7 @@ export default function employeeInfosReducer(state: IEmployeeInfosReducerState =
         case actionUtils.requestAction(GET_ALL_EMPLOYEES): {
             return {
                 ...state,
+                deleteEmployeeErrorMessage: null,
                 employeeLoadingStatus: LoadingStatusEnum.Loading
             };
         }
@@ -53,6 +57,20 @@ export default function employeeInfosReducer(state: IEmployeeInfosReducerState =
             return {
                 ...state,
                 employeeLoadingStatus: LoadingStatusEnum.Error
+            };
+        }
+        case actionUtils.responseAction(DELETE_EMPLOYEE): {
+            const newEmployeeList = _.omit(state.employeeInfosById, action.payload.id);
+            return {
+                ...state,
+                deleteEmployeeErrorMessage: null,
+                employeeInfosById: newEmployeeList
+            };
+        }
+        case actionUtils.errorAction(DELETE_EMPLOYEE): {
+            return {
+                ...state,
+                deleteEmployeeErrorMessage: getMessageFromServerError(action.payload)
             };
         }
         default:

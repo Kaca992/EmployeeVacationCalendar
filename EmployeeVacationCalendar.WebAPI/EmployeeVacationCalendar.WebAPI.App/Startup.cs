@@ -59,11 +59,7 @@ namespace EmployeeVacationCalendar.WebAPI.App
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy(EmployeePolicies.RequireMasterAdminRole, policy => policy.RequireRole(EmployeeRoles.MasterAdmin));
-                options.AddPolicy(EmployeePolicies.RequireAdminRights, policy => policy.RequireRole(EmployeeRoles.MasterAdmin, EmployeeRoles.Admin));
-            });
+            services.AddAuthorization();
 
             configureDI(services);
         }

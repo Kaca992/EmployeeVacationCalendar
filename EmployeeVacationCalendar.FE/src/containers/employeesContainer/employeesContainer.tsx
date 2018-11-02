@@ -4,9 +4,9 @@ import { IRootReducerState, getLoggedUserInfo } from '@reducers/rootReducer';
 import './employeesContainer.scss';
 import { IUserInfo } from '../../common/data';
 import { LoadingStatusEnum, EmployeeTypeEnum, RoutesEnum } from '../../common/enums';
-import { getAllEmployeesInfo } from '../../actions/employeeInfos';
+import { getAllEmployeesInfo, deleteEmployee } from '../../actions/employeeInfos';
 import { getAllEmployeeList } from '../../reducers/employeeInfosReducer';
-import { Loader, List } from 'semantic-ui-react';
+import { Loader, List, Message, Icon } from 'semantic-ui-react';
 import { initializing } from '../../common/strings';
 import EmployeeListItem from './employeeListItem';
 import { Redirect, withRouter, RouteComponentProps } from 'react-router';
@@ -18,14 +18,17 @@ interface IEmployeesContainerOwnProps extends RouteComponentProps<any> {
 interface IEmployeesContainerProps extends IEmployeesContainerOwnProps {
     loggedUserInfo: IUserInfo | null;
     employeeLoadingStatus: LoadingStatusEnum;
+    deleteEmployeeErrorMessage: string | null;
     employeesList: IUserInfo[];
     getAllEmployeesInfo();
+    deleteEmployee(id: string, concurrencyStamp: string);
 }
 
 function mapStateToProps(state: IRootReducerState, ownProps: IEmployeesContainerOwnProps): Partial<IEmployeesContainerProps> {
     return {
         ...ownProps,
         loggedUserInfo: getLoggedUserInfo(state),
+        deleteEmployeeErrorMessage: state.employeeInfos.deleteEmployeeErrorMessage,
         employeeLoadingStatus: state.employeeInfos.employeeLoadingStatus,
         employeesList: getAllEmployeeList(state)
     };
@@ -33,7 +36,8 @@ function mapStateToProps(state: IRootReducerState, ownProps: IEmployeesContainer
 
 function mapDispatchToProps(dispatch: any): Partial<IEmployeesContainerProps> {
     return {
-        getAllEmployeesInfo: () => dispatch(getAllEmployeesInfo())
+        getAllEmployeesInfo: () => dispatch(getAllEmployeesInfo()),
+        deleteEmployee: (id: string, concurrencyStamp: string) => dispatch(deleteEmployee(id, concurrencyStamp))
     };
 }
 
@@ -63,8 +67,12 @@ class EmployeesContainer extends React.Component<IEmployeesContainerProps> {
     }
 
     private _renderEmployeeList = () => {
-        const { loggedUserInfo } = this.props;
+        const { loggedUserInfo, deleteEmployeeErrorMessage } = this.props;
         return <div className="employee-container">
+            {deleteEmployeeErrorMessage && <Message visible error>
+                <Icon name='delete' />
+                {deleteEmployeeErrorMessage}
+            </Message>}
             <List className="employee-container__employee-list" divided verticalAlign='middle' size='large'>
                 {this.props.employeesList.map(employee => {
                     const { id, firstName, lastName, email } = employee;
@@ -88,7 +96,9 @@ class EmployeesContainer extends React.Component<IEmployeesContainerProps> {
     }
 
     private _onEmployeeDelete = (employeeId: string) => {
-        return;
+        const { employeesList } = this.props;
+        const employee = employeesList.find(x => x.id === employeeId);
+        this.props.deleteEmployee(employeeId, employee!.concurrencyStamp!);
     }
 }
 

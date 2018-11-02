@@ -1,5 +1,5 @@
 import fetcher from "../utils/fetcher";
-import { GET_LOGGED_USER_INFO, ADD_OR_UPDATE_EMPLOYEE_INFO, GET_ALL_EMPLOYEES } from "../actionTypes/employeeInfos";
+import { GET_LOGGED_USER_INFO, ADD_OR_UPDATE_EMPLOYEE_INFO, GET_ALL_EMPLOYEES, DELETE_EMPLOYEE } from "../actionTypes/employeeInfos";
 import { setLoggedUser } from "./app";
 import { IUserInfo, INewUserInfo } from "../common/data";
 
@@ -34,6 +34,19 @@ export function getAllEmployeesInfo() {
         return fetcher.reduxFetch(`${employeeControllerBaseUrl}/list`, {
             jsonResponseExpected: true,
             action: GET_ALL_EMPLOYEES
+        }, dispatch);
+    };
+}
+
+export function deleteEmployee(id: string, concurrencyStamp: string) {
+    return (dispatch, getState) => {
+        return fetcher.reduxFetch(`${employeeControllerBaseUrl}/delete`, {
+            jsonResponseExpected: true,
+            action: DELETE_EMPLOYEE,
+            requestInit: {
+                method: 'POST',
+                body: JSON.stringify({ id, concurrencyStamp })
+            }
         }, dispatch);
     };
 }
