@@ -10,6 +10,7 @@ import { initializing } from '../../common/strings';
 import { getAllEmployeesInfo } from '../../actions/employeeInfos';
 import { RouteComponentProps, withRouter, Redirect } from 'react-router';
 import moment = require('moment');
+import { getMessageFromServerError } from '../../utils/serverExceptionsUtil';
 
 interface ICalendarEntryManagementContainerOwnProps extends RouteComponentProps<{ id: string }> {
 
@@ -24,6 +25,7 @@ interface ICalendarEntryManagementContainerProps extends ICalendarEntryManagemen
     employees: IUserInfo[];
 
     getAllEmployeesInfo();
+    addOrUpdateCalendarEntry(calendarEntry: ICalendarEntry);
 }
 
 interface ICalendarEntryManagementContainerState {
@@ -49,7 +51,8 @@ function mapStateToProps(state: IRootReducerState, ownProps: ICalendarEntryManag
 
 function mapDispatchToProps(dispatch: any): Partial<ICalendarEntryManagementContainerProps> {
     return {
-        getAllEmployeesInfo: () => dispatch(getAllEmployeesInfo())
+        getAllEmployeesInfo: () => dispatch(getAllEmployeesInfo()),
+        addOrUpdateCalendarEntry: (calendarEntry: ICalendarEntry) => dispatch()
     };
 }
 
@@ -121,7 +124,14 @@ class CalendarEntryManagementContainer extends React.Component<ICalendarEntryMan
     }
 
     private _onSaveChanges = () => {
-
+        this.setState({ isSavingChanges: true });
+        this.props.addOrUpdateCalendarEntry(this.state.newCalendarEntry)
+            .then(() => {
+                this.setState({ isSavingChanges: false, successMessage: 'Changes saved.' });
+            })
+            .catch((error) => {
+                this.setState({ isSavingChanges: false, errorMessage: getMessageFromServerError(error) });
+            });
     }
 }
 
