@@ -6,5 +6,9 @@ namespace EmployeeVacationCalendar.WebAPI.Common.Exceptions
 {
     public class ValuesChangedByAnotherUserException: Exception
     {
+        public ValuesChangedByAnotherUserException(): base ("Another user has changed this entry. Please refresh the page and try again.")
+        {
+
+        }
     }
 }

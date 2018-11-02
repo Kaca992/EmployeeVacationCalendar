@@ -6,6 +6,7 @@ using EmployeeVacationCalendar.WebAPI.App.Services;
 using EmployeeVacationCalendar.WebAPI.App.Util;
 using EmployeeVacationCalendar.WebAPI.Common.DTO;
 using EmployeeVacationCalendar.WebAPI.Common.Enums;
+using EmployeeVacationCalendar.WebAPI.Common.Exceptions;
 using EmployeeVacationCalendar.WebAPI.Database;
 using EmployeeVacationCalendar.WebAPI.Database.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -41,8 +42,20 @@ namespace EmployeeVacationCalendar.WebAPI.App.Controllers
         public async Task<IActionResult> AddOrUpdateEmployeeInfo([FromBody] NewUserInfoDTO newUserInfoDTO)
         {
             var loggedUser = await _userManager.GetUserAsync(User);
-            var userDto = await _employeeService.AddUpdateUserInfo(loggedUser.Id, loggedUser.EmployeeType, newUserInfoDTO);
-            return Ok(userDto);
+            try
+            {
+                var userDto = await _employeeService.AddUpdateUserInfo(loggedUser.Id, loggedUser.EmployeeType, newUserInfoDTO);
+                return Ok(userDto);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ArgumentException || ex is AdminRoleRequiredException || ex is ValuesChangedByAnotherUserException)
+                {
+                    return BadRequest(ex);
+                }
+
+                throw;
+            }
         }
     }
 }

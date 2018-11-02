@@ -7,6 +7,7 @@ import { EmployeeTypeEnum } from '../../common/enums';
 import EmployeeManagement from '../../components/employeeManagement/employeeManagement';
 import { emptyAndNonWhitespaceInput, emailValidation } from '../../utils/validation';
 import { addOrUpdateEmployeeInfo } from '../../actions/employeeInfos';
+import { getMessageFromServerError } from '../../utils/serverExceptionsUtil';
 
 interface IEmployeeManagementContainerOwnProps extends RouteComponentProps<{ id: string }> {
 
@@ -53,20 +54,36 @@ class EmployeeManagementContainer extends React.Component<IEmployeeManagementCon
         };
     }
 
+    public componentWillReceiveProps(nextProps: Readonly<IEmployeeManagementContainerProps>) {
+        const { employeeInfo } = nextProps;
+        const { newEmployeeInfo } = this.state;
+
+        // update state if user made changes to the employee (updated concurrency stamp), and then wants to make more changes
+        if (employeeInfo.concurrencyStamp && newEmployeeInfo.concurrencyStamp && employeeInfo.concurrencyStamp !== newEmployeeInfo.concurrencyStamp) {
+            this.setState({
+                newEmployeeInfo: {
+                    ...newEmployeeInfo,
+                    concurrencyStamp: employeeInfo.concurrencyStamp
+                }
+            });
+        }
+    }
+
     public render() {
-        const { newEmployeeInfo, validation } = this.state;
+        const { newEmployeeInfo, validation, isLoading } = this.state;
         return <EmployeeManagement
             employeeInfo={newEmployeeInfo}
             validation={validation}
-            isSavingChanges={false}
+            isSavingChanges={isLoading}
             onEmployeeInfoChanged={this._onEmployeeInfoChanged}
             onSaveChanges={this._onSaveChanges}
         />;
     }
 
     private _onEmployeeInfoChanged = (newEmployeeInfo: INewUserInfo, newValidation: IEmployeeManagementValidation) => {
+        // we want to reset server error on change
         this.setState({
-            newEmployeeInfo, validation: newValidation
+            newEmployeeInfo, validation: { ...newValidation, serverError: undefined }
         });
     }
 
@@ -104,8 +121,9 @@ class EmployeeManagementContainer extends React.Component<IEmployeeManagementCon
             .then(() => {
                 this.setState({ isLoading: false });
             })
-            .catch(() => {
-                this.setState({ isLoading: false });
+            .catch((error) => {
+                this.setState(
+                    (oldState) => ({ isLoading: false, validation: { ...oldState.validation, serverError: getMessageFromServerError(error) } }));
             });
     }
 }

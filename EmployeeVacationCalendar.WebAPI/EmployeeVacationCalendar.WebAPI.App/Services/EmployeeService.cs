@@ -43,8 +43,8 @@ namespace EmployeeVacationCalendar.WebAPI.App.Services
             if (oldUserInfo.ConcurrencyStamp != newUserInfoDTO.ConcurrencyStamp) throw new ValuesChangedByAnotherUserException();
             oldUserInfo.FirstName = newUserInfoDTO.FirstName;
             oldUserInfo.LastName = newUserInfoDTO.LastName;
-            oldUserInfo.Email = newUserInfoDTO.Email;
             oldUserInfo.UserName = newUserInfoDTO.Email;
+            oldUserInfo.Email = newUserInfoDTO.Email;
 
             if (!string.IsNullOrEmpty(newUserInfoDTO.NewPassword))
             {
@@ -56,9 +56,11 @@ namespace EmployeeVacationCalendar.WebAPI.App.Services
             if (result.Succeeded)
             {
                 return oldUserInfo;
+            } else
+            {
+                // this will be duplicate username in this case
+                throw new ArgumentException(result.Errors.FirstOrDefault().Description);
             }
-
-            return oldUserInfo;
         }
 
         private async Task<Employee> addNewUserInfo(EmployeeTypeEnum loggedUserType, NewUserInfoDTO newUserInfoDTO)
@@ -78,6 +80,11 @@ namespace EmployeeVacationCalendar.WebAPI.App.Services
             if (result.Succeeded)
             {
                 await _userManager.AddToRoleAsync(newEmployeeInfo, RoleUtil.GetRoleFromEmployeeType(newEmployeeInfo.EmployeeType));
+            }
+            else
+            {
+                // this will be duplicate username in this case
+                throw new ArgumentException(result.Errors.FirstOrDefault().Description);
             }
 
             return newEmployeeInfo;
