@@ -44,6 +44,7 @@ namespace EmployeeVacationCalendar.WebAPI.App.Services
             oldUserInfo.FirstName = newUserInfoDTO.FirstName;
             oldUserInfo.LastName = newUserInfoDTO.LastName;
             oldUserInfo.Email = newUserInfoDTO.Email;
+            oldUserInfo.UserName = newUserInfoDTO.Email;
 
             if (!string.IsNullOrEmpty(newUserInfoDTO.NewPassword))
             {
@@ -65,6 +66,7 @@ namespace EmployeeVacationCalendar.WebAPI.App.Services
             if (loggedUserType == EmployeeTypeEnum.User) throw new AdminRoleRequiredException();
             var newEmployeeInfo = new Employee
             {
+                UserName = newUserInfoDTO.Email,
                 FirstName = newUserInfoDTO.FirstName,
                 LastName = newUserInfoDTO.LastName,
                 Email = newUserInfoDTO.Email,

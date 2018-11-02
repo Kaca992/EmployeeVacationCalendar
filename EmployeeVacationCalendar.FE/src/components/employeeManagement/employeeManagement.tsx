@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import './employeeManagement.scss';
 import { IUserInfo, INewUserInfo, IEmployeeManagementValidation } from '../../common/data';
-import { Form, Input, InputOnChangeData, Button, Checkbox, CheckboxProps } from 'semantic-ui-react';
+import { Form, Input, InputOnChangeData, Button, Checkbox, CheckboxProps, Message, Icon } from 'semantic-ui-react';
 import { EmployeeInfoStrings } from '../../common/strings';
 import LabeledInput from '../labeledInput/labeledInput';
 import { EmployeeTypeEnum } from '../../common/enums';
@@ -34,50 +34,57 @@ export default class EmployeeManagement extends React.Component<IEmployeeManagem
         const isUserTypeVisible = !id;
 
         return <div className="employee-management">
-            <LabeledInput
-                fluid
-                label={EmployeeInfoStrings.FirstNameLabel}
-                placeholder={EmployeeInfoStrings.FirstNamePlaceholder}
-                value={firstName}
-                onChange={(event, value) => this._onEmployeeInfoChanged({ firstName: value.value }, { firstNameError: undefined })}
-                errorMessage={firstNameError}
-            />
+            <Form>
+                <LabeledInput
+                    fluid
+                    label={EmployeeInfoStrings.FirstNameLabel}
+                    placeholder={EmployeeInfoStrings.FirstNamePlaceholder}
+                    value={firstName}
+                    onChange={(event, value) => this._onEmployeeInfoChanged({ firstName: value.value }, { firstNameError: undefined })}
+                    errorMessage={firstNameError}
+                />
 
-            <LabeledInput
-                fluid
-                label={EmployeeInfoStrings.LastNameLabel}
-                placeholder={EmployeeInfoStrings.LastNamePlaceholder}
-                value={lastName}
-                onChange={(event, value) => this._onEmployeeInfoChanged({ lastName: value.value }, { lastNameError: undefined })}
-                errorMessage={lastNameError}
-            />
+                <LabeledInput
+                    fluid
+                    label={EmployeeInfoStrings.LastNameLabel}
+                    placeholder={EmployeeInfoStrings.LastNamePlaceholder}
+                    value={lastName}
+                    onChange={(event, value) => this._onEmployeeInfoChanged({ lastName: value.value }, { lastNameError: undefined })}
+                    errorMessage={lastNameError}
+                />
 
-            <LabeledInput
-                fluid
-                label={EmployeeInfoStrings.EmailLabel}
-                placeholder={EmployeeInfoStrings.EmailPlaceholder}
-                value={email}
-                onChange={(event, value) => this._onEmployeeInfoChanged({ email: value.value }, { emailError: undefined })}
-                errorMessage={emailError}
-            />
+                <LabeledInput
+                    fluid
+                    label={EmployeeInfoStrings.EmailLabel}
+                    placeholder={EmployeeInfoStrings.EmailPlaceholder}
+                    value={email}
+                    onChange={(event, value) => this._onEmployeeInfoChanged({ email: value.value }, { emailError: undefined })}
+                    errorMessage={emailError}
+                />
 
-            <LabeledInput
-                fluid
-                label={EmployeeInfoStrings.NewPasswordLabel}
-                type='password'
-                placeholder={EmployeeInfoStrings.NewPasswordPlaceholder}
-                value={newPassword || ""}
-                onChange={(event, value) => this._onEmployeeInfoChanged({ newPassword: value.value }, { passwordError: undefined })}
-                errorMessage={passwordError}
-            />
+                <LabeledInput
+                    fluid
+                    label={EmployeeInfoStrings.NewPasswordLabel}
+                    type='password'
+                    placeholder={EmployeeInfoStrings.NewPasswordPlaceholder}
+                    value={newPassword || ""}
+                    onChange={(event, value) => this._onEmployeeInfoChanged({ newPassword: value.value }, { passwordError: undefined })}
+                    errorMessage={passwordError}
+                />
 
-            {isUserTypeVisible && <Checkbox className="employee-management__type-checkbox" label={EmployeeInfoStrings.IsUserAdminLabel} checked={type !== EmployeeTypeEnum.User} onChange={this._onUserTypeChanged} />}
+                {isUserTypeVisible && <Checkbox className="employee-management__type-checkbox" label={EmployeeInfoStrings.IsUserAdminLabel} checked={type !== EmployeeTypeEnum.User} onChange={this._onUserTypeChanged} />}
 
-            <div className="employee-management__buttons-container">
-                <Button primary size='large' onClick={onSaveChanges} loading={isSavingChanges}>
-                    {EmployeeInfoStrings.SaveChangesBtn}
-                </Button>
-            </div>
+                <div className="employee-management__buttons-container">
+                    <Button primary size='large' onClick={onSaveChanges} loading={isSavingChanges}>
+                        {EmployeeInfoStrings.SaveChangesBtn}
+                    </Button>
+                </div>
+                <Message visible warning>
+                    <Icon name='help' />
+                    Already signed up?&nbsp;<a href='#'>Login here</a>&nbsp;instead.
+                </Message>
+            </Form>
+
         </div>;
     }
 
