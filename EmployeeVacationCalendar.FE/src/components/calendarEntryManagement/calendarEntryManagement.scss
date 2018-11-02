@@ -1,9 +1,16 @@
 .calendar-entry {
     height: 100%;
+    max-width: 500px;
 
     .employee-selector {
         .menu {
             height: 140px;
         }
+
+        margin-bottom: 10px;
+    }
+
+    .labeled-date-picker {
+        margin-bottom: 10px;
     }
 }

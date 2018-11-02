@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace EmployeeVacationCalendar.WebAPI.Database.Models
@@ -10,7 +11,9 @@ namespace EmployeeVacationCalendar.WebAPI.Database.Models
     {
         [Key]
         public int Id { get; set; }
+        [Column(TypeName = "date")]
         public DateTime StartDate { get; set; }
+        [Column(TypeName = "date")]
         public DateTime EndDate { get; set; }
         public VacationTypeEnum VacationType { get; set;}
 

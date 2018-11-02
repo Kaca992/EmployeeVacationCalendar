@@ -1,4 +1,5 @@
 import { EmployeeTypeEnum, VacationTypeEnum } from "./enums";
+import { Moment } from "moment";
 
 export interface IUserInfo {
     id: string;
@@ -23,6 +24,8 @@ export interface IEmployeeManagementValidation {
 
 export interface ICalendarEntry {
     id: string;
+    startDate: Moment;
+    endDate: Moment;
     vacationType: VacationTypeEnum;
     employeeId?: string;
     concurrencyStamp?: string;

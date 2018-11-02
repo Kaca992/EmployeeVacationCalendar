@@ -1,0 +1,13 @@
+.labeled-date-picker {
+    &__inner {
+        // so it will look like semantic inputs
+        cursor: pointer;
+        border-radius: 5px;
+    
+        line-height: 1.21428571em;
+        padding: .67857143em 2.1em .67857143em 1em;
+    
+        box-shadow: none;
+        border: 1px solid rgba(34, 36, 38, 0.15);
+    }
+}

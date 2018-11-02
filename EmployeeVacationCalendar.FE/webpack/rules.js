@@ -19,6 +19,18 @@ const sassProd = {
     use: [plugins.MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader']
 };
 
+// css loader
+const cssDev = {
+    test: /\.css$/,
+    use: ['style-loader', 'css-loader', 'postcss-loader']
+};
+
+// produciton css loader separates all css files into a separate file, not inlined with js
+const cssProd = {
+    test: /\.css$/,
+    use: [plugins.MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader']
+};
+
 // assets loaders
 const fileLoader = {
     test: /\.(png|jpg|jpeg|gif|svg)$/, use: "file-loader?name=./assets/images/[name].[ext]"
@@ -34,8 +46,10 @@ exports.getRules = (isProduction) => {
 
     if (isProduction) {
         loaders.push(sassProd);
+        loaders.push(cssProd);
     } else {
         loaders.push(sassDev);
+        loaders.push(cssDev);
     }
 
     return loaders;

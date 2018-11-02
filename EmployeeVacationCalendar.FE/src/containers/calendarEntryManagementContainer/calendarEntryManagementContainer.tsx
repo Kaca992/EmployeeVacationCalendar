@@ -9,6 +9,7 @@ import { Loader } from 'semantic-ui-react';
 import { initializing } from '../../common/strings';
 import { getAllEmployeesInfo } from '../../actions/employeeInfos';
 import { RouteComponentProps, withRouter, Redirect } from 'react-router';
+import moment = require('moment');
 
 interface ICalendarEntryManagementContainerOwnProps extends RouteComponentProps<{ id: string }> {
 
@@ -54,10 +55,16 @@ function mapDispatchToProps(dispatch: any): Partial<ICalendarEntryManagementCont
 class CalendarEntryManagementContainer extends React.Component<ICalendarEntryManagementContainerProps, ICalendarEntryManagementContainerState> {
     constructor(props: ICalendarEntryManagementContainerProps) {
         super(props);
+
+        const startDate = moment(Date.now());
+        const endDate = moment(Date.now()).add(1, 'day');
         this.state = {
-            isInitialized: false,
+            // TODO: implement
+            isInitialized: true,
             newCalendarEntry: props.initEntry || {
                 id: "",
+                startDate,
+                endDate,
                 employeeId: props.loggedUserInfo.type === EmployeeTypeEnum.User ? props.loggedUserInfo.id : undefined,
                 vacationType: VacationTypeEnum.Holiday
             },
@@ -74,7 +81,7 @@ class CalendarEntryManagementContainer extends React.Component<ICalendarEntryMan
         }
 
         if (!initEntry && !isNewEntry) {
-            // TODO fetch entry so refresh will work on entry
+            // TODO: fetch entry so refresh will work on entry
         }
     }
 
@@ -82,14 +89,14 @@ class CalendarEntryManagementContainer extends React.Component<ICalendarEntryMan
         const { newCalendarEntry, validation, isInitialized } = this.state;
         const { employees, employeeLoadingStatus } = this.props;
 
-        if (isInitialized || this._shouldInitializeEmployees() && employeeLoadingStatus !== LoadingStatusEnum.Loaded) {
+        if (!isInitialized || this._shouldInitializeEmployees() && employeeLoadingStatus !== LoadingStatusEnum.Loaded) {
             return <Loader active size='large'>{initializing}</Loader>;
         }
 
         return <CalendarEntryManagement
-            isEmployeeSelectable={this._shouldInitializeEmployees()}
             calendarEntry={newCalendarEntry}
             validation={validation}
+            isEmployeeSelectable={this._shouldInitializeEmployees()}
             employees={employees}
             onCalendarEntryChanged={this._onCalendarEntryChanged}
         />;
