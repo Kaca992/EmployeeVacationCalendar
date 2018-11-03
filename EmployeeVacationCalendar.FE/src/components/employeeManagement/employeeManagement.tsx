@@ -76,9 +76,11 @@ export default class EmployeeManagement extends React.Component<IEmployeeManagem
 
             {isUserTypeVisible && <Checkbox className="employee-management__type-checkbox" label={EmployeeInfoStrings.IsUserAdminLabel} checked={type !== EmployeeTypeEnum.User} onChange={this._onUserTypeChanged} />}
 
-            <Button primary size='large' onClick={onSaveChanges} loading={isSavingChanges}>
-                {EmployeeInfoStrings.SaveChangesBtn}
-            </Button>
+            <div>
+                <Button primary size='large' onClick={onSaveChanges} loading={isSavingChanges}>
+                    {EmployeeInfoStrings.SaveChangesBtn}
+                </Button>
+            </div>
             {serverError && <Message visible error>
                 <Icon name='delete' />
                 {serverError}
