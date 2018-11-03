@@ -3,8 +3,8 @@ import { ICalendarEntry } from "../common/data";
 import { IRootReducerState } from "./rootReducer";
 
 export interface ICalendarReducerState {
-    calendarInfoById: { [id: string]: ICalendarEntry };
-    calendarInfoIdsByMonth: { [id: string]: string[] };
+    calendarInfoById: { [id: number]: ICalendarEntry };
+    calendarInfoIdsByMonth: { [id: string]: number[] };
     deleteCalendarEntryErrorMessage: string | null;
 }
 

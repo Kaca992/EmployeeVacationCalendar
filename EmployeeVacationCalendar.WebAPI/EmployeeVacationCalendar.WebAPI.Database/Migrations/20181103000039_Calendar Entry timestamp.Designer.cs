@@ -4,14 +4,16 @@ using EmployeeVacationCalendar.WebAPI.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EmployeeVacationCalendar.WebAPI.Database.Migrations
 {
     [DbContext(typeof(EmployeeVacationDbContext))]
-    partial class EmployeeVacationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181103000039_Calendar Entry timestamp")]
+    partial class CalendarEntrytimestamp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -18,5 +18,8 @@ namespace EmployeeVacationCalendar.WebAPI.Database.Models
         public VacationTypeEnum VacationType { get; set;}
 
         public Employee Employee { get; set; }
+
+        [Timestamp]
+        public byte[] ConcurrencyStamp { get; set; }
     }
 }

@@ -96,11 +96,11 @@ export default class CalendarEntryManagement extends React.Component<ICalendarEn
         this._onCalendarEntryChanged({ employeeId: id });
     }
 
-    private _onStartDateChanged = (date: Moment) => {
+    private _onStartDateChanged = (date: Date) => {
         this._onCalendarEntryChanged({ startDate: date });
     }
 
-    private _onEndDateChanged = (date: Moment) => {
+    private _onEndDateChanged = (date: Date) => {
         this._onCalendarEntryChanged({ endDate: date });
     }
 

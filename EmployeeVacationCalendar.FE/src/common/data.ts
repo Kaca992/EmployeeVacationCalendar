@@ -23,9 +23,9 @@ export interface IEmployeeManagementValidation {
 }
 
 export interface ICalendarEntry {
-    id: string;
-    startDate: Moment;
-    endDate: Moment;
+    id: number;
+    startDate: Date;
+    endDate: Date;
     vacationType: VacationTypeEnum;
     employeeId?: string;
     concurrencyStamp?: string;

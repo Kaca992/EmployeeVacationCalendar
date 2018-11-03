@@ -11,6 +11,7 @@ import { getAllEmployeesInfo } from '../../actions/employeeInfos';
 import { RouteComponentProps, withRouter, Redirect } from 'react-router';
 import moment = require('moment');
 import { getMessageFromServerError } from '../../utils/serverExceptionsUtil';
+import { addOrUpdateCalendarEntry } from '../../actions/calendar';
 
 interface ICalendarEntryManagementContainerOwnProps extends RouteComponentProps<{ id: string }> {
 
@@ -52,7 +53,7 @@ function mapStateToProps(state: IRootReducerState, ownProps: ICalendarEntryManag
 function mapDispatchToProps(dispatch: any): Partial<ICalendarEntryManagementContainerProps> {
     return {
         getAllEmployeesInfo: () => dispatch(getAllEmployeesInfo()),
-        addOrUpdateCalendarEntry: (calendarEntry: ICalendarEntry) => dispatch()
+        addOrUpdateCalendarEntry: (calendarEntry: ICalendarEntry) => dispatch(addOrUpdateCalendarEntry(calendarEntry))
     };
 }
 
@@ -60,13 +61,13 @@ class CalendarEntryManagementContainer extends React.Component<ICalendarEntryMan
     constructor(props: ICalendarEntryManagementContainerProps) {
         super(props);
 
-        const startDate = moment(Date.now());
-        const endDate = moment(Date.now()).add(1, 'day');
+        const startDate = moment(Date.now()).toDate();
+        const endDate = moment(Date.now()).add(1, 'day').toDate();
         this.state = {
             // TODO: implement
             isInitialized: true,
             newCalendarEntry: props.initEntry || {
-                id: "",
+                id: -1,
                 startDate,
                 endDate,
                 employeeId: props.loggedUserInfo.type === EmployeeTypeEnum.User ? props.loggedUserInfo.id : undefined,

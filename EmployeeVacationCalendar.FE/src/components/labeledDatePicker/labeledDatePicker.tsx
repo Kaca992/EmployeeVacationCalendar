@@ -9,11 +9,11 @@ import { Moment } from 'moment';
 import moment = require('moment');
 
 export interface ILabeledDatePickerProps {
-    selectedDate: Moment;
+    selectedDate: Date;
     label?: string;
     maxSelectableDate?: Moment;
     minSelectableDate?: Moment;
-    onStartDateChanged(newDate: Moment);
+    onStartDateChanged(newDate: Date);
 }
 
 export default class LabeledDatePicker extends React.PureComponent<ILabeledDatePickerProps> {
@@ -23,14 +23,18 @@ export default class LabeledDatePicker extends React.PureComponent<ILabeledDateP
             <div className="labeled-date-picker">
                 {label && <Label content={label} />}
                 <DatePicker
-                    selected={selectedDate}
+                    selected={moment(selectedDate)}
                     maxDate={maxSelectableDate}
                     minDate={minSelectableDate}
                     shouldCloseOnSelect={true}
                     className="labeled-date-picker__inner"
-                    onChange={onStartDateChanged}
+                    onChange={this._onStartDateChanged}
                 />
             </div>
         );
+    }
+
+    private _onStartDateChanged = (newDate: Moment) => {
+        this.props.onStartDateChanged(newDate.toDate());
     }
 }
