@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { IRootReducerState, getLoggedUserInfo } from '@reducers/rootReducer';
 import { getCalendarEntries } from '../../actions/calendar';
-import { Button, Loader } from 'semantic-ui-react';
+import { Button, Loader, Icon, Header } from 'semantic-ui-react';
 import './calendarContainer.scss';
 import { RoutesEnum, LoadingStatusEnum } from '../../common/enums';
 import { RouteComponentProps } from 'react-router';
@@ -80,7 +80,7 @@ class CalendarContainer extends React.Component<ICalendarContainerProps, ICalend
         const { loggedUserInfo } = this.props;
         return (
             <div className="calendar-container">
-                {loggedUserInfo && <Button onClick={this._onAddNewEntry}>Add New Entry</Button>}
+                {this._renderCalendarHeader()}
                 <Calendar />
             </div>
         );
@@ -88,6 +88,16 @@ class CalendarContainer extends React.Component<ICalendarContainerProps, ICalend
 
     private _onAddNewEntry = () => {
         this.props.history.push(RoutesEnum.NewCalendarEntry);
+    }
+
+    private _renderCalendarHeader = () => {
+        const { loggedUserInfo } = this.props;
+        return <div className="calendar-header">
+            {loggedUserInfo && <Button className="calendar-header__add-entry" onClick={this._onAddNewEntry}>Add New Entry</Button>}
+            <Button icon><Icon name='angle left' /></Button>
+            <Header className="calendar-header__title" content="TEST" />
+            <Button icon><Icon name='angle right' /></Button>
+        </div>;
     }
 }
 

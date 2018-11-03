@@ -67,12 +67,21 @@ export default function calendarReducer(state: ICalendarReducerState = initialSt
         case actionUtils.responseAction(ADD_OR_UPDATE_CALENDAR_ENTRY):
             {
                 const calendarEntry: ICalendarEntry = action.payload;
+                const monthKeys = getMonthKeysForEntry(calendarEntry.startDate, calendarEntry.endDate);
+                const newCalendarInfoIdsByMonth = { ...state.calendarInfoIdsByMonth };
+
+                monthKeys.forEach(key => {
+                    if (newCalendarInfoIdsByMonth[key] && !newCalendarInfoIdsByMonth[key].find(x => x === calendarEntry.id)) {
+                        newCalendarInfoIdsByMonth[key].push(calendarEntry.id);
+                    }
+                });
                 return {
                     ...state,
                     calendarInfoById: {
                         ...state.calendarInfoById,
                         [calendarEntry.id]: calendarEntry
-                    }
+                    },
+                    calendarInfoIdsByMonth: newCalendarInfoIdsByMonth
                 };
             }
         default:
@@ -106,4 +115,19 @@ export const getSelectedMonthEntries = createSelector([getSelectedMonthEntryIds,
 export function getYearAndMonthFromKey(selectedMonthKey: string) {
     const values = selectedMonthKey.split("/");
     return { month: parseInt(values[0], 10), year: parseInt(values[1], 10) };
+}
+
+/** Returns keys for all months that contain this vacation */
+export function getMonthKeysForEntry(startDate: Date, endDate: Date): string[] {
+    const keys: string[] = [];
+    const start = moment(startDate);
+    const end = moment(endDate);
+
+    while (start.year() <= end.year() && start.month() <= end.month()) {
+        // moment month starts from 0
+        keys.push(`${start.month() + 1}/${start.year()}`);
+        start.add(1, 'month');
+    }
+
+    return keys;
 }
