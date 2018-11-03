@@ -12,6 +12,7 @@ import { getSelectedMonthLoadingStatus, getSelectedMonthEntries, getYearAndMonth
 import { initializing } from '../../common/strings';
 import Calendar from '../../components/calendar/calendar';
 import { Moment } from 'moment';
+import { getAllEmployeeList } from '../../reducers/employeeInfosReducer';
 
 interface ICalendarContainerOwnProps extends RouteComponentProps<any> {
 
@@ -22,6 +23,7 @@ interface ICalendarContainerProps extends ICalendarContainerOwnProps {
     selectedMonthKey: string;
     loadingStatus: LoadingStatusEnum;
     monthEntries: ICalendarEntry[];
+    employeeInfosById: { [id: string]: IUserInfo };
     getCalendarEntries(year: number, month: number);
 }
 
@@ -35,7 +37,8 @@ function mapStateToProps(state: IRootReducerState, ownProps: ICalendarContainerO
         loggedUserInfo: getLoggedUserInfo(state),
         selectedMonthKey: state.calendar.selectedMonthKey,
         loadingStatus: getSelectedMonthLoadingStatus(state),
-        monthEntries: getSelectedMonthEntries(state)
+        monthEntries: getSelectedMonthEntries(state),
+        employeeInfosById: state.employeeInfos.employeeInfosById
     };
 }
 
@@ -52,8 +55,9 @@ class CalendarContainer extends React.Component<ICalendarContainerProps, ICalend
     }
 
     public componentDidMount() {
-        const today = moment(Date.now());
-        this.props.getCalendarEntries(today.year(), today.month() + 1);
+        const { selectedMonthKey } = this.props;
+        const { year, month } = getYearAndMonthFromKey(selectedMonthKey);
+        this.props.getCalendarEntries(year, month);
     }
 
     public componentWillReceiveProps(nextProps: Readonly<ICalendarContainerProps>) {
@@ -73,18 +77,22 @@ class CalendarContainer extends React.Component<ICalendarContainerProps, ICalend
             case LoadingStatusEnum.Loaded:
                 return this._renderCalendar();
             case LoadingStatusEnum.Error:
-                return <div>There was an error while loading Employees.</div>;
+                return <div>There was an error while loading Calendar Entries.</div>;
         }
     }
 
     private _renderCalendar = () => {
-        const { loggedUserInfo, selectedMonthKey } = this.props;
+        const { selectedMonthKey, employeeInfosById, monthEntries } = this.props;
         const { year, month } = getYearAndMonthFromKey(selectedMonthKey);
         const monthMoment = moment(new Date(year, month - 1, 1));
         return (
             <div className="calendar-container">
                 {this._renderCalendarHeader(monthMoment)}
-                <Calendar startOfMonth={monthMoment} />
+                <Calendar
+                    startOfMonth={monthMoment}
+                    employeeInfosById={employeeInfosById}
+                    monthEntries={monthEntries}
+                />
             </div>
         );
     }

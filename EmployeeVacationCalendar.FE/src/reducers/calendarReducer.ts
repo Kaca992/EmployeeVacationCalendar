@@ -6,6 +6,7 @@ import { actionUtils } from "../utils/fetcher";
 import moment = require("moment");
 import { LoadingStatusEnum } from "../common/enums";
 import { createSelector } from "reselect";
+import { Moment } from "moment";
 
 export interface ICalendarReducerState {
     selectedMonthKey: string;
@@ -16,7 +17,7 @@ export interface ICalendarReducerState {
 }
 
 const initialState: ICalendarReducerState = {
-    selectedMonthKey: "",
+    selectedMonthKey: getMonthKeyFromDate(moment(Date.now())),
     calendarInfoById: {},
     calendarInfoIdsByMonth: {},
     calendarStatusByMonth: {},
@@ -64,11 +65,35 @@ export default function calendarReducer(state: ICalendarReducerState = initialSt
                 }
             };
         }
+        case actionUtils.errorAction(GET_CALENDAR_ENTRIES): {
+            const monthKey: string = action.payload.monthKey;
+
+            return {
+                ...state,
+                calendarStatusByMonth: {
+                    ...state.calendarStatusByMonth,
+                    [monthKey]: LoadingStatusEnum.Error
+                }
+            };
+        }
         case actionUtils.responseAction(ADD_OR_UPDATE_CALENDAR_ENTRY):
             {
                 const calendarEntry: ICalendarEntry = action.payload;
+                const oldEntry: ICalendarEntry = state.calendarInfoById[calendarEntry.id];
                 const monthKeys = getMonthKeysForEntry(calendarEntry.startDate, calendarEntry.endDate);
+                const oldMonthKeys = oldEntry ? getMonthKeysForEntry(oldEntry.startDate, oldEntry.endDate) : [];
+
                 const newCalendarInfoIdsByMonth = { ...state.calendarInfoIdsByMonth };
+
+                // we need to first remove all old month keys, because entry might have changed months in which it was
+                oldMonthKeys.forEach(key => {
+                    if (newCalendarInfoIdsByMonth[key]) {
+                        const elementIndex = newCalendarInfoIdsByMonth[key].findIndex(x => x === calendarEntry.id);
+                        if (elementIndex !== -1) {
+                            newCalendarInfoIdsByMonth[key].splice(elementIndex, 1);
+                        }
+                    }
+                });
 
                 monthKeys.forEach(key => {
                     if (newCalendarInfoIdsByMonth[key] && !newCalendarInfoIdsByMonth[key].find(x => x === calendarEntry.id)) {
@@ -130,4 +155,8 @@ export function getMonthKeysForEntry(startDate: Date, endDate: Date): string[] {
     }
 
     return keys;
+}
+
+function getMonthKeyFromDate(date: Moment) {
+    return `${date.month() + 1}/${date.year()}`;
 }

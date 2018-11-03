@@ -90,8 +90,8 @@ namespace EmployeeVacationCalendar.WebAPI.App.Services
             {
                 throw new ArgumentException("Entry was deleted by someone else.");
             }
-
-            if (entry.ConcurrencyStamp != entryDTO.ConcurrencyStamp) throw new ValuesChangedByAnotherUserException();
+                        
+            if (entry.ConcurrencyStamp.Length != entryDTO.ConcurrencyStamp.Length || entry.ConcurrencyStamp.Any(x => !entryDTO.ConcurrencyStamp.Contains(x))) throw new ValuesChangedByAnotherUserException();
 
             entry.StartDate = entryDTO.StartDate;
             entry.EndDate = entryDTO.EndDate;

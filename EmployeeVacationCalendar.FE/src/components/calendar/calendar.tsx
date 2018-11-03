@@ -1,12 +1,16 @@
 import * as React from 'react';
 
 import './calendar.scss';
-import { Table } from 'semantic-ui-react';
+import { Table, Label, Icon } from 'semantic-ui-react';
 import { Moment } from 'moment';
 import moment = require('moment');
+import { ICalendarEntry, IUserInfo } from '../../common/data';
+import CalendarEntry from './calendarEntry';
 
 export interface ICalendarProps {
     startOfMonth: Moment;
+    monthEntries: ICalendarEntry[];
+    employeeInfosById: { [id: string]: IUserInfo };
 }
 
 export interface ICalendarState {
@@ -87,8 +91,22 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
 
     private _renderDay = (day: Moment) => {
         return <Table.Cell className="calendar__day">
-            {day.date()}
+            <div className="calendar__day__date">
+                {day.date()}
+            </div>
+            <div className="calendar__day__entries">
+                {this._renderDayEntries(day)}
+            </div>
         </Table.Cell>;
+    }
+
+    private _renderDayEntries(day: Moment) {
+        const { monthEntries, employeeInfosById } = this.props;
+        return monthEntries
+            .filter(entry => day.isBetween(entry.startDate, entry.endDate, 'days', '[)'))
+            .map(entry => {
+                return <CalendarEntry key={entry.id} entry={entry} employee={employeeInfosById[entry.employeeId!]} />;
+            });
     }
 
     private _renderEmptyDay = () => {

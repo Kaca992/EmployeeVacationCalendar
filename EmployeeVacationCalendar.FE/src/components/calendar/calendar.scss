@@ -1,5 +1,8 @@
 .calendar {
     &__day {
-        
+        &__entries {
+            display: flex;
+            flex-direction: column;
+        }
     }
 }
