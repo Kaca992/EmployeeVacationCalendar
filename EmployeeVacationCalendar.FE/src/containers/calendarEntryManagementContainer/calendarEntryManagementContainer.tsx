@@ -120,8 +120,8 @@ class CalendarEntryManagementContainer extends React.Component<ICalendarEntryMan
 
     /** Only admins can choose add entries for other users */
     private _shouldInitializeEmployees = () => {
-        const { isNewEntry, loggedUserInfo } = this.props;
-        return isNewEntry && loggedUserInfo && loggedUserInfo.type !== EmployeeTypeEnum.User;
+        const { loggedUserInfo } = this.props;
+        return loggedUserInfo && loggedUserInfo.type !== EmployeeTypeEnum.User;
     }
 
     private _onSaveChanges = () => {
