@@ -17,6 +17,7 @@ namespace EmployeeVacationCalendar.WebAPI.App.Services
         Task<CalendarEntryDTO> AddUpdateCalendarEntry(string loggedUserId, EmployeeTypeEnum loggedUserType, CalendarEntryDTO entryDTO);
         List<CalendarEntryDTO> GetCalendarEntries(int year, int month);
         Task<CalendarEntryDTO> GetCalendarEntryById(int entryId);
+        Task DeleteCalendarEntry(string loggedUserId, EmployeeTypeEnum loggedUserType, CalendarEntryDTO entryDTO);
     }
 
     public class CalendarService: ICalendarService
@@ -100,5 +101,17 @@ namespace EmployeeVacationCalendar.WebAPI.App.Services
             return entry;
         }
         #endregion
+
+        public async Task DeleteCalendarEntry(string loggedUserId, EmployeeTypeEnum loggedUserType, CalendarEntryDTO entryDTO)
+        {
+            var entry = await _context.CalendarEntries.FindAsync(entryDTO.Id);
+
+            if (entry == null) return;
+            if (entry.EmployeeId != loggedUserId && loggedUserType == EmployeeTypeEnum.User) throw new AdminRoleRequiredException();
+            if (entry.ConcurrencyStamp.ToString() != entryDTO.ConcurrencyStamp) throw new ValuesChangedByAnotherUserException();
+
+            _context.CalendarEntries.Remove(entry);
+            await _context.SaveChangesAsync();
+        }
     }
 }

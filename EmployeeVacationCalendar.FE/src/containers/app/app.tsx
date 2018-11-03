@@ -14,10 +14,12 @@ import EmployeeManagementContainer from '../employeeManagementContainer/employee
 import { initLoggedUserInfo } from '../../actions/employeeInfos';
 import EmployeesContainer from '../employeesContainer/employeesContainer';
 import CalendarEntryManagementContainer from '../calendarEntryManagementContainer/calendarEntryManagementContainer';
+import { initializeApp } from '../../actions/app';
 
 interface IAppProps {
+    isAppInitialized: boolean;
     loggedUserInfo: IUserInfo | undefined;
-    initLoggedUserInfo(): Promise<IUserInfo>;
+    initializeApp();
 }
 
 interface IAppState {
@@ -26,13 +28,14 @@ interface IAppState {
 
 function mapStateToProps(state: IRootReducerState): Partial<IAppProps> {
     return {
+        isAppInitialized: state.app.appInitialized,
         loggedUserInfo: getLoggedUserInfo(state)
     };
 }
 
 function mapDispatchToProps(dispatch: any): Partial<IAppProps> {
     return {
-        initLoggedUserInfo: () => dispatch(initLoggedUserInfo())
+        initializeApp: () => dispatch(initializeApp())
     };
 }
 
@@ -47,18 +50,16 @@ export class App extends React.Component<IAppProps, IAppState> {
     }
 
     public componentDidMount() {
-        if (this.isIdentityCookieSet && !this.props.loggedUserInfo) {
-            this.props.initLoggedUserInfo();
+        if (!this.props.isAppInitialized) {
+            this.props.initializeApp();
         }
     }
 
     public render() {
-        const { loggedUserInfo } = this.props;
-        const isUserLogginInitializing = this.isIdentityCookieSet && !loggedUserInfo;
-        const isAppLoading = isUserLogginInitializing;
+        const { loggedUserInfo, isAppInitialized } = this.props;
 
         return (
-            <Layout isLoading={isAppLoading}>
+            <Layout isLoading={!isAppInitialized}>
                 <Switch>
                     <Route exact path={RoutesEnum.Calendar} component={CalendarContainer} />
                     <Route path={RoutesEnum.Login} render={this._renderLoginForm} />

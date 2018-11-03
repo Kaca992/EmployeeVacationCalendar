@@ -3,6 +3,7 @@ import { ICalendarEntry } from "../common/data";
 import { IRootReducerState } from "./rootReducer";
 import { ADD_OR_UPDATE_CALENDAR_ENTRY, GET_CALENDAR_ENTRIES } from "../actionTypes/calendar";
 import { actionUtils } from "../utils/fetcher";
+import moment = require("moment");
 
 export interface ICalendarReducerState {
     isLoading: boolean;
@@ -50,7 +51,7 @@ export default function calendarReducer(state: ICalendarReducerState = initialSt
         case actionUtils.responseAction(ADD_OR_UPDATE_CALENDAR_ENTRY):
             {
                 const calendarEntry: ICalendarEntry = action.payload;
-                const monthKey = getMonthCalendarKey(calendarEntry.endDate);
+                const monthKey = getMonthCalendarKey(moment(calendarEntry.endDate).toDate());
                 const monthInfos = state.calendarInfoIdsByMonth[monthKey];
                 return {
                     ...state,

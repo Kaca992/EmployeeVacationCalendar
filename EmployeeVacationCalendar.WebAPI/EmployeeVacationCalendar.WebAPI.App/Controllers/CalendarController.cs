@@ -57,5 +57,27 @@ namespace EmployeeVacationCalendar.WebAPI.App.Controllers
                 throw;
             }
         }
+
+        [Authorize]
+        [HttpPost]
+        [Route("delete")]
+        public async Task<IActionResult> DeleteCalendarEntry([FromBody]CalendarEntryDTO calendarEntry)
+        {
+            try
+            {
+                var loggedUser = await _userManager.GetUserAsync(User);
+                await _calendarService.DeleteCalendarEntry(loggedUser.Id, loggedUser.EmployeeType, calendarEntry);
+                return Ok(new { Id = calendarEntry.Id });
+            }
+            catch (Exception ex)
+            {
+                if (ex is ArgumentException || ex is AdminRoleRequiredException || ex is ValuesChangedByAnotherUserException)
+                {
+                    return BadRequest(new Exception(ex.Message));
+                }
+
+                throw;
+            }
+        }
     }
 }

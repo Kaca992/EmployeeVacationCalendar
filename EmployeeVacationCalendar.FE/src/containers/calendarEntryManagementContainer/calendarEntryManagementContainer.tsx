@@ -4,10 +4,9 @@ import { IRootReducerState, getLoggedUserInfo } from '@reducers/rootReducer';
 import CalendarEntryManagement from '../../components/calendarEntryManagement/calendarEntryManagement';
 import { IUserInfo, ICalendarEntry } from '../../common/data';
 import { getAllEmployeeList } from '../../reducers/employeeInfosReducer';
-import { LoadingStatusEnum, RoutesEnum, EmployeeTypeEnum, VacationTypeEnum } from '../../common/enums';
+import { RoutesEnum, EmployeeTypeEnum, VacationTypeEnum } from '../../common/enums';
 import { Loader } from 'semantic-ui-react';
 import { initializing } from '../../common/strings';
-import { getAllEmployeesInfo } from '../../actions/employeeInfos';
 import { RouteComponentProps, withRouter, Redirect } from 'react-router';
 import moment = require('moment');
 import { getMessageFromServerError } from '../../utils/serverExceptionsUtil';
@@ -22,10 +21,8 @@ interface ICalendarEntryManagementContainerProps extends ICalendarEntryManagemen
     initEntry?: ICalendarEntry;
 
     loggedUserInfo: IUserInfo;
-    employeeLoadingStatus: LoadingStatusEnum;
     employees: IUserInfo[];
 
-    getAllEmployeesInfo();
     addOrUpdateCalendarEntry(calendarEntry: ICalendarEntry);
 }
 
@@ -45,14 +42,12 @@ function mapStateToProps(state: IRootReducerState, ownProps: ICalendarEntryManag
         isNewEntry: !calendarEntryId,
         initEntry: calendarEntryId ? state.calendar.calendarInfoById[calendarEntryId] : undefined,
         loggedUserInfo: getLoggedUserInfo(state),
-        employeeLoadingStatus: state.employeeInfos.employeeLoadingStatus,
         employees: getAllEmployeeList(state)
     };
 }
 
 function mapDispatchToProps(dispatch: any): Partial<ICalendarEntryManagementContainerProps> {
     return {
-        getAllEmployeesInfo: () => dispatch(getAllEmployeesInfo()),
         addOrUpdateCalendarEntry: (calendarEntry: ICalendarEntry) => dispatch(addOrUpdateCalendarEntry(calendarEntry))
     };
 }
@@ -80,12 +75,7 @@ class CalendarEntryManagementContainer extends React.Component<ICalendarEntryMan
     }
 
     public componentDidMount() {
-        const { employeeLoadingStatus, initEntry, isNewEntry } = this.props;
-        // only admins can choose add entries for other users
-        if (this._shouldInitializeEmployees() && employeeLoadingStatus !== LoadingStatusEnum.Loading && employeeLoadingStatus !== LoadingStatusEnum.Loaded) {
-            this.props.getAllEmployeesInfo();
-        }
-
+        const { initEntry, isNewEntry } = this.props;
         if (!initEntry && !isNewEntry) {
             // TODO: fetch entry so refresh will work on entry
         }
@@ -93,16 +83,16 @@ class CalendarEntryManagementContainer extends React.Component<ICalendarEntryMan
 
     public render() {
         const { newCalendarEntry, isInitialized, successMessage, errorMessage, isSavingChanges } = this.state;
-        const { employees, employeeLoadingStatus, isNewEntry } = this.props;
+        const { employees, isNewEntry } = this.props;
 
-        if (!isInitialized || this._shouldInitializeEmployees() && employeeLoadingStatus !== LoadingStatusEnum.Loaded) {
+        if (!isInitialized) {
             return <Loader active size='large'>{initializing}</Loader>;
         }
 
         return <CalendarEntryManagement
             header={isNewEntry ? "Add New Calendar Entry" : "Edit Calendar Entry"}
             buttonText={isNewEntry ? "Create Entry" : "Save Changes"}
-            isEmployeeSelectable={this._shouldInitializeEmployees()}
+            isEmployeeSelectable={this._isAdmin()}
             employees={employees}
             calendarEntry={newCalendarEntry}
             successMessage={successMessage}
@@ -119,7 +109,7 @@ class CalendarEntryManagementContainer extends React.Component<ICalendarEntryMan
     }
 
     /** Only admins can choose add entries for other users */
-    private _shouldInitializeEmployees = () => {
+    private _isAdmin = () => {
         const { loggedUserInfo } = this.props;
         return loggedUserInfo && loggedUserInfo.type !== EmployeeTypeEnum.User;
     }

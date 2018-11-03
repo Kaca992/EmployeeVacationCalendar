@@ -29,7 +29,7 @@ interface IEmployeeManagementContainerState {
 function mapStateToProps(state: IRootReducerState, ownProps: IEmployeeManagementContainerOwnProps): Partial<IEmployeeManagementContainerProps> {
     return {
         ...ownProps,
-        isAppInitialized: state.app.initialization.userInfoInitialized,
+        isAppInitialized: state.app.appInitialized,
         employeeInfo: ownProps.match.params.id && state.employeeInfos ? state.employeeInfos.employeeInfosById[ownProps.match.params.id] : {
             id: "",
             firstName: "",

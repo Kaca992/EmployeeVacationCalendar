@@ -4,8 +4,30 @@ import fetcher from '../utils/fetcher';
 import { RoutesEnum } from '../common/enums';
 import { IAction } from '../common/appDataStructures';
 import { IUserInfo } from '../common/data';
+import { identityCookieExists } from '../utils/common';
+import { initLoggedUserInfo, getAllEmployeesInfo } from './employeeInfos';
 
 const loginControllerBaseUrl = "api/login";
+
+export function initializeApp() {
+    return (dispatch, getState) => {
+        const initializationTasks: Promise<any>[] = [];
+        if (identityCookieExists()) {
+            initializationTasks.push(dispatch(initLoggedUserInfo()));
+        }
+
+        initializationTasks.push(dispatch(getAllEmployeesInfo()));
+        return Promise.all(initializationTasks).then(result => {
+            dispatch(setAppInitialized());
+        });
+    };
+}
+
+export function setAppInitialized(): IAction {
+    return {
+        type: appActions.SET_APP_INITIALIZED
+    };
+}
 
 export function setLoggedUser(loggedUserId: string | null): IAction {
     return {
