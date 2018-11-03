@@ -76,7 +76,7 @@ namespace EmployeeVacationCalendar.WebAPI.App
             services.AddTransient<ICalendarService, CalendarService>();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<Employee> userManager, IAppSettings appSettings)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<Employee> userManager, IAppSettings appSettings, EmployeeVacationDbContext dbContext)
         {
             if (env.IsDevelopment())
             {
@@ -110,6 +110,7 @@ namespace EmployeeVacationCalendar.WebAPI.App
             });
 
             // initialize users
+            dbContext.Database.Migrate();
             EmployeeVacationDbInitializer.SeedUsers(appSettings, userManager);
         }
     }
