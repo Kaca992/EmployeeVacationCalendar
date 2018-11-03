@@ -9,6 +9,7 @@ import LabeledDatePicker from '../labeledDatePicker/labeledDatePicker';
 import moment = require('moment');
 import { Dropdown, DropdownItemProps, DropdownProps, Header, Divider, Button, Message, Icon } from 'semantic-ui-react';
 import { VacationTypeEnum } from '../../common/enums';
+import { getVacationTypeResources } from '../../common/vacationType';
 
 export interface ICalendarEntryManagementProps {
     header: string;
@@ -31,9 +32,9 @@ export interface ICalendarEntryManagementState {
 
 export default class CalendarEntryManagement extends React.Component<ICalendarEntryManagementProps, ICalendarEntryManagementState> {
     private readonly _calendarEntryTypeOptions: DropdownItemProps[] = [
-        { key: VacationTypeEnum.Holiday, value: VacationTypeEnum.Holiday, text: 'Holiday', icon: 'bath' },
-        { key: VacationTypeEnum.SickLeave, value: VacationTypeEnum.SickLeave, text: 'Sick Leave', icon: 'hospital' },
-        { key: VacationTypeEnum.VacationLeave, value: VacationTypeEnum.VacationLeave, text: 'Vacation Leave', icon: 'beer' }
+        { key: VacationTypeEnum.Holiday, value: VacationTypeEnum.Holiday, ...getVacationTypeResources(VacationTypeEnum.Holiday) },
+        { key: VacationTypeEnum.SickLeave, value: VacationTypeEnum.SickLeave, ...getVacationTypeResources(VacationTypeEnum.SickLeave) },
+        { key: VacationTypeEnum.VacationLeave, value: VacationTypeEnum.VacationLeave, ...getVacationTypeResources(VacationTypeEnum.VacationLeave) }
     ];
 
     constructor(props: ICalendarEntryManagementProps) {

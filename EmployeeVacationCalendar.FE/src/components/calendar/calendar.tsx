@@ -8,6 +8,7 @@ import { ICalendarEntry, IUserInfo } from '../../common/data';
 import CalendarEntry from './calendarEntry';
 
 export interface ICalendarProps {
+    loggedUserInfo?: IUserInfo;
     startOfMonth: Moment;
     monthEntries: ICalendarEntry[];
     employeeInfosById: { [id: string]: IUserInfo };
@@ -90,7 +91,7 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
     }
 
     private _renderDay = (day: Moment) => {
-        return <Table.Cell className="calendar__day">
+        return <Table.Cell key={day.date()} className="calendar__day">
             <div className="calendar__day__date">
                 {day.date()}
             </div>
@@ -101,15 +102,15 @@ export default class Calendar extends React.Component<ICalendarProps, ICalendarS
     }
 
     private _renderDayEntries(day: Moment) {
-        const { monthEntries, employeeInfosById } = this.props;
+        const { monthEntries, employeeInfosById, loggedUserInfo } = this.props;
         return monthEntries
             .filter(entry => day.isBetween(entry.startDate, entry.endDate, 'days', '[)'))
             .map(entry => {
-                return <CalendarEntry key={entry.id} entry={entry} employee={employeeInfosById[entry.employeeId!]} />;
+                return <CalendarEntry key={entry.id} loggedUserInfo={loggedUserInfo} entry={entry} employee={employeeInfosById[entry.employeeId!]} />;
             });
     }
 
     private _renderEmptyDay = () => {
-        return <Table.Cell />;
+        return <Table.Cell className="calendar__day calendar__day--empty" />;
     }
 }

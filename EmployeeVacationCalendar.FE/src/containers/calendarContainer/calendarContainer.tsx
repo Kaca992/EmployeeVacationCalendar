@@ -68,7 +68,7 @@ class CalendarContainer extends React.Component<ICalendarContainerProps, ICalend
     }
 
     public render() {
-        const { loggedUserInfo, loadingStatus } = this.props;
+        const { loadingStatus } = this.props;
 
         switch (loadingStatus) {
             case LoadingStatusEnum.None:
@@ -82,13 +82,14 @@ class CalendarContainer extends React.Component<ICalendarContainerProps, ICalend
     }
 
     private _renderCalendar = () => {
-        const { selectedMonthKey, employeeInfosById, monthEntries } = this.props;
+        const { loggedUserInfo, selectedMonthKey, employeeInfosById, monthEntries } = this.props;
         const { year, month } = getYearAndMonthFromKey(selectedMonthKey);
         const monthMoment = moment(new Date(year, month - 1, 1));
         return (
             <div className="calendar-container">
                 {this._renderCalendarHeader(monthMoment)}
                 <Calendar
+                    loggedUserInfo={loggedUserInfo}
                     startOfMonth={monthMoment}
                     employeeInfosById={employeeInfosById}
                     monthEntries={monthEntries}
