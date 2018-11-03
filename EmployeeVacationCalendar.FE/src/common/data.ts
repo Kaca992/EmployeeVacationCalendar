@@ -28,5 +28,5 @@ export interface ICalendarEntry {
     endDate: Date;
     vacationType: VacationTypeEnum;
     employeeId?: string;
-    concurrencyStamp?: string;
+    concurrencyStamp?: any;
 }

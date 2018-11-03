@@ -61,7 +61,7 @@ export class App extends React.Component<IAppProps, IAppState> {
         return (
             <Layout isLoading={!isAppInitialized}>
                 <Switch>
-                    <Route exact path={RoutesEnum.Calendar} component={CalendarContainer} />
+                    <Route exact path={`${RoutesEnum.Calendar}`} component={CalendarContainer} />
                     <Route path={RoutesEnum.Login} render={this._renderLoginForm} />
                     <Route path={RoutesEnum.Employees} render={this._renderEmployeesContainer} />
                     <ProtectedRoute isUserLoggedIn={!!loggedUserInfo} path={`${RoutesEnum.EmployeeInfo}/:id?`} render={this._renderEmployeeInfo} />

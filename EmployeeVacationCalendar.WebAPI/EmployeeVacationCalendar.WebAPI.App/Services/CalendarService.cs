@@ -91,7 +91,7 @@ namespace EmployeeVacationCalendar.WebAPI.App.Services
                 throw new ArgumentException("Entry was deleted by someone else.");
             }
 
-            if (entry.ConcurrencyStamp.ToString() != entryDTO.ConcurrencyStamp) throw new ValuesChangedByAnotherUserException();
+            if (entry.ConcurrencyStamp != entryDTO.ConcurrencyStamp) throw new ValuesChangedByAnotherUserException();
 
             entry.StartDate = entryDTO.StartDate;
             entry.EndDate = entryDTO.EndDate;
@@ -108,7 +108,7 @@ namespace EmployeeVacationCalendar.WebAPI.App.Services
 
             if (entry == null) return;
             if (entry.EmployeeId != loggedUserId && loggedUserType == EmployeeTypeEnum.User) throw new AdminRoleRequiredException();
-            if (entry.ConcurrencyStamp.ToString() != entryDTO.ConcurrencyStamp) throw new ValuesChangedByAnotherUserException();
+            if (entry.ConcurrencyStamp != entryDTO.ConcurrencyStamp) throw new ValuesChangedByAnotherUserException();
 
             _context.CalendarEntries.Remove(entry);
             await _context.SaveChangesAsync();

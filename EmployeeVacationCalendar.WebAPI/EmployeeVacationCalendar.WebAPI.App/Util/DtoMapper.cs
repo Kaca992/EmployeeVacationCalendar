@@ -30,7 +30,7 @@ namespace EmployeeVacationCalendar.WebAPI.App.Util
                 StartDate = calendarEntry.StartDate,
                 EndDate = calendarEntry.EndDate,
                 EmployeeId = calendarEntry.EmployeeId,
-                ConcurrencyStamp = calendarEntry.ConcurrencyStamp.ToString(),
+                ConcurrencyStamp = calendarEntry.ConcurrencyStamp,
                 VacationType = calendarEntry.VacationType
             };
         }
