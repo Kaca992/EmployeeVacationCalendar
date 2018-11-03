@@ -9,7 +9,8 @@ export function getCalendarEntries(year: number, month: number) {
         return fetcher.reduxFetch(`${calendarControllerBaseUrl}/${year}/${month}`,
             {
                 action: GET_CALENDAR_ENTRIES,
-                jsonResponseExpected: false,
+                jsonResponseExpected: true,
+                responseActionPayloadMapper: (payload) => ({ entries: payload, monthKey: `${month}/${year}` })
             },
             dispatch
         );

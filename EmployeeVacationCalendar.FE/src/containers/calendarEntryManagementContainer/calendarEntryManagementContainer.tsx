@@ -129,6 +129,7 @@ class CalendarEntryManagementContainer extends React.Component<ICalendarEntryMan
         this.props.addOrUpdateCalendarEntry(this.state.newCalendarEntry)
             .then(() => {
                 this.setState({ isSavingChanges: false, successMessage: 'Changes saved.' });
+                this.props.history.push(RoutesEnum.Calendar);
             })
             .catch((error) => {
                 this.setState({ isSavingChanges: false, errorMessage: getMessageFromServerError(error) });

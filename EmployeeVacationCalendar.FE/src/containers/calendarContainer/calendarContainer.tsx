@@ -41,7 +41,7 @@ class CalendarContainer extends React.Component<ICalendarContainerProps, ICalend
     }
 
     public componentDidMount() {
-        this.props.getCalendarEntries(2018, 10);
+        this.props.getCalendarEntries(2018, 11);
     }
 
     public render() {

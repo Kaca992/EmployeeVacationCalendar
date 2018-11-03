@@ -21,5 +21,18 @@ namespace EmployeeVacationCalendar.WebAPI.App.Util
                 Type = employee.EmployeeType
             };
         }
+
+        public static CalendarEntryDTO MapCalendarEntryToDTO(CalendarEntry calendarEntry)
+        {
+            return new CalendarEntryDTO
+            {
+                Id = calendarEntry.Id,
+                StartDate = calendarEntry.StartDate,
+                EndDate = calendarEntry.EndDate,
+                EmployeeId = calendarEntry.EmployeeId,
+                ConcurrencyStamp = calendarEntry.ConcurrencyStamp.ToString(),
+                VacationType = calendarEntry.VacationType
+            };
+        }
     }
 }

@@ -13,5 +13,7 @@ namespace EmployeeVacationCalendar.WebAPI.Common.DTO
         public VacationTypeEnum VacationType { get; set; }
         public string EmployeeId { get; set; }
         public string ConcurrencyStamp { get; set; }
+
+        public bool IsNew => Id == -1;
     }
 }

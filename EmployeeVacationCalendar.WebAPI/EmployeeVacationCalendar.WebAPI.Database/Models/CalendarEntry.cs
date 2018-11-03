@@ -17,6 +17,7 @@ namespace EmployeeVacationCalendar.WebAPI.Database.Models
         public DateTime EndDate { get; set; }
         public VacationTypeEnum VacationType { get; set;}
 
+        public string EmployeeId { get; set; }
         public Employee Employee { get; set; }
 
         [Timestamp]

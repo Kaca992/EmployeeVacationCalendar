@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using EmployeeVacationCalendar.WebAPI.App.Services;
 using EmployeeVacationCalendar.WebAPI.Common;
 using EmployeeVacationCalendar.WebAPI.Common.DTO;
+using EmployeeVacationCalendar.WebAPI.Common.Exceptions;
 using EmployeeVacationCalendar.WebAPI.Database;
 using EmployeeVacationCalendar.WebAPI.Database.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -29,21 +30,32 @@ namespace EmployeeVacationCalendar.WebAPI.App.Controllers
             _calendarService = calendarService;
         }
 
-        [Authorize]
         [HttpGet("{year}/{month}")]
-        public IEnumerable<string> GetCalendarEntries(int year, int month)
+        public IActionResult GetCalendarEntries(int year, int month)
         {
-            var authUser = HttpContext.User;
-            var user = _userManager.GetUserAsync(User).Result;
-            return new string[] { "value1", "value2" };
+            var entries = _calendarService.GetCalendarEntries(year, month);
+            return Ok(entries);
         }
 
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> AddOrUpdateCalendarEntries([FromBody]CalendarEntryDTO calendarEntry)
         {
-            var user = await _userManager.GetUserAsync(User);
-            return Ok();
+            try
+            {
+                var loggedUser = await _userManager.GetUserAsync(User);
+                var newEntry = await _calendarService.AddUpdateCalendarEntry(loggedUser.Id, loggedUser.EmployeeType, calendarEntry);
+                return Ok(newEntry);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ArgumentException || ex is AdminRoleRequiredException || ex is ValuesChangedByAnotherUserException)
+                {
+                    return BadRequest(new Exception(ex.Message));
+                }
+
+                throw;
+            }
         }
     }
 }
