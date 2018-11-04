@@ -1,0 +1,28 @@
+.calendar {
+    &__day {
+        position: relative;
+        min-height: 100px;
+        height: 100px;
+        &__date {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+        }
+
+        &__entries {
+            display: flex;
+            flex-direction: column;
+
+            margin: 2px;
+
+            .calendar-entry {
+                margin: 0 0 2px 0;
+                width: 100%;
+
+                .label {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}

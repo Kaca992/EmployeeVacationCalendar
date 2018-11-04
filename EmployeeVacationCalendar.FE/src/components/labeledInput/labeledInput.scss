@@ -1,0 +1,13 @@
+.labeled-input {
+    width: 100%;
+    max-width: 500px !important;
+    margin-bottom: 10px;
+
+    .label {
+        width: 100px;
+    }
+
+    &__error-label {
+        width: fit-content !important;
+    }
+}

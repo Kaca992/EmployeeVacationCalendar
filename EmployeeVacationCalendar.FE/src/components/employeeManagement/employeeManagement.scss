@@ -1,0 +1,16 @@
+.employee-management {
+    width: 100%;
+    max-width: 450px;
+    &__fields {
+        width: 100%;
+        
+        .field {
+            max-width: 450px !important;
+            margin-bottom: 10px;
+        }
+    }
+
+    &__type-checkbox {
+        margin-bottom: 10px;
+    }
+}

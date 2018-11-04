@@ -1,0 +1,48 @@
+@import '../../style/variables';
+
+.layout {
+    width: 100%;
+    height: 100vh;
+
+    .menu {
+        position: relative;
+        height: 46px;
+        width: 100%;
+
+        background-color: $primary-color;
+        border-radius: 0;
+
+        padding: 0 100px 0 100px;
+
+        a {
+            color: $menu-color;
+        
+            &:hover {
+                color: $menu-selected-color;
+            }
+        
+            &.active {
+                color: $menu-selected-color;
+            }
+        }
+
+        &__logout-item {
+            color: $menu-color;
+        
+            &:hover {
+                color: $menu-selected-color;
+                cursor: pointer;
+            }
+            
+            i {
+                margin-left: 5px;
+            }
+        }
+    }
+
+    &__content {
+        // menu height + bottom margin
+        height: calc(100% - 60px);
+        padding: 2%;
+    }
+}

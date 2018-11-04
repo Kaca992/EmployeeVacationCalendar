@@ -1,0 +1,42 @@
+@import "_variables";
+@import "_mixins";
+@import "_normalizer";
+
+// inherited border box model
+html {
+    box-sizing: border-box;
+}
+
+*, *::before, *::after {
+    box-sizing: inherit;
+}
+
+button {
+    &.primary {
+        background-color: $primary-color !important;
+
+        &:hover {
+            background-color: $primary-color-hover !important;
+        }
+    }
+
+    &.secondary {
+        background-color: $secondary-color !important;
+
+        &:hover {
+            background-color: $secondary-color-hover !important;
+        }
+    }
+}
+
+.holiday-vacation {
+    background-color: lightblue !important;
+}
+
+.sick-vacation {
+    background-color: lightgreen !important;
+}
+
+.vacation-leave {
+    background-color: pink !important;
+}

@@ -1,0 +1,24 @@
+.calendar-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .calendar-header {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+
+        margin-bottom: 20px;
+
+        &__title {
+            margin: 0 15px 0 15px;
+        }
+
+        &__add-entry {
+            position: absolute;
+            right: 10px;
+        }
+    }
+}
