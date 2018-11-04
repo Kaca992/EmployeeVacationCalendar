@@ -61,13 +61,13 @@ namespace EmployeeVacationCalendar.WebAPI.App.Services
             if (entryDTO.EmployeeId != loggedUserId && loggedUserType == EmployeeTypeEnum.User) throw new AdminRoleRequiredException();
             if (entryDTO.StartDate >= entryDTO.EndDate) throw new ArgumentException("End Date must be after Start Date");
 
-            CalendarEntry entry = entryDTO.IsNew ? await addNewUserInfo(loggedUserType, entryDTO) : await updateUserInfo(loggedUserId, loggedUserType, entryDTO);
+            CalendarEntry entry = entryDTO.IsNew ? await addCalendarEntry(loggedUserType, entryDTO) : await updateCalendarEntry(loggedUserId, loggedUserType, entryDTO);
 
             await _context.SaveChangesAsync();
             return DtoMapper.MapCalendarEntryToDTO(entry);
         }
 
-        private async Task<CalendarEntry> addNewUserInfo(EmployeeTypeEnum loggedUserType, CalendarEntryDTO entryDTO)
+        private async Task<CalendarEntry> addCalendarEntry(EmployeeTypeEnum loggedUserType, CalendarEntryDTO entryDTO)
         {
             var entry = new CalendarEntry
             {
@@ -81,7 +81,7 @@ namespace EmployeeVacationCalendar.WebAPI.App.Services
             return entry;
         }
 
-        private async Task<CalendarEntry> updateUserInfo(string loggedUserId, EmployeeTypeEnum loggedUserType, CalendarEntryDTO entryDTO)
+        private async Task<CalendarEntry> updateCalendarEntry(string loggedUserId, EmployeeTypeEnum loggedUserType, CalendarEntryDTO entryDTO)
         {
             
             var entry = await _context.CalendarEntries.FindAsync(entryDTO.Id);
