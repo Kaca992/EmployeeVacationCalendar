@@ -1,111 +1,68 @@
 # Template TypeScript + React + Redux
 
-> This is a template with initial configuration for TypeScript, React, Redux and React-Router.
+> This is an application used for managing vacation entries for employees.
 
-This template contains:
+This application is built using:
 
-* TypeScript and React configuration
-* Redux setup
-* Webpack v4.9 configuration
-* Sass for styling
-* TSLint for linting
-* React-router for routing
-* Normalize.css included
-* Some basic snippets for React and Redux to get easily started
-
-Template is configured to support __IE 11__ and uses autoprefixer for cross-broswer css support.
+* TypeScript
+* React
+* Redux
+* Webpack
+* Sass
+* ASP.NET Core
 
 ---
 
 ## Table of Contents
 
+- [Project Components](#project-components)
 - [Installation](#installation)
-- [Folder Structure](#folder-structure)
-- [Snippets](#snippets)
+- [Development Setup](#development-setup)
+    - [Seed Values](#seed-values)
 - [License](#license)
 
 ---
 
+## Project Components
+
+Frontend and backend parts of the project are in separate folders:
+
+- Frontend Project: `EmployeeVacationCalendar\EmployeeVacationCalendar.FE`
+- Backend Project: `EmployeeVacationCalendar\EmployeeVacationCalendar.WebAPI`
+
 ## Installation
 
-Yarn.lock and npm-shrinkwrap.json are provided so you can use whichever you prefer.
+Tools that are required:
+- NodeJS (LTS) : [https://nodejs.org/en/](https://nodejs.org/en/)
+- Visual Studio 2017 or newer
 
-### Npm
-```
-npm init
-```
+### Frontend
 
-### Yarn
-```
-yarn
-```
+- Open folder: `EmployeeVacationCalendar\EmployeeVacationCalendar.FE`
+- Execute `yarn` or `npm install` to install node modules
 
-After you run the install comand you will get the following folder structure:
+### Backend
 
-```text
-my-app/
-├─ .vscode
-├─ node_modules/
-├─ public/
-├─ src/
-│  └─ actions/
-│  └─ actionTypes/
-│  └─ assets/
-│  └─ common/
-│  └─ components/
-│  └─ containers/
-│  └─ reducers/
-│  └─ store/
-│  └─ style/
-│  └─ utils/
-│  └─ index.ts
-├─ types/
-│  └─ global.d.ts
-├─ webpack/
-│  └─ plugins.js
-│  └─ rules.js
-├─ .browserslistrc
-├─ .gitignore
-├─ .npmignore
-├─ index.html
-├─ npm-shrinkwrap.json
-├─ package.json
-├─ postcss.config.js
-├─ tsconfig.json
-├─ tslint.json
-├─ webpack.config.js
-└─ yarn.lock
-```
+Backend requires not additional setup.
 
-Now you can start the project by running:
-```
-yarn dev or npm run dev
-```
+## Development Setup
 
-This should open the broswer and you should see a hello world page.
+1. Open solution in `EmployeeVacationCalendar\EmployeeVacationCalendar.WebAPI`
+2. To configure the database connection string:
+    - Open: `appsettings.Development.json`
+    - Enter your connection string at `ConnectionStrings:EmployeeVacationDatabase`
+3. Application is seeded with initial users who will have the password defined in  `appsettings.Development.json` -> `MasterAdmin`
+    - `MasterAdmin:Email` defines username for the `MasterAdmin` user type (only one exists in the application, has all the rights as an ordinary administrator, but cannot be deleted)
+4. To start the backend WEB API run the `EmployeeVacationCalendar.WebAPI.App` project
+5. To start the frontend part of the application:
+    - Open folder: `EmployeeVacationCalendar\EmployeeVacationCalendar.FE`
+    - Run `yarn` or `npm install` if you didn't in the installation step
+    - Start the webpack-dev-server with `npm run dev`
+    - Your default web broswer should open in `http://localhost:3000` and should see the empty calendar
 
-## Folder Structure
+### Seed Values
 
-Typescript code goes into the src folder. Notable folders in there are:
-
-* __Actions, actionTypes and reducers__ are folders where Redux action creators and reducers go. Store is configured in __store/configureStore.ts__ and there you should add additional middlewares if you have some. 
-* __Assets__ folder will contain fonts and images (and some other assets you will need) in your application. It is configured in webpack to be __automatically__ copied to the dist folder.
-* __Style__  - collection of variables, mixins, normalize and other global style properties.
-* __Utils__ - contains a wrapper around isomorphic-fetch that can be easier used with Redux.
-
-## Snippets
-
-If you are using __Visual Studio Code__ as your editor and install the recommended extensions for this workspace you will get some handy snippets that can speed up your development. Snippets will name classes/interfaces by taking the name of the file and properly formatting the name, so it is advisable to first name your file correctly and then use the snippet.
-
-### Typescript snippeti (.ts):
-* **Redux reducer template:** _rdx-reducer
-* **Redux action creator template:** _rdx-action
-
-### Typescript-React snippeti (.tsx):
-* **React Component:** _cmp
-* **React Stateless Functional Component:** _cmp-func
-* **React Pure Component:** _cmp-stateless
-* **TS React Redux Container:** _cont
+Development and release version both have the initial `Master Admin` account with values defined in `appsettings.json`. In development database is seeded with some test users (both User and Admin type) with password defined for `Master Admin`.
 
 ## License
 

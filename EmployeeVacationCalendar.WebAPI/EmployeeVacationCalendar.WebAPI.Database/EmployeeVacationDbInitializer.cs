@@ -26,6 +26,13 @@ namespace EmployeeVacationCalendar.WebAPI.Database
         public static void SeedUsers(IAppSettings appSettings, UserManager<Employee> userManager)
         {
             seedMasterAdmin(appSettings, userManager);
+#if DEBUG
+            seedTestUsers(appSettings, userManager);
+#endif
+        }
+
+        private static void seedTestUsers(IAppSettings appSettings, UserManager<Employee> userManager)
+        {
             seedUser(appSettings, userManager, new Employee { UserName = "test1@test.com", Email = "test1@test.com", FirstName = "Test", LastName = "User 1", EmployeeType = EmployeeTypeEnum.User });
             seedUser(appSettings, userManager, new Employee { UserName = "test2@test.com", Email = "test2@test.com", FirstName = "Test", LastName = "User 2", EmployeeType = EmployeeTypeEnum.User });
             seedUser(appSettings, userManager, new Employee { UserName = "test3@test.com", Email = "test3@test.com", FirstName = "Test", LastName = "User 3", EmployeeType = EmployeeTypeEnum.User });
