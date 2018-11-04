@@ -38,6 +38,26 @@ namespace EmployeeVacationCalendar.WebAPI.App.Controllers
         }
 
         [Authorize]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetCalendarEntry(int id)
+        {
+            try
+            {
+                var entry = await _calendarService.GetCalendarEntryById(id);
+                return Ok(entry);
+            }
+            catch (Exception ex)
+            {
+                if (ex is ArgumentException)
+                {
+                    return BadRequest(new Exception(ex.Message));
+                }
+
+                throw;
+            }
+        }
+
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> AddOrUpdateCalendarEntries([FromBody]CalendarEntryDTO calendarEntry)
         {

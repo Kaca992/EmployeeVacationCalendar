@@ -1,7 +1,7 @@
 import { IAction } from "@common/appDataStructures";
 import { ICalendarEntry } from "../common/data";
 import { IRootReducerState } from "./rootReducer";
-import { ADD_OR_UPDATE_CALENDAR_ENTRY, GET_CALENDAR_ENTRIES, SET_SELECTED_CALENDAR_MONTH, DELETE_CALENDAR_ENTRY } from "../actionTypes/calendar";
+import { ADD_OR_UPDATE_CALENDAR_ENTRY, GET_CALENDAR_ENTRIES, SET_SELECTED_CALENDAR_MONTH, DELETE_CALENDAR_ENTRY, GET_CALENDAR_ENTRY } from "../actionTypes/calendar";
 import { actionUtils } from "../utils/fetcher";
 import moment = require("moment");
 import { LoadingStatusEnum } from "../common/enums";
@@ -72,6 +72,16 @@ export default function calendarReducer(state: ICalendarReducerState = initialSt
                 calendarStatusByMonth: {
                     ...state.calendarStatusByMonth,
                     [monthKey]: LoadingStatusEnum.Error
+                }
+            };
+        }
+        case actionUtils.responseAction(GET_CALENDAR_ENTRY): {
+            const calendarEntry: ICalendarEntry = action.payload;
+            return {
+                ...state,
+                calendarInfoById: {
+                    ...state.calendarInfoById,
+                    [calendarEntry.id]: calendarEntry
                 }
             };
         }

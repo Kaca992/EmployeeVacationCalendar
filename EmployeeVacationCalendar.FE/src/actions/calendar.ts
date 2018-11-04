@@ -1,5 +1,5 @@
 import fetcher from "../utils/fetcher";
-import { GET_CALENDAR_ENTRIES, ADD_OR_UPDATE_CALENDAR_ENTRY, SET_SELECTED_CALENDAR_MONTH, DELETE_CALENDAR_ENTRY } from "../actionTypes/calendar";
+import { GET_CALENDAR_ENTRIES, ADD_OR_UPDATE_CALENDAR_ENTRY, SET_SELECTED_CALENDAR_MONTH, DELETE_CALENDAR_ENTRY, GET_CALENDAR_ENTRY } from "../actionTypes/calendar";
 import { ICalendarEntry } from "../common/data";
 import { IRootReducerState } from "../reducers/rootReducer";
 import { LoadingStatusEnum } from "../common/enums";
@@ -27,6 +27,18 @@ export function getCalendarEntries(year: number, month: number) {
                 action: GET_CALENDAR_ENTRIES,
                 jsonResponseExpected: true,
                 responseActionPayloadMapper: (payload) => ({ entries: payload, monthKey })
+            },
+            dispatch
+        );
+    };
+}
+
+export function getCalendarEntry(entryId: number) {
+    return (dispatch, getState) => {
+        return fetcher.reduxFetch(`${calendarControllerBaseUrl}/${entryId}`,
+            {
+                action: GET_CALENDAR_ENTRY,
+                jsonResponseExpected: true
             },
             dispatch
         );

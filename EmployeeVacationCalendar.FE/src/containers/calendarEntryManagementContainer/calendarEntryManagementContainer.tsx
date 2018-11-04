@@ -10,7 +10,7 @@ import { initializing } from '../../common/strings';
 import { RouteComponentProps, withRouter, Redirect } from 'react-router';
 import moment = require('moment');
 import { getMessageFromServerError } from '../../utils/serverExceptionsUtil';
-import { addOrUpdateCalendarEntry, deleteCalendarEntry } from '../../actions/calendar';
+import { addOrUpdateCalendarEntry, deleteCalendarEntry, getCalendarEntry } from '../../actions/calendar';
 
 interface ICalendarEntryManagementContainerOwnProps extends RouteComponentProps<{ id: string }> {
 
@@ -19,12 +19,14 @@ interface ICalendarEntryManagementContainerOwnProps extends RouteComponentProps<
 interface ICalendarEntryManagementContainerProps extends ICalendarEntryManagementContainerOwnProps {
     isNewEntry: boolean;
     initEntry?: ICalendarEntry;
+    calendarEntryId: number;
 
     loggedUserInfo: IUserInfo;
     employees: IUserInfo[];
 
     addOrUpdateCalendarEntry(calendarEntry: ICalendarEntry);
     onDeleteEntry(calendarEntry: ICalendarEntry);
+    getCalendarEntry(entryId: number);
 }
 
 interface ICalendarEntryManagementContainerState {
@@ -36,11 +38,12 @@ interface ICalendarEntryManagementContainerState {
 }
 
 function mapStateToProps(state: IRootReducerState, ownProps: ICalendarEntryManagementContainerOwnProps): Partial<ICalendarEntryManagementContainerProps> {
-    const calendarEntryId = ownProps.match.params && ownProps.match.params.id;
+    const calendarEntryId = parseInt(ownProps.match.params && ownProps.match.params.id, 10);
 
     return {
         ...ownProps,
         isNewEntry: !calendarEntryId,
+        calendarEntryId,
         initEntry: calendarEntryId ? state.calendar.calendarInfoById[calendarEntryId] : undefined,
         loggedUserInfo: getLoggedUserInfo(state),
         employees: getAllEmployeeList(state)
@@ -50,7 +53,8 @@ function mapStateToProps(state: IRootReducerState, ownProps: ICalendarEntryManag
 function mapDispatchToProps(dispatch: any): Partial<ICalendarEntryManagementContainerProps> {
     return {
         addOrUpdateCalendarEntry: (calendarEntry: ICalendarEntry) => dispatch(addOrUpdateCalendarEntry(calendarEntry)),
-        onDeleteEntry: (calendarEntry: ICalendarEntry) => dispatch(deleteCalendarEntry(calendarEntry))
+        onDeleteEntry: (calendarEntry: ICalendarEntry) => dispatch(deleteCalendarEntry(calendarEntry)),
+        getCalendarEntry: (entryId: number) => dispatch(getCalendarEntry(entryId))
     };
 }
 
@@ -62,7 +66,7 @@ class CalendarEntryManagementContainer extends React.Component<ICalendarEntryMan
         const endDate = moment(Date.now()).add(1, 'day').toDate();
         this.state = {
             // TODO: implement
-            isInitialized: true,
+            isInitialized: false,
             newCalendarEntry: props.initEntry || {
                 id: -1,
                 startDate,
@@ -77,9 +81,16 @@ class CalendarEntryManagementContainer extends React.Component<ICalendarEntryMan
     }
 
     public componentDidMount() {
-        const { initEntry, isNewEntry } = this.props;
-        if (!initEntry && !isNewEntry) {
-            // TODO: fetch entry so refresh will work on entry
+        const { initEntry, isNewEntry, calendarEntryId } = this.props;
+        // somebody used a link or refreshed the page
+        if (!initEntry && !isNewEntry && !isNaN(calendarEntryId)) {
+            this.props.getCalendarEntry(calendarEntryId).then(result => {
+                this.setState({ isInitialized: true, newCalendarEntry: result });
+            }).catch(() => {
+                this.props.history.push(RoutesEnum.Calendar);
+            });
+        } else {
+            this.setState({ isInitialized: true });
         }
     }
 
