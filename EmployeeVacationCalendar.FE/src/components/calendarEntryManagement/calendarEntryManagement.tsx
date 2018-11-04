@@ -66,7 +66,7 @@ export default class CalendarEntryManagement extends React.Component<ICalendarEn
             />
 
             <LabeledDatePicker
-                label="End Date"
+                label="End Date (not included)"
                 selectedDate={endDate}
                 minSelectableDate={moment(startDate).add(1, 'day')}
                 onStartDateChanged={this._onEndDateChanged}
