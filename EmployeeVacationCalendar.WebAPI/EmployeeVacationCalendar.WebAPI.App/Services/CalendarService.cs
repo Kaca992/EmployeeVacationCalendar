@@ -83,15 +83,15 @@ namespace EmployeeVacationCalendar.WebAPI.App.Services
 
         private async Task<CalendarEntry> updateCalendarEntry(string loggedUserId, EmployeeTypeEnum loggedUserType, CalendarEntryDTO entryDTO)
         {
-            
+
             var entry = await _context.CalendarEntries.FindAsync(entryDTO.Id);
 
             if (entry == null)
             {
                 throw new ArgumentException("Entry was deleted by someone else.");
             }
-                        
-            if (entry.ConcurrencyStamp.Length != entryDTO.ConcurrencyStamp.Length || entry.ConcurrencyStamp.Any(x => !entryDTO.ConcurrencyStamp.Contains(x))) throw new ValuesChangedByAnotherUserException();
+
+            validateConcurrencyStamp(entryDTO, entry);
 
             entry.StartDate = entryDTO.StartDate;
             entry.EndDate = entryDTO.EndDate;
@@ -100,6 +100,7 @@ namespace EmployeeVacationCalendar.WebAPI.App.Services
 
             return entry;
         }
+
         #endregion
 
         public async Task DeleteCalendarEntry(string loggedUserId, EmployeeTypeEnum loggedUserType, CalendarEntryDTO entryDTO)
@@ -108,10 +109,15 @@ namespace EmployeeVacationCalendar.WebAPI.App.Services
 
             if (entry == null) return;
             if (entry.EmployeeId != loggedUserId && loggedUserType == EmployeeTypeEnum.User) throw new AdminRoleRequiredException();
-            if (entry.ConcurrencyStamp != entryDTO.ConcurrencyStamp) throw new ValuesChangedByAnotherUserException();
+            validateConcurrencyStamp(entryDTO, entry);
 
             _context.CalendarEntries.Remove(entry);
             await _context.SaveChangesAsync();
+        }
+
+        private static void validateConcurrencyStamp(CalendarEntryDTO entryDTO, CalendarEntry entry)
+        {
+            if (entry.ConcurrencyStamp.Length != entryDTO.ConcurrencyStamp.Length || entry.ConcurrencyStamp.Any(x => !entryDTO.ConcurrencyStamp.Contains(x))) throw new ValuesChangedByAnotherUserException();
         }
     }
 }

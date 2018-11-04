@@ -16,6 +16,7 @@ export interface ICalendarEntryManagementProps {
     buttonText: string;
     isEmployeeSelectable: boolean;
     employees: IUserInfo[] | null;
+    isDeleteBtnVisible: boolean;
 
     calendarEntry: ICalendarEntry;
 
@@ -24,6 +25,7 @@ export interface ICalendarEntryManagementProps {
     errorMessage: string | null;
     onCalendarEntryChanged(newCalendarEntry: ICalendarEntry);
     onSaveChanges();
+    onDeleteEntry();
 }
 
 export interface ICalendarEntryManagementState {
@@ -43,7 +45,7 @@ export default class CalendarEntryManagement extends React.Component<ICalendarEn
     }
 
     public render() {
-        const { employees, isEmployeeSelectable, header, buttonText, onSaveChanges, isSavingChanges, successMessage, errorMessage } = this.props;
+        const { employees, isEmployeeSelectable, isDeleteBtnVisible, header, buttonText, onSaveChanges, onDeleteEntry, isSavingChanges, successMessage, errorMessage } = this.props;
         const { employeeId, startDate, endDate, vacationType } = this.props.calendarEntry;
 
         return <div className="calendar-entry">
@@ -79,9 +81,14 @@ export default class CalendarEntryManagement extends React.Component<ICalendarEn
                 onChange={this._onVacationTypeChanged}
             />
 
-            <Button primary size='large' onClick={onSaveChanges} loading={isSavingChanges}>
-                {buttonText}
-            </Button>
+            <div className="calendar-entry__buttons">
+                {isDeleteBtnVisible && <Button primary size='large' onClick={onDeleteEntry}>
+                    Delete Entry
+                </Button>}
+                <Button primary size='large' onClick={onSaveChanges} loading={isSavingChanges}>
+                    {buttonText}
+                </Button>
+            </div>
             {errorMessage && <Message visible error>
                 <Icon name='delete' />
                 {errorMessage}

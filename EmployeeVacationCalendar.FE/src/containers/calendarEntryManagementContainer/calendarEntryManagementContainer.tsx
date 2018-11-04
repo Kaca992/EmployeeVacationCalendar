@@ -10,7 +10,7 @@ import { initializing } from '../../common/strings';
 import { RouteComponentProps, withRouter, Redirect } from 'react-router';
 import moment = require('moment');
 import { getMessageFromServerError } from '../../utils/serverExceptionsUtil';
-import { addOrUpdateCalendarEntry } from '../../actions/calendar';
+import { addOrUpdateCalendarEntry, deleteCalendarEntry } from '../../actions/calendar';
 
 interface ICalendarEntryManagementContainerOwnProps extends RouteComponentProps<{ id: string }> {
 
@@ -24,6 +24,7 @@ interface ICalendarEntryManagementContainerProps extends ICalendarEntryManagemen
     employees: IUserInfo[];
 
     addOrUpdateCalendarEntry(calendarEntry: ICalendarEntry);
+    onDeleteEntry(calendarEntry: ICalendarEntry);
 }
 
 interface ICalendarEntryManagementContainerState {
@@ -48,7 +49,8 @@ function mapStateToProps(state: IRootReducerState, ownProps: ICalendarEntryManag
 
 function mapDispatchToProps(dispatch: any): Partial<ICalendarEntryManagementContainerProps> {
     return {
-        addOrUpdateCalendarEntry: (calendarEntry: ICalendarEntry) => dispatch(addOrUpdateCalendarEntry(calendarEntry))
+        addOrUpdateCalendarEntry: (calendarEntry: ICalendarEntry) => dispatch(addOrUpdateCalendarEntry(calendarEntry)),
+        onDeleteEntry: (calendarEntry: ICalendarEntry) => dispatch(deleteCalendarEntry(calendarEntry))
     };
 }
 
@@ -93,6 +95,7 @@ class CalendarEntryManagementContainer extends React.Component<ICalendarEntryMan
             header={isNewEntry ? "Add New Calendar Entry" : "Edit Calendar Entry"}
             buttonText={isNewEntry ? "Create Entry" : "Save Changes"}
             isEmployeeSelectable={this._isAdmin()}
+            isDeleteBtnVisible={!isNewEntry}
             employees={employees}
             calendarEntry={newCalendarEntry}
             successMessage={successMessage}
@@ -100,6 +103,7 @@ class CalendarEntryManagementContainer extends React.Component<ICalendarEntryMan
             isSavingChanges={isSavingChanges}
             onCalendarEntryChanged={this._onCalendarEntryChanged}
             onSaveChanges={this._onSaveChanges}
+            onDeleteEntry={this._onDeleteEntry}
         />;
     }
 
@@ -124,6 +128,18 @@ class CalendarEntryManagementContainer extends React.Component<ICalendarEntryMan
             .catch((error) => {
                 this.setState({ isSavingChanges: false, errorMessage: getMessageFromServerError(error) });
             });
+    }
+
+    private _onDeleteEntry = () => {
+        if (this.props.initEntry) {
+            this.props.onDeleteEntry(this.props.initEntry)
+                .then(() => {
+                    this.props.history.push(RoutesEnum.Calendar);
+                })
+                .catch((error) => {
+                    this.setState({ errorMessage: getMessageFromServerError(error) });
+                });
+        }
     }
 }
 

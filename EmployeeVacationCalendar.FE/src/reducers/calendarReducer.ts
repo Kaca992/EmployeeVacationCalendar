@@ -1,19 +1,19 @@
 import { IAction } from "@common/appDataStructures";
 import { ICalendarEntry } from "../common/data";
 import { IRootReducerState } from "./rootReducer";
-import { ADD_OR_UPDATE_CALENDAR_ENTRY, GET_CALENDAR_ENTRIES, SET_SELECTED_CALENDAR_MONTH } from "../actionTypes/calendar";
+import { ADD_OR_UPDATE_CALENDAR_ENTRY, GET_CALENDAR_ENTRIES, SET_SELECTED_CALENDAR_MONTH, DELETE_CALENDAR_ENTRY } from "../actionTypes/calendar";
 import { actionUtils } from "../utils/fetcher";
 import moment = require("moment");
 import { LoadingStatusEnum } from "../common/enums";
 import { createSelector } from "reselect";
 import { Moment } from "moment";
+import _ = require("lodash");
 
 export interface ICalendarReducerState {
     selectedMonthKey: string;
     calendarInfoById: { [id: number]: ICalendarEntry };
     calendarInfoIdsByMonth: { [id: string]: number[] };
     calendarStatusByMonth: { [id: string]: LoadingStatusEnum };
-    deleteCalendarEntryErrorMessage: string | null;
 }
 
 const initialState: ICalendarReducerState = {
@@ -21,7 +21,6 @@ const initialState: ICalendarReducerState = {
     calendarInfoById: {},
     calendarInfoIdsByMonth: {},
     calendarStatusByMonth: {},
-    deleteCalendarEntryErrorMessage: null
 };
 
 export default function calendarReducer(state: ICalendarReducerState = initialState, action: IAction = { type: '', payload: null }): ICalendarReducerState {
@@ -81,19 +80,9 @@ export default function calendarReducer(state: ICalendarReducerState = initialSt
                 const calendarEntry: ICalendarEntry = action.payload;
                 const oldEntry: ICalendarEntry = state.calendarInfoById[calendarEntry.id];
                 const monthKeys = getMonthKeysForEntry(calendarEntry.startDate, calendarEntry.endDate);
-                const oldMonthKeys = oldEntry ? getMonthKeysForEntry(oldEntry.startDate, oldEntry.endDate) : [];
-
-                const newCalendarInfoIdsByMonth = { ...state.calendarInfoIdsByMonth };
 
                 // we need to first remove all old month keys, because entry might have changed months in which it was
-                oldMonthKeys.forEach(key => {
-                    if (newCalendarInfoIdsByMonth[key]) {
-                        const elementIndex = newCalendarInfoIdsByMonth[key].findIndex(x => x === calendarEntry.id);
-                        if (elementIndex !== -1) {
-                            newCalendarInfoIdsByMonth[key].splice(elementIndex, 1);
-                        }
-                    }
-                });
+                const newCalendarInfoIdsByMonth = removeOldCalendarEntryFromMonths(oldEntry, state.calendarInfoIdsByMonth);
 
                 monthKeys.forEach(key => {
                     if (newCalendarInfoIdsByMonth[key] && !newCalendarInfoIdsByMonth[key].find(x => x === calendarEntry.id)) {
@@ -109,11 +98,26 @@ export default function calendarReducer(state: ICalendarReducerState = initialSt
                     calendarInfoIdsByMonth: newCalendarInfoIdsByMonth
                 };
             }
+        case actionUtils.responseAction(DELETE_CALENDAR_ENTRY):
+            {
+                const calendarEntryId = action.payload.id;
+                const oldEntry: ICalendarEntry = state.calendarInfoById[calendarEntryId];
+                // we need to first remove all old month keys, because entry might have changed months in which it was
+                const newCalendarInfoIdsByMonth = removeOldCalendarEntryFromMonths(oldEntry, state.calendarInfoIdsByMonth);
+                const newCalendarInfoById = _.omit(state.calendarInfoById, calendarEntryId);
+
+                return {
+                    ...state,
+                    calendarInfoById: newCalendarInfoById,
+                    calendarInfoIdsByMonth: newCalendarInfoIdsByMonth
+                };
+            }
         default:
             return state;
     }
 }
 
+//#region Selectors
 const getSelectedMonthKey = (state: IRootReducerState) => state.calendar.selectedMonthKey;
 const getAllLoadingStatuses = (state: IRootReducerState) => state.calendar.calendarStatusByMonth;
 const getAllCalendarEntriesByMonth = (state: IRootReducerState) => state.calendar.calendarInfoIdsByMonth;
@@ -141,6 +145,7 @@ export function getYearAndMonthFromKey(selectedMonthKey: string) {
     const values = selectedMonthKey.split("/");
     return { month: parseInt(values[0], 10), year: parseInt(values[1], 10) };
 }
+//#endregion
 
 /** Returns keys for all months that contain this vacation */
 export function getMonthKeysForEntry(startDate: Date, endDate: Date): string[] {
@@ -157,6 +162,24 @@ export function getMonthKeysForEntry(startDate: Date, endDate: Date): string[] {
     return keys;
 }
 
+//#region Helpers
 function getMonthKeyFromDate(date: Moment) {
     return `${date.month() + 1}/${date.year()}`;
 }
+
+function removeOldCalendarEntryFromMonths(calendarEntry: ICalendarEntry, calendarInfoIdsByMonth: { [id: string]: number[] }): { [id: string]: number[] } {
+    const calendarEntryKeys = calendarEntry ? getMonthKeysForEntry(calendarEntry.startDate, calendarEntry.endDate) : [];
+    const newCalendarInfoIdsByMonth = { ...calendarInfoIdsByMonth };
+
+    calendarEntryKeys.forEach(key => {
+        if (newCalendarInfoIdsByMonth[key]) {
+            const elementIndex = newCalendarInfoIdsByMonth[key].findIndex(x => x === calendarEntry.id);
+            if (elementIndex !== -1) {
+                newCalendarInfoIdsByMonth[key].splice(elementIndex, 1);
+            }
+        }
+    });
+
+    return newCalendarInfoIdsByMonth;
+}
+//#endregion

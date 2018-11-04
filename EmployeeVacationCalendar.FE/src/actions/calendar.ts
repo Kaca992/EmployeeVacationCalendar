@@ -1,5 +1,5 @@
 import fetcher from "../utils/fetcher";
-import { GET_CALENDAR_ENTRIES, ADD_OR_UPDATE_CALENDAR_ENTRY, SET_SELECTED_CALENDAR_MONTH } from "../actionTypes/calendar";
+import { GET_CALENDAR_ENTRIES, ADD_OR_UPDATE_CALENDAR_ENTRY, SET_SELECTED_CALENDAR_MONTH, DELETE_CALENDAR_ENTRY } from "../actionTypes/calendar";
 import { ICalendarEntry } from "../common/data";
 import { IRootReducerState } from "../reducers/rootReducer";
 import { LoadingStatusEnum } from "../common/enums";
@@ -45,6 +45,19 @@ export function addOrUpdateCalendarEntry(calendarEntry: ICalendarEntry) {
         return fetcher.reduxFetch(calendarControllerBaseUrl, {
             jsonResponseExpected: true,
             action: ADD_OR_UPDATE_CALENDAR_ENTRY,
+            requestInit: {
+                method: 'POST',
+                body: JSON.stringify(calendarEntry)
+            }
+        }, dispatch);
+    };
+}
+
+export function deleteCalendarEntry(calendarEntry: ICalendarEntry) {
+    return (dispatch, getState) => {
+        return fetcher.reduxFetch(`${calendarControllerBaseUrl}/delete`, {
+            jsonResponseExpected: true,
+            action: DELETE_CALENDAR_ENTRY,
             requestInit: {
                 method: 'POST',
                 body: JSON.stringify(calendarEntry)
