@@ -14,9 +14,34 @@ namespace EmployeeVacationCalendar.WebAPI.App.Services
 {
     public interface ICalendarService
     {
-        Task<CalendarEntryDTO> AddUpdateCalendarEntry(string loggedUserId, EmployeeTypeEnum loggedUserType, CalendarEntryDTO entryDTO);
+        /// <summary>
+        /// Get calendar entries for the selected month
+        /// </summary>
+        /// <param name="year"></param>
+        /// <param name="month"></param>
+        /// <returns></returns>
         List<CalendarEntryDTO> GetCalendarEntries(int year, int month);
+        /// <summary>
+        /// Get calendar entry by id
+        /// </summary>
+        /// <param name="entryId"></param>
+        /// <returns></returns>
         Task<CalendarEntryDTO> GetCalendarEntryById(int entryId);
+        /// <summary>
+        /// If existing entry it will update it, otherwise a new entry will be created.
+        /// </summary>
+        /// <param name="loggedUserId"></param>
+        /// <param name="loggedUserType"></param>
+        /// <param name="entryDTO"></param>
+        /// <returns></returns>
+        Task<CalendarEntryDTO> AddUpdateCalendarEntry(string loggedUserId, EmployeeTypeEnum loggedUserType, CalendarEntryDTO entryDTO);
+        /// <summary>
+        /// Deletes calendar entry if user has permissions to do it.
+        /// </summary>
+        /// <param name="loggedUserId"></param>
+        /// <param name="loggedUserType"></param>
+        /// <param name="entryDTO"></param>
+        /// <returns></returns>
         Task DeleteCalendarEntry(string loggedUserId, EmployeeTypeEnum loggedUserType, CalendarEntryDTO entryDTO);
     }
 

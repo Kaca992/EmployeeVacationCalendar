@@ -17,14 +17,12 @@ namespace EmployeeVacationCalendar.WebAPI.App.Controllers
     [Route("api/[controller]")]
     public class CalendarController : Controller
     {
-        private SignInManager<Employee> _signInManager;
         private UserManager<Employee> _userManager;
         private EmployeeVacationDbContext _context;
         private ICalendarService _calendarService;
 
-        public CalendarController(SignInManager<Employee> signInManager, UserManager<Employee> userManager, EmployeeVacationDbContext context, ICalendarService calendarService)
+        public CalendarController(UserManager<Employee> userManager, EmployeeVacationDbContext context, ICalendarService calendarService)
         {
-            _signInManager = signInManager;
             _userManager = userManager;
             _context = context;
             _calendarService = calendarService;

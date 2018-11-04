@@ -14,8 +14,8 @@ namespace EmployeeVacationCalendar.WebAPI.App.Services
 {
     public interface IEmployeeService
     {
-        Task<UserInfoDTO> AddUpdateUserInfo(string loggedUserId, EmployeeTypeEnum loggedUserType, NewUserInfoDTO newUserInfoDTO);
         Dictionary<string, UserInfoDTO> GetAllEmployeesGroupedById();
+        Task<UserInfoDTO> AddUpdateUserInfo(string loggedUserId, EmployeeTypeEnum loggedUserType, NewUserInfoDTO newUserInfoDTO);
         Task DeleteEmployee(string loggedUserId, EmployeeTypeEnum loggedUserType, string employeeId, string employeeConcurrencyToken);
     }
 
@@ -28,6 +28,11 @@ namespace EmployeeVacationCalendar.WebAPI.App.Services
         {
             _context = context;
             _userManager = userManager;
+        }
+
+        public Dictionary<string, UserInfoDTO> GetAllEmployeesGroupedById()
+        {
+            return _context.Users.Select(x => DtoMapper.MapEmployeeToDTO(x)).ToDictionary(x => x.Id, x => x);
         }
 
         #region Insert/Update user
@@ -100,11 +105,6 @@ namespace EmployeeVacationCalendar.WebAPI.App.Services
             return newEmployeeInfo;
         }
         #endregion
-
-        public Dictionary<string, UserInfoDTO> GetAllEmployeesGroupedById()
-        {
-            return _context.Users.Select(x => DtoMapper.MapEmployeeToDTO(x)).ToDictionary(x => x.Id, x => x);
-        }
 
         public async Task DeleteEmployee(string loggedUserId, EmployeeTypeEnum loggedUserType, string employeeId, string employeeConcurrencyToken)
         {

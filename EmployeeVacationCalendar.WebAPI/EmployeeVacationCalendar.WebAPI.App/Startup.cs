@@ -84,7 +84,6 @@ namespace EmployeeVacationCalendar.WebAPI.App
             }
             else
             {
-                app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
 
@@ -109,7 +108,7 @@ namespace EmployeeVacationCalendar.WebAPI.App
                 await context.Response.SendFileAsync(Path.Combine(env.WebRootPath, "index.html"));
             });
 
-            // initialize users
+            // initialize database and users
             dbContext.Database.Migrate();
             EmployeeVacationDbInitializer.SeedUsers(appSettings, userManager);
         }

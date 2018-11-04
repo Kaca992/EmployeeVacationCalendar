@@ -18,13 +18,11 @@ namespace EmployeeVacationCalendar.WebAPI.App.Controllers
     [Route("api/[controller]")]
     public class EmployeeController : Controller
     {
-        private SignInManager<Employee> _signInManager;
         private UserManager<Employee> _userManager;
         private IEmployeeService _employeeService;
 
-        public EmployeeController(SignInManager<Employee> signInManager, UserManager<Employee> userManager, IEmployeeService employeeService)
+        public EmployeeController(UserManager<Employee> userManager, IEmployeeService employeeService)
         {
-            _signInManager = signInManager;
             _userManager = userManager;
             _employeeService = employeeService;
         }
