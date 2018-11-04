@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { IRootReducerState } from '@reducers/rootReducer';
 import { withRouter } from 'react-router';
 import Navigation from '../../components/navigation/navigation';
-import { IUserInfo } from '../../common/data';
+import { logoutUser } from '../../actions/app';
 
 interface INavigationContainerProps {
     loggedInUserId: string | null;
@@ -22,7 +22,7 @@ function mapStateToProps(state: IRootReducerState): Partial<INavigationContainer
 
 function mapDispatchToProps(dispatch: any): Partial<INavigationContainerProps> {
     return {
-        onLogOut: () => alert('hello')
+        onLogOut: () => dispatch(logoutUser())
     };
 }
 

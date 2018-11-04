@@ -40,5 +40,12 @@ namespace EmployeeVacationCalendar.WebAPI.App.Controllers
 
             return BadRequest(new UserLoginFailedException());
         }
+
+        [HttpGet]
+        [Route("logout")]
+        public async Task LogoutEmployee()
+        {
+            await _signInManager.SignOutAsync();
+        }
     }
 }

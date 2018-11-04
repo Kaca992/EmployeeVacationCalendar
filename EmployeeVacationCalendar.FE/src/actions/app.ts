@@ -51,3 +51,16 @@ export function loginUser(email: string, password: string, redirectUrl: string, 
         });
     };
 }
+
+export function logoutUser() {
+    return (dispatch, getState) => {
+        return fetcher.reduxFetch(`${loginControllerBaseUrl}/logout`, {
+            jsonResponseExpected: false,
+            action: appActions.LOGOUT_USER
+        }, dispatch).then(() => {
+            window.location.reload();
+        }).catch(() => {
+            window.location.reload();
+        });
+    };
+}
