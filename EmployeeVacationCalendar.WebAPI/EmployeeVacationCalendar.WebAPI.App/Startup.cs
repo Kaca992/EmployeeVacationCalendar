@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -111,6 +112,10 @@ namespace EmployeeVacationCalendar.WebAPI.App
             // initialize database and users
             dbContext.Database.Migrate();
             EmployeeVacationDbInitializer.SeedUsers(appSettings, userManager);
+
+#if DEBUG
+            Debug.WriteLine($"Service started.");
+#endif
         }
     }
 }

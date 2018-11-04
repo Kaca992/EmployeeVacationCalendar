@@ -162,11 +162,17 @@ export function getMonthKeysForEntry(startDate: Date, endDate: Date): string[] {
     const keys: string[] = [];
     const start = moment(startDate);
     const end = moment(endDate);
+    const date = moment(start);
 
-    while (start.year() <= end.year() && start.month() <= end.month()) {
+    while (date.isBetween(start, end, 'days', '[)')) {
         // moment month starts from 0
-        keys.push(`${start.month() + 1}/${start.year()}`);
-        start.add(1, 'month');
+        keys.push(`${date.month() + 1}/${date.year()}`);
+        date.add(1, 'month');
+    }
+
+    const key = `${end.month() + 1}/${end.year()}`;
+    if (start.date() >= end.date() && !keys.find(x => x === key)) {
+        keys.push(key);
     }
 
     return keys;
