@@ -62,7 +62,7 @@ Backend requires not additional setup.
 
 ### Seed Values
 
-Development and release version both have the initial `Master Admin` account with values defined in `appsettings.json`. In development database is seeded with some test users (both User and Admin type) with password defined for `Master Admin`.
+Development and release version both have the initial `Master Admin` account with values defined in `appsettings.json`. In development, database is seeded with some test users (both User and Admin type) with password defined for `Master Admin`.
 
 ## License
 
