@@ -1,4 +1,4 @@
-# Template TypeScript + React + Redux
+# Employee Vacation Application
 
 > This is an application used for managing vacation entries for employees.
 

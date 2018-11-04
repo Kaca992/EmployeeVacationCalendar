@@ -1,8 +1,8 @@
 {
   "name": "template-ts-react",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
-  "description": "Template project that includes React, TypeScript, React-Router, Sass and Webpack v4",
+  "description": "Employee Vacation Application",
   "main": "dist/src/index.js",
   "typings": "dist/src/index.d.ts",
   "author": {
@@ -20,7 +20,7 @@
     "yarn"
   ],
   "repository": {
-    "url": "https://github.com/Kaca992/template-ts-react"
+    "url": "https://github.com/Kaca992/EmployeeVacationCalenda"
   },
   "scripts": {
     "test": "jest --verbose",
