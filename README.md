@@ -43,7 +43,7 @@ Tools that are required:
 
 ### Backend
 
-Backend requires not additional setup.
+Backend requires no additional setup.
 
 ## Development Setup
 
